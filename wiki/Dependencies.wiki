@@ -27,21 +27,21 @@
 
 === External Dependencies ===
 
-* commons-beanutils-1.8.3.jar
-* commons-logging-1.1.1.jar
-* log4j-1.2.16.jar
-* slf4j-log4j12-1.5.8.jar
-* hibernate3.jar
-* antlr-2.7.6.jar
-* commons-collections-3.1.jar
-* dom4j-1.6.1.jar
-* javassist-3.9.0.GA.jar
-* jta-1.1.jar
-* slf4j-api-1.5.8.jar
-* junit4-4.8.1.jar
-* hamcrest-1.1.0.jar
-* odfdom-java-0.8.7.jar
-* wicket-1.4.17.jar
-* jasperreports-4.1.2.jar
-* jotm-core.jar
-* jotm-2.1.9
+ * commons-beanutils-1.8.3.jar
+ * commons-logging-1.1.1.jar
+ * log4j-1.2.16.jar
+ * slf4j-log4j12-1.5.8.jar
+ * hibernate3.jar
+ * antlr-2.7.6.jar
+ * commons-collections-3.1.jar
+ * dom4j-1.6.1.jar
+ * javassist-3.9.0.GA.jar
+ * jta-1.1.jar
+ * slf4j-api-1.5.8.jar
+ * junit4-4.8.1.jar
+ * hamcrest-1.1.0.jar
+ * odfdom-java-0.8.7.jar
+ * wicket-1.4.17.jar
+ * jasperreports-4.1.2.jar
+ * jotm-core.jar
+ * jotm-2.1.9
