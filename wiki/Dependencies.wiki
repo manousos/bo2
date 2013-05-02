@@ -1,0 +1,27 @@
+#summary Dependencies table of Bo2 project.
+
+=== Bo2 Projects Dependencies ===
+
+|| || Bo2Utils || Bo2UtilsDoc || Bo2UtilsMeta ||Bo2UtilsSql||Bo2JsqlParser||WicketUtils||Bo2Architecture||Bo2Creation||Bo2ArchUtils||Bo2UtilsMetaExt||Bo2ImplOpen||Bo2OdfToolkit||Bo2ImplHibernate||Bo2ImplJee||Bo2ImplJotm||Bo2ImplMsOffice||Bo2ImplOpen||Bo2Jasper||WicketBo2||
+|| Bo2Utils || || || || || || || || || || || || || || || || || || || ||
+|| Bo2UtilsDoc || X || || || || || || || || || || || || || || || || || || ||
+|| Bo2UtilsMeta || X || || || || || || || || || || || || || || || || || || ||
+|| Bo2UtilsSql || X || || || || || || || || || || || || || || || || || || ||
+|| Bo2JsqlParser || X || || || X || || || || || || || || || || || || || || || ||
+|| WicketUtils || X || || X || || || || || || || || || || || || || || || || ||
+|| Bo2Architecture || X || || || || || || || || || || || || || || || || || || ||
+|| Bo2Creation || X || || || || || || || || || || || || || || || || || || ||
+|| Bo2ArchUtils || X || || || || || || X || X || || || || || || || || || || || ||
+|| Bo2UtilsMetaExt || X || || X || || || || X || || X || || || || || || || || || || ||
+|| Bo2ImplOpen || X || X || X || X || || || X || X || X || || || || || || || || || || ||
+|| Bo2OdfToolkit || X || X || X || || || || || || || || || || || || || || || || ||
+|| Bo2ImplHibernate || X || || X || X || || || X || X || X || || X || || || || || || || || ||
+|| Bo2ImplJee || X || || || || || || X || || X || || X || || || || || || || || ||
+|| Bo2ImplJotm || X || || || || || || X || X || || || X || || X || || || || || || ||
+|| Bo2ImplMsOffice || X || || || || || || X ||  || || || X || || || || || || || || ||
+|| Bo2Gui || X || || X || || || || X || || X || || || || || || || || || || ||
+|| Bo2Jasper || X || X || X || X || X || X || X || X || X || X || X || X || X || X || X || X || X || X || X ||
+|| WicketBo2 || X || || X || || || X || X || X || X || X || X || || || || || || || || ||
+
+
+=== External Dependencies ===
