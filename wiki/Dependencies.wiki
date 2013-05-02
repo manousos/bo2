@@ -2,7 +2,7 @@
 
 === Bo2 Projects Dependencies ===
 
-|| || Bo2Utils || Bo2UtilsDoc || Bo2UtilsMeta ||Bo2UtilsSql||Bo2JsqlParser||WicketUtils||Bo2Architecture||Bo2Creation||Bo2ArchUtils||Bo2UtilsMetaExt||Bo2ImplOpen||Bo2OdfToolkit||Bo2ImplHibernate||Bo2ImplJee||Bo2ImplJotm||Bo2ImplMsOffice||Bo2ImplOpen||Bo2Jasper||WicketBo2||
+|| || B<br>o<br>2<br>U<br>t<br>i<br>l<br>s<br> || B<br>o<br>2<br>U<br>t<br>i<br>l<br>s<br>D<br>o<br>c<br> || B<br>o<br>2<br>U<br>t<br>i<br>l<br>s<br>M<br>e<br>t<br>a<br> || B<br>o<br>2<br>U<br>t<br>i<br>l<br>s<br>S<br>q<br>l<br> || B<br>o<br>2<br>J<br>s<br>q<br>l<br>P<br>a<br>r<br>s<br>e<br>r<br> || W<br>i<br>c<br>k<br>e<br>t<br>U<br>t<br>i<br>l<br>s<br> || B<br>o<br>2<br>A<br>r<br>c<br>h<br>i<br>t<br>e<br>c<br>t<br>u<br>r<br>e<br> || B<br>o<br>2<br>C<br>r<br>e<br>a<br>t<br>i<br>o<br>n<br> || B<br>o<br>2<br>A<br>r<br>c<br>h<br>U<br>t<br>i<br>l<br>s<br> || B<br>o<br>2<br>U<br>t<br>i<br>l<br>s<br>M<br>e<br>t<br>a<br>E<br>x<br>t<br> || B<br>o<br>2<br>I<br>m<br>p<br>l<br>O<br>p<br>e<br>n<br> || B<br>o<br>2<br>O<br>d<br>f<br>T<br>o<br>o<br>l<br>k<br>i<br>t<br> || B<br>o<br>2<br>I<br>m<br>p<br>l<br>H<br>i<br>b<br>e<br>r<br>n<br>a<br>t<br>e<br> || B<br>o<br>2<br>I<br>m<br>p<br>l<br>J<br>e<br>e<br> || B<br>o<br>2<br>I<br>m<br>p<br>l<br>J<br>o<br>t<br>m<br> || B<br>o<br>2<br>I<br>m<br>p<br>l<br>M<br>s<br>O<br>f<br>f<br>i<br>c<br>e<br> || B<br>o<br>2<br>G<br>u<br>i<br> || B<br>o<br>2<br>J<br>a<br>s<br>p<br>e<br>r<br> || W<br>i<br>c<br>k<br>e<br>t<br>B<br>o<br>2<br> || 
 || Bo2Utils || || || || || || || || || || || || || || || || || || || ||
 || Bo2UtilsDoc || X || || || || || || || || || || || || || || || || || || ||
 || Bo2UtilsMeta || X || || || || || || || || || || || || || || || || || || ||
