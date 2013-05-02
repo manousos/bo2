@@ -1,0 +1,20 @@
+||Project||Description||
+|| *Bo2Architecture* ||This package contains the declaration of the Bo2 architecture.||
+|| *Bo2ArchUtils* || Utilities based on the Bo2 architecture.||
+||*Bo2Creation*|| The name of the package, iandi stands for interface and implementation. This package contains interfaces and their implementations. These are used for testing the ObjectFactoryImpl.||
+||*Bo2Gui*||
+||*Bo2ImplHibernate*||This package contains Hibernate support for Bo2.||
+||*Bo2ImplJee*|| ||
+||*Bo2ImplJotm*|| ||
+||*Bo2ImplMsOffice*|| ||
+||*Bo2ImplOpen*||This package contains implementations of the architecture defined in the gr.interamerican.bo2.arch package.||
+||*Bo2Jasper*|| ||
+||*Bo2JsqlParser*|| ||
+||*Bo2OdfToolkit*||The Bo2Odftoolkit project provides an implementation of a gr.interamerican.bo2.utils.doc.DocumentEngine} based on ODF documents. The document engine is an ODF based template engine aiming to the creation of business documents. The project is based on the OdfToolkit libraries http://incubator.apache.org/odftoolkit/||
+||*Bo2Utils*|| This package contains various utility classes.||
+||*Bo2UtilsDoc*|| ||
+||*Bo2UtilsMeta*|| The "meta" package is an effort to develop a metadata||
+||*Bo2UtilsMetaExt*|| This package extends the Bo2UtilsMeta project with support for types defined by the Bo2 architecture.|| 
+||*Bo2UtilsSql*||  This package contains utilities relevant with relational databases and SQL.||
+||*WicketBo2*|| This package contains supporting classes for development of wicket applications that use the Bo2 framework.||
+||*WicketUtils*|| Classes for advanced wicket experience.||
