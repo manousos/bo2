@@ -12,9 +12,8 @@
 || *Bo2ImplMsOffice* || Utilities for MS Office Documents. ||
 || *Bo2Jasper* || Integration with Jasper reports. ||
 || *Bo2JsqlParser* || Integration with JsqlParser sql parser. ||
-|| *Bo2OdfToolkit* ||The Bo2Odftoolkit project provides an implementation of a gr.interamerican.bo2.utils.doc.DocumentEngine based on ODF documents. The document engine is an ODF based template engine aiming to the creation of business documents. The project is based on the OdfToolkit libraries http://incubator.apache.org/odftoolkit/||
-
-|| *Bo2UtilsDoc* || Implementation of Bo2UtilsDoc based on OdfToolkit libraries. ||
+|| *Bo2UtilsDoc* || Defines the architecture of a template engine that creates business documents. The architecture is defined as a set of interfaces and exception classes.||
+|| *Bo2OdfToolkit* ||The Bo2Odftoolkit project provides an implementation of the template engine architecture defined by the !Bo2UtilsDoc project. The implementation is based on open document format. The project is based on the !OdfToolkit libraries http://incubator.apache.org/odftoolkit/||
 || *Bo2UtilsMeta* || Metadata facilities for Business Object data. ||
 || *Bo2UtilsMetaExt* || This package extends the Bo2UtilsMeta project with support for types defined by the Bo2 architecture.|| 
 || *Bo2UtilsSql* ||  This package contains utilities relevant with relational databases and SQL.||
