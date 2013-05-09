@@ -1,7 +1,7 @@
 #labels Featured
 || *Project* || *Description* ||
 || *Bo2Architecture* ||This package contains the declaration of the Bo2 architecture.||
-|| *Bo2ArchUtils* || Utilities based on the Bo2 architecture.||
+|| *!Bo2ArchUtils* || Utilities based on the Bo2 architecture.||
 || *Bo2Creation* || The name of the package, iandi stands for interface and implementation. This package contains interfaces and their implementations. These are used for testing the ObjectFactoryImpl.||
 || *Bo2Gui* || Swing utilities. ||
 || *Bo2ImplHibernate* ||This package contains Hibernate support for Bo2.||
