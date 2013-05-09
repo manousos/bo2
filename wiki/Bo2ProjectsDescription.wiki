@@ -1,18 +1,19 @@
 #labels Featured
 || *Project* || *Description* ||
-|| *Bo2Architecture* ||This package contains the declaration of the Bo2 architecture.||
-|| *!Bo2ArchUtils* || Utilities based on the Bo2 architecture.||
-|| *Bo2Creation* || The name of the package, iandi stands for interface and implementation. This package contains interfaces and their implementations. These are used for testing the ObjectFactoryImpl.||
+|| *Bo2Architecture* ||This project contains the the declaration of the Bo2 architecture. It consists of interfaces and exception classes defining the architecture abstractions||
+|| *Bo2ArchUtils* || Utility classes based on the Bo2Architecture interfaces.||
+|| *Bo2Utils* || This package contains various utility classes.||
+|| *Bo2Creation* || This project provides the means to eliminate boilerplate as getters and setters. It provides object factories that can create functional implementations of abstract classes and in some cases implement an interface automatically||
+|| *Bo2ImplOpen* ||This project contains implementations of the architecture concepts defined in the !Bo2Architecture project.||
 || *Bo2Gui* || Swing utilities. ||
 || *Bo2ImplHibernate* ||This package contains Hibernate support for Bo2.||
 || *Bo2ImplJee* || Integration with J2EE technologies. ||
 || *Bo2ImplJotm* || Integration with the Java Open Transaction Manager (JOTM). ||
 || *Bo2ImplMsOffice* || Utilities for MS Office Documents. ||
-|| *Bo2ImplOpen* ||This package contains implementations of the architecture defined in the gr.interamerican.bo2.arch package.||
 || *Bo2Jasper* || Integration with Jasper reports. ||
 || *Bo2JsqlParser* || Integration with JsqlParser sql parser. ||
 || *Bo2OdfToolkit* ||The Bo2Odftoolkit project provides an implementation of a gr.interamerican.bo2.utils.doc.DocumentEngine based on ODF documents. The document engine is an ODF based template engine aiming to the creation of business documents. The project is based on the OdfToolkit libraries http://incubator.apache.org/odftoolkit/||
-|| *Bo2Utils* || This package contains various utility classes.||
+
 || *Bo2UtilsDoc* || Implementation of Bo2UtilsDoc based on OdfToolkit libraries. ||
 || *Bo2UtilsMeta* || Metadata facilities for Business Object data. ||
 || *Bo2UtilsMetaExt* || This package extends the Bo2UtilsMeta project with support for types defined by the Bo2 architecture.|| 
