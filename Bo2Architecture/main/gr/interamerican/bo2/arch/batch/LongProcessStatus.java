@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -48,8 +48,12 @@ public interface LongProcessStatus {
 	boolean isFinished();
 
 	/**
-	 * Indicates that the process has quit processing abnormally due
-	 * to an exception.
+	 * Indicates that the process has quit while processing is still
+	 * not finished.
+	 * 
+	 * This could happen in the following cases:
+	 * <li> The process was forced to quit. </>
+	 * <li> Processing ended abnormally due to an exception. </>
 	 *
 	 * @return Returns true if processing has stopped abnormally.
 	 */
