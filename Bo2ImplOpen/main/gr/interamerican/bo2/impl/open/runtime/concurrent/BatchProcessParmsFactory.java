@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -12,6 +12,7 @@
  ******************************************************************************/
 package gr.interamerican.bo2.impl.open.runtime.concurrent;
 
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -33,8 +34,12 @@ public interface BatchProcessParmsFactory {
 	 * 
 	 * @param input
 	 * @param criteria
+	 * @param inputFileDefinitions 
+	 *        key: logical name (no spaces)
+	 *        value: filesystem path.
+	 * 
 	 * @return Returns the {@link BatchProcessParm}.
 	 */
-	<T> BatchProcessParm<T> createParameter(BatchProcessInput input, Object criteria);
+	BatchProcessParm<?> createParameter(BatchProcessInput input, Object criteria, Map<String, String> inputFileDefinitions);
 	
 }

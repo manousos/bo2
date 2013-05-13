@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -14,6 +14,7 @@ package gr.interamerican.bo2.jsqlparser.op;
 
 import gr.interamerican.bo2.jsqlparser.visitors.JoinRightItemStaticLocator;
 import gr.interamerican.bo2.jsqlparser.visitors.TableNamesFinderInExpression;
+import gr.interamerican.bo2.jsqlparser.visitors.TableNamesFinderInHaving;
 import gr.interamerican.bo2.jsqlparser.visitors.TableNamesFinderInJoin;
 import gr.interamerican.bo2.jsqlparser.visitors.TableNamesFinderInSelectElements;
 import gr.interamerican.bo2.jsqlparser.visitors.TableNamesFinderInWhereClause;
@@ -87,10 +88,13 @@ public class UselessJoinsFinder {
 		joinFinder.setSelectTables(selectFinder.getTableNames());
 		plain.accept(joinFinder);
 		
+		TableNamesFinderInHaving havingFinder = new TableNamesFinderInHaving();
+		plain.accept(havingFinder);
+
 		Set<Join> usefullJoins = new HashSet<Join>();
 		for (int i = 0; i < joinFinder.getJoinTables().keySet().size(); i++) {
-			usefullJoins = getUsefullJoins(
-				selectFinder.getTableNames(), whereFinder.getTableNames(), usefullJoins, joinFinder.getJoinTables());
+			usefullJoins = getUsefullJoins(selectFinder.getTableNames(), whereFinder.getTableNames(),
+					havingFinder.getTableNames(), usefullJoins, joinFinder.getJoinTables());
 			if (usefullJoins.containsAll(joinFinder.getJoinTables().keySet())) {
 				return uselessJoins;
 			}
@@ -104,19 +108,21 @@ public class UselessJoinsFinder {
 	/**
 	 * Creates the list of {@link Join}s that are not required for the analyzed sql.
 	 * 
-	 * @param selectTables 
-	 *        Tables required for the ResultSet.
-	 * @param whereTables 
-	 *        Tables required for the Where clause.
-	 * @param usefullJoins 
-	 *        Useful joins found so far.
+	 * @param selectTables
+	 *            Tables required for the ResultSet.
+	 * @param whereTables
+	 *            Tables required for the Where clause.
+	 * @param havingTables
+	 *            Tables required for the having clause.
+	 * @param usefullJoins
+	 *            Useful joins found so far.
 	 * @param joinTablesMap
-	 *        Tables involved in each Join.
-	 *        
-	 * @return Returns useful joins. 
+	 *            Tables involved in each Join.
+	 * 
+	 * @return Returns useful joins.
 	 */
-	private Set<Join> getUsefullJoins(
-	Set<String> selectTables, Set<String> whereTables, Set<Join> usefullJoins, Map<Join, Set<String>> joinTablesMap) {
+	private Set<Join> getUsefullJoins(Set<String> selectTables, Set<String> whereTables, Set<String> havingTables,
+			Set<Join> usefullJoins, Map<Join, Set<String>> joinTablesMap) {
 		Set<String> joinTables = new HashSet<String>();
 		Set<Join> result = new HashSet<Join>();
 		result.addAll(usefullJoins);
@@ -127,7 +133,7 @@ public class UselessJoinsFinder {
 		for (Join j : joinTablesMap.keySet()) {
 			String joinTable = getJoinTable(j);
 			if ((hasJoinStaticValues(j)) || (selectTables.contains(joinTable)) || (whereTables.contains(joinTable))
-					|| (joinTables.contains(joinTable))) {
+					|| (havingTables.contains(joinTable)) || (joinTables.contains(joinTable))) {
 				result.add(j);
 			}
 		}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -35,10 +35,12 @@ public class ComponentFactoryPage extends WebPage implements IMarkupResourceStre
 	/**
 	 * A dummy Bean.
 	 */
+	@SuppressWarnings("unused")
 	private Bean1 bean1 = new Bean1();
 	/**
 	 * button for sumbission of a form
 	 */
+	@SuppressWarnings("unused")
 	private Button button = new Button("submit"); //$NON-NLS-1$
 	/**
 	 * 

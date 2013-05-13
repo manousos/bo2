@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -29,6 +29,7 @@ public class TestDecimalFormatter {
 	/**
 	 * Test
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
 	public void testFormat_createdWithDecimalFormat() {
 		DecimalFormat df = new DecimalFormat();		
@@ -42,7 +43,7 @@ public class TestDecimalFormatter {
 	 * Test
 	 */
 	@Test
-	@SuppressWarnings("nls")
+	@SuppressWarnings({ "nls", "rawtypes", "unchecked" })
 	public void testFormat_createdWithSymbols() {		
 		DecimalFormatter formatter = new DecimalFormatter(3, ',', null);
 		String actual = formatter.format(d);

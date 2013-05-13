@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -25,6 +25,7 @@ import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParm
 import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmNames.QUERY_CLASS;
 import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmNames.UI_CAN_ADD_THREADS;
 import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmNames.UI_REFRESH_INTERVAL;
+import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmNames.TIDY_INTERVAL;
 import static gr.interamerican.bo2.utils.CollectionUtils.getMandatoryProperty;
 import static gr.interamerican.bo2.utils.StringUtils.isNullOrBlank;
 import gr.interamerican.bo2.arch.EntitiesQuery;
@@ -41,6 +42,7 @@ import gr.interamerican.bo2.utils.meta.formatters.Formatter;
 import gr.interamerican.bo2.utils.meta.formatters.ObjectFormatter;
 
 import java.util.Enumeration;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -103,9 +105,9 @@ implements BatchProcessParmsFactory {
 		boolean addTheads = StringUtils.string2Bool(strAddThreads);
 		input.setUiCanAddThreads(addTheads);
 		
-		String strRefreshInterval = properties.getProperty(UI_REFRESH_INTERVAL);
-		int refreshInterval = NumberUtils.string2Int(strRefreshInterval);
-		input.setUiRefreshInterval(refreshInterval);
+		String strTidyInterval = properties.getProperty(TIDY_INTERVAL);
+		int tidyInterval = NumberUtils.string2Int(strTidyInterval);
+		input.setTidyInterval(tidyInterval);
 		
 		return input;
 		
@@ -167,14 +169,14 @@ implements BatchProcessParmsFactory {
 		}
 		return initialThreads;
 	}
-
+	
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> BatchProcessParm<T> createParameter(BatchProcessInput input, Object criteria) {
-		BatchProcessParm<T> output = Factory.create(BatchProcessParm.class);
+	public BatchProcessParm<?> createParameter(BatchProcessInput input, Object criteria, Map<String, String> inputFileDefinitions) {
+		BatchProcessParm output = Factory.create(BatchProcessParm.class);
 		
 		output.setName(ExceptionUtils.notNull(input.getName()));
-		output.setFormatter((Formatter<T>)createFormatter(input.getFormatterClassName()));
+		output.setFormatter((Formatter)createFormatter(input.getFormatterClassName()));
 		output.setInitialThreads(Utils.notNull(input.getInitialThreads(), 1));
 		output.setInputPropertyName(ExceptionUtils.notNull(input.getInputPropertyName()));
 		output.setMonitoringMailInterval(Utils.notNull(input.getMonitoringMailInterval(), 0)); //0 is never send
@@ -187,10 +189,9 @@ implements BatchProcessParmsFactory {
 		output.setPreProcessing(optionalOperation(input.getPreProcessingOperationClassName()));
 		
 		String queryClassName = ExceptionUtils.notNull(input.getQueryClassName());
-		output.setQuery((EntitiesQuery<T>) Factory.create(queryClassName.trim()));
+		output.setQuery((EntitiesQuery<?>) Factory.create(queryClassName.trim()));
 		
-		output.setUiCanAddThreads(Utils.notNull(input.getUiCanAddThreads(), false));
-		output.setUiRefreshInterval(Utils.notNull(input.getUiRefreshInterval(), 0)); //0 is never refresh
+		output.setUiCanAddThreads(Utils.notNull(input.getUiCanAddThreads(), false));		
 		
 		if(criteria!=null) {
 			Modification<Object> copy = new CopyFromBeans<Object>(criteria);
@@ -199,6 +200,8 @@ implements BatchProcessParmsFactory {
 			output.setPreOperationParametersSetter(copy);
 			output.setQueryParametersSetter(copy);
 		}
+		
+		output.setNamedInputFiles(inputFileDefinitions);
 		
 		return output;
 	}

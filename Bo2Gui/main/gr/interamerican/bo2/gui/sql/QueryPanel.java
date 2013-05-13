@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -25,6 +25,7 @@ import gr.interamerican.bo2.impl.open.utils.Bo2DeploymentInfoUtility;
 import gr.interamerican.bo2.utils.StringConstants;
 import gr.interamerican.bo2.utils.Utils;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.JButton;
@@ -69,6 +70,10 @@ extends JPanel {
 	 * Number of rows to limit results to.
 	 */
 	JTextField limitField;
+	/**
+	 * field containing the number of results returned in the {@link ResultSet}
+	 */
+	JTextField numberOfResultsField;
 	
 	/**
 	 * Should a row limit be applied?
@@ -116,7 +121,12 @@ extends JPanel {
 		String[] managers = Bo2DeploymentInfoUtility.get().getJdbcManagers();
 		
 		managersSelection = new JComboBox(managers);
-		
+		BLabel numberOfResultsLabel = new BLabel("resultsLabel");
+		numberOfResultsLabel.setValue("Total results");
+		numberOfResultsField = new JTextField(15);
+		numberOfResultsField.setText("-");
+		numberOfResultsField.setEditable(false);
+
 		add(queryLabel);
 		add(limitLabel);
 		add(limitField);
@@ -125,6 +135,8 @@ extends JPanel {
 		add(button);
 		add(tableScrollPane);
 		add(managersSelection);
+		add(numberOfResultsField);
+		add(numberOfResultsLabel);
 		
 		SpringLayout layout = new SpringLayout();
 		setLayout(layout);
@@ -136,6 +148,10 @@ extends JPanel {
 		layout.putConstraint(SpringLayout.WEST, limitField, 5, SpringLayout.EAST, limitLabel);
 		layout.putConstraint(SpringLayout.WEST, limitCheckBox, 5, SpringLayout.EAST, limitField);
 		layout.putConstraint(SpringLayout.WEST, managersSelection, 5, SpringLayout.EAST, limitCheckBox);
+		layout.putConstraint(SpringLayout.NORTH, numberOfResultsField, 5, SpringLayout.SOUTH, managersSelection);
+		layout.putConstraint(SpringLayout.NORTH, numberOfResultsLabel, 5, SpringLayout.SOUTH, managersSelection);
+		layout.putConstraint(SpringLayout.WEST, numberOfResultsLabel, 200, SpringLayout.EAST, sqlArea);
+		layout.putConstraint(SpringLayout.WEST, numberOfResultsField, 5, SpringLayout.EAST, numberOfResultsLabel);
 		layout.putConstraint(SpringLayout.NORTH, tableScrollPane, 25, SpringLayout.SOUTH, sqlScrollPane);		
 	}
 	
@@ -170,6 +186,7 @@ extends JPanel {
 		String[] columnNames = executor.getColumnNames();		
 		Object[][] contents = JdbcUtils.queryResultsAsMatrix(executor, true);		
 		TableModel result = new DefaultTableModel(contents, columnNames);
+		numberOfResultsField.setText(String.valueOf(contents.length));
 		return result;
 	}
 	

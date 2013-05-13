@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -611,6 +611,31 @@ public class TestQueueProcessor {
 		qp.tidy();		
 		Assert.assertNotNull(qp.newOperation);
 		Assert.assertEquals(qp.operation.getClass(), qp.newOperation.getClass());
+	}
+	
+	/**
+	 * test Process.
+	 * 
+	 * @throws TransactionManagerException 
+	 */
+	@SuppressWarnings({ "nls" })
+	@Test
+	public void testPollAndProcess_withTransactionManagerException() throws TransactionManagerException {		
+		TransactionManager mockTm = Mockito.mock(TransactionManager.class);
+		Mockito.doThrow(CouldNotCommitException.class).when(mockTm).commit();
+		NamedPrintStream nps = Mockito.mock(NamedPrintStream.class);
+		Mockito.when(nps.getStream()).thenReturn(System.out);
+		
+		String input = "input";
+		QueueProcessor<String> qp = sample();
+		qp.tm = mockTm;
+		qp.failuresLog = nps;
+		qp.stacktracesLog = nps;
+		qp.successesLog = nps;
+		
+		qp.inputQueue.add(input);		
+		qp.pollAndProcess();
+		Assert.assertTrue(qp.inputQueue.contains(input));
 	}
 	
 	

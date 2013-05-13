@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -41,12 +41,12 @@ public class DocumentUtils {
 
 	
 	/**
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½ columnIndex οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ table οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½, οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ 
-	 * οΏ½οΏ½ columnIndex οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ table.maxColumn 
-	 * οΏ½οΏ½ οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½ columnIndex οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ DocumentEngineException().
-	 * @param table o οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½.
-	 * @param tableName οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½, οΏ½οΏ½οΏ½ error message.
-	 * @param columnIndex οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½ οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½.
+	 * Μέθοδος που ελέγχει αν το columnIndex αναφέρεται σε στήλη του πίνακα table που υπάρχει, πρέπει 
+	 * το columnIndex να είναι μεγαλύτερο table.maxColumn 
+	 * Αν ο πίνακας έχει λιγότερες στήλες απο το columnIndex τότε πετάμε DocumentEngineException().
+	 * @param table o πίνακας που δημιουργούμε.
+	 * @param tableName το όνομα του πίνακα, για error message.
+	 * @param columnIndex ο μέγιστος αριθμός στηλών που θέλουμε να έχει ο πίνακας.
 	 * @throws DocumentEngineException
 	 */
 	public static void validateColumnCount(DocumentTable table, String tableName,int columnIndex) throws DocumentEngineException{
@@ -57,15 +57,15 @@ public class DocumentUtils {
 	}
 	
 	/**
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½ append οΏ½οΏ½ null-safe οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ BusinessDocuments οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½.
-	 * <br>οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½ documents οΏ½οΏ½οΏ½οΏ½οΏ½ null οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ null
-	 * <br>οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½ documents not-null οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ append οΏ½οΏ½ extraDoc οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ 
-	 * οΏ½οΏ½οΏ½ baseDoc οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ extraDoc.
-	 * <br>οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ baseDoc οΏ½οΏ½οΏ½οΏ½οΏ½ null οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ extraDoc οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ extraDoc.
-	 * @param baseDoc οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ document οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ append.
-	 * @param extraDoc οΏ½οΏ½ document οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½.
-	 * @param addPageBreak οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ true οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ pageBreak οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½.
-	 * @return resultDoc οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ append
+	 * Κάνει append με null-safe τροπο δυο BusinessDocuments και επιστρέφει το αποτέλεσμα.
+	 * <br>Αν και τα δύο documents είναι null τότε δεν κάνει τιποτα και επιστρεφει null
+	 * <br>Αν είναι και τα δύο documents not-null τότε κανει append το extraDoc στο τέλος 
+	 * του baseDoc και επιστρέφει το extraDoc.
+	 * <br>Αν είναι το baseDoc ειναι null αλλα το extraDoc οχι τοτε επιστρέφει το extraDoc.
+	 * @param baseDoc το βασικό document στο οποίο θα κανουμε append.
+	 * @param extraDoc το document το οποίο θα μπεί στο τέλος του βασικού.
+	 * @param addPageBreak Αν είναι true βάζει ένα pageBreak μεταξύ των δύο σελίδων.
+	 * @return resultDoc το αποτελεσμα του append
 	 * @throws DocumentEngineException
 	 */
 	public static BusinessDocument safeAppend

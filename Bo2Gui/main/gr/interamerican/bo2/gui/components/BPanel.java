@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -13,7 +13,6 @@
 package gr.interamerican.bo2.gui.components;
 
 import gr.interamerican.bo2.gui.layout.Sizes;
-import gr.interamerican.bo2.gui.listeners.MethodBasedActionListener;
 import gr.interamerican.bo2.gui.properties.ButtonProperties;
 import gr.interamerican.bo2.gui.properties.CheckBoxProperties;
 import gr.interamerican.bo2.gui.properties.LabelOption;
@@ -27,12 +26,9 @@ import gr.interamerican.bo2.utils.attributes.Refreshable;
 
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import javax.swing.JPanel;
 
 import org.apache.commons.beanutils.BeanUtils;
 

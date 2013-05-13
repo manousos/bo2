@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -55,7 +55,6 @@ public class TestMediator {
 	 * @return bean1
 	 * 
 	 */
-	@SuppressWarnings("hiding")
 	private Bean1 getMyFullBean() {
 		Bean1 bean1 = new Bean1();
 		bean1.setDescription("description1"); //$NON-NLS-1$
@@ -67,7 +66,6 @@ public class TestMediator {
 	 * Return one list with BoPropertyDescriptors
 	 * @return List<BoPropertyDescriptor<?>>
 	 */
-	@SuppressWarnings("hiding")
 	private List<BoPropertyDescriptor<?>> getDescriptors(){
 		
 		 Bean1descriptor descriptor =  new Bean1descriptor();

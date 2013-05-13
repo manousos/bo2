@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -43,6 +43,9 @@ import java.util.Queue;
  * QueueProcessor is a Runnable object that pulls a queue with the input
  * objects of a batch process and processes each of them in an atomic
  * transaction.
+ * If processing fails, then the element is counted as a failure.
+ * If processing succeeds but a {@link TransactionManagerException}
+ * occurs, then the element is returned to the queue.
  * 
  * @param <T>
  *        Type of objects in the queue. 
@@ -254,6 +257,7 @@ implements Runnable, LongProcess {
 			String failuresLogName = streamname + "_FAILURES"; //$NON-NLS-1$
 			failuresLog = (NamedPrintStream) nsp.getSharedStream(failuresLogName);
 			stacktracesLog = getOptionalStacktracesLog(nsp);
+			
 			return true;
 		} catch (DataException de) {
 			handle(de);
@@ -331,6 +335,7 @@ implements Runnable, LongProcess {
 			try {
 				process(input);
 			} catch (TransactionManagerException e) {
+				inputQueue.add(input);
 				exceptionMessage = ExceptionUtils.getThrowableStackTrace(e);
 				quit = true;
 				logFailure(input, e);

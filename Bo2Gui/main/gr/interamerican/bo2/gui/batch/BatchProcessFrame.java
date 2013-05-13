@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -12,11 +12,10 @@
  ******************************************************************************/
 package gr.interamerican.bo2.gui.batch;
 
+import gr.interamerican.bo2.arch.batch.LongProcess;
 import gr.interamerican.bo2.arch.batch.MultiThreadedLongProcess;
 import gr.interamerican.bo2.arch.ext.Session;
 import gr.interamerican.bo2.arch.utils.ext.Bo2Session;
-import gr.interamerican.bo2.gui.components.BButton;
-import gr.interamerican.bo2.gui.components.BPanel;
 import gr.interamerican.bo2.gui.components.ButtonPanel;
 import gr.interamerican.bo2.gui.frames.BFrame;
 import gr.interamerican.bo2.gui.layout.Layout;
@@ -24,21 +23,24 @@ import gr.interamerican.bo2.gui.layout.Sizes;
 import gr.interamerican.bo2.gui.properties.ButtonProperties;
 import gr.interamerican.bo2.impl.open.creation.Factory;
 import gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcess;
-import gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmNames;
 import gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParm;
-import gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmsFactory;
 import gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmFactoryImpl;
+import gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmNames;
+import gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmsFactory;
 import gr.interamerican.bo2.impl.open.runtime.concurrent.IsFinished;
 import gr.interamerican.bo2.impl.open.runtime.concurrent.LongProcessMail;
+import gr.interamerican.bo2.impl.open.runtime.concurrent.Tidy;
 import gr.interamerican.bo2.utils.ReflectionUtils;
 import gr.interamerican.bo2.utils.StringUtils;
-import gr.interamerican.bo2.utils.TimeUtils;
-import gr.interamerican.bo2.utils.Utils;
+import gr.interamerican.bo2.utils.adapters.PeriodicCommand;
+import gr.interamerican.bo2.utils.adapters.Refresh;
+import gr.interamerican.bo2.utils.adapters.SingleSubjectOperation;
+import gr.interamerican.bo2.utils.adapters.VoidOperation;
+import gr.interamerican.bo2.utils.attributes.SimpleCommand;
 import gr.interamerican.bo2.utils.concurrent.ThreadUtils;
 import gr.interamerican.bo2.utils.conditions.Condition;
 import gr.interamerican.bo2.utils.runnables.Monitor;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.util.Properties;
 
@@ -83,6 +85,11 @@ extends BFrame {
 	 * Process name.
 	 */
 	String name;
+	
+	/**
+	 * Monitor.
+	 */
+	Monitor<MultiThreadedLongProcess> monitor;
 	
 	
 	/**
@@ -152,7 +159,7 @@ extends BFrame {
 		processPanel = new MultiThreadedLongProcessPanel(batch);
 		setPanel(processPanel);
 		setTitle(name);
-		startMonitoringThread();
+		startMonitor();
 	}
 	
 	
@@ -179,8 +186,6 @@ extends BFrame {
 		return (BatchProcessParmsFactory) factory;		
 	}
 	
-	
-	
 	/**
 	 * Starts the batch process.
 	 */
@@ -199,25 +204,77 @@ extends BFrame {
 	 * Starts the monitoring thread.
 	 *
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	void startMonitoringThread() {		
-		BatchProcessParm bpi = batch.getParameters();
-		int interval = bpi.getMonitoringMailInterval();
-		String recipients = bpi.getMonitoringMailRecipients();
-		boolean start = (interval>0) && (!StringUtils.isNullOrBlank(recipients));
-		if (start) {			 
-			Condition<MultiThreadedLongProcess> stop = 
-				new IsFinished<MultiThreadedLongProcess>();
-			/*
-			 * This could be more generic 
-			 */
-			LongProcessMail mail = new LongProcessMail();
-			mail.setStatusMessageRecipients(recipients);
-			long millis = TimeUtils.minutes2millis(interval);
-			Monitor<MultiThreadedLongProcess> monitor = 
-				new Monitor(batch, millis, stop, mail);
-			new Thread(monitor).start();
-		}
+	void startMonitor() {
+		Condition<MultiThreadedLongProcess> stop = 
+			new IsFinished<MultiThreadedLongProcess>();
+		monitor = new Monitor<MultiThreadedLongProcess>(batch, 1000, stop);
+		monitor.addCommand(uiRefresh());
+		monitor.addCommand(mail());
+		monitor.addCommand(tidy());
+		new Thread(monitor).start();
 	}
+	
+	
+	
+	/**
+	 * Creates a SimpleCommand that refreshes the UI.
+	 * 
+	 * @return Returns the command.
+	 */
+	SimpleCommand uiRefresh() {
+		VoidOperation<MultiThreadedLongProcessPanel> refresh = 
+			new Refresh<MultiThreadedLongProcessPanel>();
+		return new SingleSubjectOperation <MultiThreadedLongProcessPanel> 
+			(refresh, processPanel);
+				
+	}
+	
+	/**
+	 * Creates a SimpleCommand that refreshes the UI.
+	 * 
+	 * @return Returns the command.
+	 */
+	SimpleCommand mail() {
+		BatchProcessParm<?> bpi = batch.getParameters();
+		String recipients = bpi.getMonitoringMailRecipients();		
+		if (StringUtils.isNullOrBlank(recipients)) {
+			return null;
+		}
+		LongProcessMail mail = new LongProcessMail();
+		mail.setStatusMessageRecipients(recipients);
+		SingleSubjectOperation<MultiThreadedLongProcess> op =
+			new SingleSubjectOperation<MultiThreadedLongProcess>(mail, batch);
+		int minutes = bpi.getMonitoringMailInterval();
+		long period = minutes * 60;
+		return new PeriodicCommand(op, period);
+	}
+	
+	
+	/**
+	 * Creates a SimpleCommand that refreshes the UI.
+	 * 
+	 * @return Returns the command.
+	 */
+	SimpleCommand tidy() {
+		BatchProcessParm<?> bpi = batch.getParameters();
+		int minutes = bpi.getTidyInterval();
+		if (minutes==0) {
+			return null;
+		}
+		Tidy tidy = new Tidy();
+		SingleSubjectOperation<LongProcess> op =
+			new SingleSubjectOperation<LongProcess>(tidy, batch);		
+		long period = minutes * 60;
+		return new PeriodicCommand(op, period);
+	}
+	
+	
+
+	
+	
+
+	
+	
+
 
 }

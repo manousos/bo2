@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -13,10 +13,12 @@
 package gr.interamerican.bo2.utils.runnables;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import gr.interamerican.bo2.utils.Debug;
 import gr.interamerican.bo2.utils.adapters.VoidOperation;
+import gr.interamerican.bo2.utils.attributes.SimpleCommand;
 import gr.interamerican.bo2.utils.conditions.Condition;
 
 import org.junit.Test;
@@ -33,14 +35,29 @@ public class TestMonitor {
 	@SuppressWarnings("unchecked")
 	public void testConstructor() {
 		Object o = new Object();
-		Condition<Object> stop = mock(Condition.class);
-		VoidOperation<Object> action = mock(VoidOperation.class);
+		Condition<Object> stop = mock(Condition.class);		
 		int i = 1000;
-		Monitor<Object> monitor = new Monitor<Object>(o, i, stop, action);
+		Monitor<Object> monitor = new Monitor<Object>(o, i, stop);
 		assertEquals(o, monitor.system);
 		assertEquals(i, monitor.interval);
 		assertEquals(stop, monitor.mustStop);
-		assertEquals(action, monitor.action);
+		assertNotNull(monitor.commands);
+	}
+	
+	/**
+	 * test for the constructor.
+	 */
+	@Test
+	@SuppressWarnings("unchecked")
+	public void testAddAction() {
+		Object o = new Object();
+		Condition<Object> stop = mock(Condition.class);		
+		int i = 1000;
+		Monitor<Object> monitor = new Monitor<Object>(o, i, stop);		
+		assertEquals(0, monitor.commands.size());		
+		SimpleCommand operation = mock(SimpleCommand.class);		
+		monitor.addCommand(operation);
+		assertEquals(1, monitor.commands.size());
 	}
 	
 	/**
@@ -52,16 +69,18 @@ public class TestMonitor {
 		Object o = new Object();
 		Condition<Object> stop = mock(Condition.class);
 		final String counter = "Monitor";		 //$NON-NLS-1$
-		VoidOperation<Object> action = new VoidOperation<Object>() {			 
+		SimpleCommand operation = new SimpleCommand() {			 
 			@Override
-			public void execute(Object a) {
+			public void execute() {
 				Debug.increaseCounter(counter);					
 			}
 		};		
 		when(stop.check(o)).thenReturn(false,false,false,true);
 		int i = 2;
 		Debug.resetCounter(counter);
-		Monitor<Object> monitor = new Monitor<Object>(o, i, stop, action);
+		Monitor<Object> monitor = new Monitor<Object>(o, i, stop);
+		monitor.addCommand(operation);
+		
 		monitor.run();
 		assertEquals(4, Debug.getCounter(counter));
 	}

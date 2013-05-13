@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -107,14 +107,12 @@ public class MockResultSet implements ResultSet{
 		return new BigDecimal("0");
 	}
 
-	@SuppressWarnings("deprecation")
 	public BigDecimal getBigDecimal(int columnIndex, int scale) throws SQLException {
 		BigDecimal bd = new BigDecimal("0");
 		bd.setScale(scale);
 		return bd;
 	}
 
-	@SuppressWarnings("deprecation")
 	public BigDecimal getBigDecimal(String columnLabel, int scale) throws SQLException {
 		BigDecimal bd = new BigDecimal("0");
 		bd.setScale(scale);
@@ -702,7 +700,7 @@ public class MockResultSet implements ResultSet{
 
 	
 	public void updateBlob(int columnIndex, Blob x) throws SQLException {
-		
+		// empty
 		
 	}
 
@@ -824,249 +822,151 @@ public class MockResultSet implements ResultSet{
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see java.sql.ResultSet#updateAsciiStream(java.lang.String, java.io.InputStream)
-	 */
 	public void updateAsciiStream(String arg0, InputStream arg1) throws SQLException {
 		/*empty*/
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see java.sql.ResultSet#updateAsciiStream(int, java.io.InputStream, long)
-	 */
 	public void updateAsciiStream(int arg0, InputStream arg1, long arg2) throws SQLException {
 		
-		
+		// empty
 	}
 
-	/* (non-Javadoc)
-	 * @see java.sql.ResultSet#updateAsciiStream(java.lang.String, java.io.InputStream, long)
-	 */
 	public void updateAsciiStream(String arg0, InputStream arg1, long arg2) throws SQLException {
 		/*empty*/
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see java.sql.ResultSet#updateBinaryStream(int, java.io.InputStream)
-	 */
 	public void updateBinaryStream(int arg0, InputStream arg1) throws SQLException {
 		/*empty*/
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see java.sql.ResultSet#updateBinaryStream(java.lang.String, java.io.InputStream)
-	 */
 	public void updateBinaryStream(String arg0, InputStream arg1) throws SQLException {
 		/*empty*/
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see java.sql.ResultSet#updateBinaryStream(int, java.io.InputStream, long)
-	 */
 	public void updateBinaryStream(int arg0, InputStream arg1, long arg2) throws SQLException {
 		/*empty*/
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see java.sql.ResultSet#updateBinaryStream(java.lang.String, java.io.InputStream, long)
-	 */
 	public void updateBinaryStream(String arg0, InputStream arg1, long arg2) throws SQLException {
 		/*empty*/
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see java.sql.ResultSet#updateCharacterStream(int, java.io.Reader)
-	 */
 	public void updateCharacterStream(int arg0, Reader arg1) throws SQLException {
 		/*empty*/
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see java.sql.ResultSet#updateCharacterStream(java.lang.String, java.io.Reader)
-	 */
 	public void updateCharacterStream(String arg0, Reader arg1) throws SQLException {
-		
+		/* empty */
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see java.sql.ResultSet#updateCharacterStream(int, java.io.Reader, long)
-	 */
 	public void updateCharacterStream(int arg0, Reader arg1, long arg2) throws SQLException {
-		
+		/* empty */
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see java.sql.ResultSet#updateCharacterStream(java.lang.String, java.io.Reader, long)
-	 */
 	public void updateCharacterStream(String arg0, Reader arg1, long arg2) throws SQLException {
 		/*empty*/
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see java.sql.ResultSet#updateClob(int, java.io.Reader)
-	 */
 	public void updateClob(int arg0, Reader arg1) throws SQLException {
 		/*empty*/
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see java.sql.ResultSet#updateClob(java.lang.String, java.io.Reader)
-	 */
 	public void updateClob(String arg0, Reader arg1) throws SQLException {
 		/*empty*/
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see java.sql.ResultSet#updateClob(int, java.io.Reader, long)
-	 */
 	public void updateClob(int arg0, Reader arg1, long arg2) throws SQLException {
 		/*empty*/
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see java.sql.ResultSet#updateClob(java.lang.String, java.io.Reader, long)
-	 */
 	public void updateClob(String arg0, Reader arg1, long arg2) throws SQLException {
 		/*empty*/
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see java.sql.ResultSet#updateNCharacterStream(int, java.io.Reader)
-	 */
 	public void updateNCharacterStream(int arg0, Reader arg1) throws SQLException {
 		/*empty*/
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see java.sql.ResultSet#updateNCharacterStream(java.lang.String, java.io.Reader)
-	 */
 	public void updateNCharacterStream(String arg0, Reader arg1) throws SQLException {
 		/*empty*/
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see java.sql.ResultSet#updateNCharacterStream(int, java.io.Reader, long)
-	 */
 	public void updateNCharacterStream(int arg0, Reader arg1, long arg2) throws SQLException {
 		/*empty*/
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see java.sql.ResultSet#updateNCharacterStream(java.lang.String, java.io.Reader, long)
-	 */
 	public void updateNCharacterStream(String arg0, Reader arg1, long arg2) throws SQLException {
 		/*empty*/
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see java.sql.ResultSet#updateNClob(int, java.sql.NClob)
-	 */
 	public void updateNClob(int arg0, NClob arg1) throws SQLException {
 		/*empty*/
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see java.sql.ResultSet#updateNClob(java.lang.String, java.sql.NClob)
-	 */
 	public void updateNClob(String arg0, NClob arg1) throws SQLException {
-		
-		
+		/* empty */
 	}
 
-	/* (non-Javadoc)
-	 * @see java.sql.ResultSet#updateNClob(int, java.io.Reader)
-	 */
 	public void updateNClob(int arg0, Reader arg1) throws SQLException {
 		/*empty*/
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see java.sql.ResultSet#updateNClob(java.lang.String, java.io.Reader)
-	 */
 	public void updateNClob(String arg0, Reader arg1) throws SQLException {
-		
-		
+		/* empty */
 	}
 
-	/* (non-Javadoc)
-	 * @see java.sql.ResultSet#updateNClob(int, java.io.Reader, long)
-	 */
 	public void updateNClob(int arg0, Reader arg1, long arg2) throws SQLException {
 		/*empty*/
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see java.sql.ResultSet#updateNClob(java.lang.String, java.io.Reader, long)
-	 */
 	public void updateNClob(String arg0, Reader arg1, long arg2) throws SQLException {
 		/*empty*/
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see java.sql.ResultSet#updateNString(int, java.lang.String)
-	 */
 	public void updateNString(int arg0, String arg1) throws SQLException {
 		/*empty*/
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see java.sql.ResultSet#updateNString(java.lang.String, java.lang.String)
-	 */
 	public void updateNString(String arg0, String arg1) throws SQLException {
-		
-		
+		/* empty */
 	}
 
-	/* (non-Javadoc)
-	 * @see java.sql.ResultSet#updateRowId(int, java.sql.RowId)
-	 */
 	public void updateRowId(int arg0, RowId arg1) throws SQLException {
 		/*empty*/
-		
 	}
 
-	/* (non-Javadoc)
-	 * @see java.sql.ResultSet#updateRowId(java.lang.String, java.sql.RowId)
-	 */
 	public void updateRowId(String arg0, RowId arg1) throws SQLException {
 		/*empty*/
-		
 	}
 
-	/* (non-Javadoc)
-	 * @see java.sql.ResultSet#updateSQLXML(int, java.sql.SQLXML)
-	 */
 	public void updateSQLXML(int arg0, SQLXML arg1) throws SQLException {
 		/*empty*/
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see java.sql.ResultSet#updateSQLXML(java.lang.String, java.sql.SQLXML)
-	 */
 	public void updateSQLXML(String arg0, SQLXML arg1) throws SQLException {
 		/*empty*/
 	}

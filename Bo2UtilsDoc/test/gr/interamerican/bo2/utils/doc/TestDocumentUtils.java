@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -68,7 +68,7 @@ public class TestDocumentUtils {
 	}
 	
 	/**
-	 * Test for safeAppend().
+	 * Test for appendRowIfNeeded().
 	 * 
 	 * @throws DocumentEngineException
 	 */
@@ -77,11 +77,11 @@ public class TestDocumentUtils {
 		DocumentTable table = mock(DocumentTable.class);
 		when(table.getRowCount()).thenReturn(2);		 
 		DocumentUtils.appendRowIfNeeded(table, 2);
-		verify(table, times(0)).appendRow();
+		verify(table, times(1)).appendRow(); //appendRow was invoked once.
 	}
 	
 	/**
-	 * Test for safeAppend().
+	 * Test for appendRowIfNeeded().
 	 * 
 	 * @throws DocumentEngineException
 	 */
@@ -90,7 +90,7 @@ public class TestDocumentUtils {
 		DocumentTable table = mock(DocumentTable.class);
 		when(table.getRowCount()).thenReturn(2);		 
 		DocumentUtils.appendRowIfNeeded(table, 1);
-		verify(table, times(1)).appendRow();
+		verify(table, times(0)).appendRow(); //appendRow was not invoked.
 	}
 	
 	/**

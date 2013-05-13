@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -35,7 +35,7 @@ public class TestDoubleBoPropertyDescriptor {
 	@Test		
 	public void testParse() throws ParseException{
 		doubleDesc.setLengthOfDecimalPart(2);
-		System.out.println(doubleDesc.parse("15,46748"));
+		System.out.println(doubleDesc.parse("15,46748")); //$NON-NLS-1$
 		assertEquals(Double.valueOf(15.47), doubleDesc.parse("15,46748")); //$NON-NLS-1$
 		doubleDesc.setLengthOfDecimalPart(4);
 		assertEquals(Double.valueOf(1.4577), doubleDesc.parse("1,45767789")); //$NON-NLS-1$

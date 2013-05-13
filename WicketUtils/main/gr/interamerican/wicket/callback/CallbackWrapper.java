@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -72,7 +72,8 @@ public class CallbackWrapper implements CallbackAction {
 	 * Things to do before executing the wrapped action.
 	 * @param target 
 	 */
-	public void before(@SuppressWarnings("unused") AjaxRequestTarget target){ /* empty */ }
+	public void before(AjaxRequestTarget target) { /* empty */
+	}
 	
 	/**
 	 * Things to do after executing the wrapped action.
@@ -83,7 +84,8 @@ public class CallbackWrapper implements CallbackAction {
 	 * Things to do after executing the wrapped action.
 	 * @param target 
 	 */	
-	public void after(@SuppressWarnings("unused") AjaxRequestTarget target){ /* empty */ }
+	public void after(AjaxRequestTarget target) { /* empty */
+	}
 
 	/**
 	 * Gets the action wrapped by this one.

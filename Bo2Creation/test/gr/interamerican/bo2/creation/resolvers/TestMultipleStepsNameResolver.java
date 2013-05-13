@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -56,9 +56,9 @@ public class TestMultipleStepsNameResolver {
 	@Test
 	@SuppressWarnings("nls")
 	public void testGetDeclarationName() {		
-		String name = "com.foo.impl.domain.Product";
-		String expected = name + suffix;		
-		String actual = resolver.getDeclarationName(name); 
+		String name = "com.foo.def.domain.Product";
+		String expected = name;		
+		String actual = resolver.getDeclarationName(name + suffix); 
 		assertEquals(expected, actual);
 	}
 

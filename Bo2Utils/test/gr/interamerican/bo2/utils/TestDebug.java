@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -57,7 +57,7 @@ public class TestDebug {
 	 * Tests counter.
 	 */
 	@Test
-	public void testsetCounter() {	
+	public void testSetCounter() {	
 		assertTrue(Debug.getCounter("counter")==0);
 		Debug.setCounter("counter", 2);
 		assertTrue(Debug.getCounter("counter")==2);
@@ -68,9 +68,9 @@ public class TestDebug {
 	 */
 	@Test
 	public void testIncreaseCounter() {
-		int last = Debug.getCounter("counter");		
-		Debug.increaseCounter("counter");
-		assertTrue(Debug.getCounter("counter")==last + 1);
+		int last = Debug.getCounter("counter1");		
+		Debug.increaseCounter("counter1");
+		assertTrue(Debug.getCounter("counter1")==last + 1);
 	}
 	
 	/**
