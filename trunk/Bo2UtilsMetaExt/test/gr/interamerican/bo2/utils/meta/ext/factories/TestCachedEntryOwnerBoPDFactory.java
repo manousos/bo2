@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -22,6 +22,7 @@ import gr.interamerican.bo2.utils.meta.exceptions.ParseException;
 import gr.interamerican.bo2.utils.meta.ext.descriptors.CachedEntryOwnerBoPropertyDescriptor;
 import gr.interamerican.samples.utils.meta.SamplePropertyDefinition;
 
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -69,8 +70,14 @@ public class TestCachedEntryOwnerBoPDFactory {
 	@SuppressWarnings("nls")
 	@Test(expected = ParseException.class)
 	public void testCreate_fails() throws ParseException{
+		//register and fill cache
+		Cache<Long> cache =  new CacheImpl<Long>();
+		EnumElement value = new EnumElement(1000L, ObjectType.OBJECT1);
+		cache.put(value);
+		CacheRegistry.registerCache("mySelectableCache2", cache, Long.class);
+		
 		pd.fillSamplePropertyDefinition();
-		pd.setCacheName("mySelectableCache");
+		pd.setCacheName("mySelectableCache2");
 		pd.setListCd(1000L);
 		pd.setSubListCd(2000L);
 		pd.setDefaultValue("noSelectableValue");

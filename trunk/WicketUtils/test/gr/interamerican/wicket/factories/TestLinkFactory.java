@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -47,7 +47,7 @@ public class TestLinkFactory extends WicketTest{
 	@Test
 	public void testCreateLinkStringIModelOfStringCallbackAction() {
 		Form<Void> testForm  = new Form<Void>(TestPage.FORM_ID);
-		AjaxLink<?> testLink = LinkFactory.createLink(TestPage.TEST_ID+"Link",new Model(),null); //$NON-NLS-1$
+		AjaxLink<?> testLink = LinkFactory.createLink(TestPage.TEST_ID + "Link", new Model<String>(), null); //$NON-NLS-1$
 		testForm.add(testLink);
 		wicketTester.startPage(new LinkPage(testForm, TestPage.TEST_ID));
 		wicketTester.assertComponent(WicketUtils.wicketPath(TestPage.FORM_ID,TestPage.TEST_ID+"Link"), AjaxLink.class); //$NON-NLS-1$

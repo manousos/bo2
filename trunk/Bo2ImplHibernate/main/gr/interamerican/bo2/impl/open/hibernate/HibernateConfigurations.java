@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -15,13 +15,16 @@ package gr.interamerican.bo2.impl.open.hibernate;
 import gr.interamerican.bo2.arch.exceptions.InitializationException;
 import gr.interamerican.bo2.impl.open.hibernate.tuple.Bo2PojoEntityTuplizer;
 import gr.interamerican.bo2.impl.open.hibernate.tuple.resolver.Bo2EntityNameResolver;
+import gr.interamerican.bo2.utils.ReflectionUtils;
 import gr.interamerican.bo2.utils.StringConstants;
+import gr.interamerican.bo2.utils.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.hibernate.EntityMode;
 import org.hibernate.HibernateException;
+import org.hibernate.Interceptor;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.impl.SessionFactoryImpl;
@@ -52,17 +55,19 @@ public class HibernateConfigurations {
 	 *        Path to the configuration resource file.
 	 * @param dbSchema
 	 *        Db schema.
+	 * @param sessionInterceptor 
+	 *        Hibernate session interceptor.
 	 * 
 	 * @return Returns the session factory.
 	 * 
 	 * @throws InitializationException
 	 *         If the creation of the session factory fails.
 	 */
-	public static SessionFactory getSessionFactory(String pathToCfg, String dbSchema) 
+	public static SessionFactory getSessionFactory(String pathToCfg, String dbSchema, String sessionInterceptor) 
 	throws InitializationException {
 		SessionFactory sessionFactory = sessionFactories.get(key(pathToCfg, dbSchema));
 		if (sessionFactory==null) {
-			sessionFactory = createSessionFactory(pathToCfg, dbSchema);
+			sessionFactory = createSessionFactory(pathToCfg, dbSchema, sessionInterceptor);
 			sessionFactories.put(key(pathToCfg, dbSchema), sessionFactory);
 		}
 		return sessionFactory;
@@ -76,16 +81,24 @@ public class HibernateConfigurations {
 	 *        Path to the hibernate configuration file.
 	 * @param dbSchema
 	 *        Db schema.
+	 * @param sessionInterceptor
+	 *        Hibernate session interceptor.
 	 *        
 	 * @return Returns the session factory.
 	 * 
 	 * @throws InitializationException 
 	 *         If the creation of the SessionFactory fails.
 	 */
-	static SessionFactory createSessionFactory(String pathToCfg, String dbSchema) 
+	static SessionFactory createSessionFactory(String pathToCfg, String dbSchema, String sessionInterceptor) 
 	throws InitializationException {
 		try {
 			Configuration conf = new Configuration();
+			
+			Interceptor interceptor = getInterceptor(sessionInterceptor);
+			if(interceptor!=null) {
+				conf.setInterceptor(interceptor);
+			}
+			
 			conf.setProperty(SCHEMA_PROPERTY, dbSchema);
 			conf.configure(pathToCfg);
 			conf.getEntityTuplizerFactory().registerDefaultTuplizerClass(EntityMode.POJO, Bo2PojoEntityTuplizer.class);
@@ -96,6 +109,18 @@ public class HibernateConfigurations {
 		} catch (HibernateException e) {
 			throw new InitializationException(e);
 		}
+	}
+	
+	/**
+	 * Get the interceptor instance if it is configured.
+	 * @param sessionInterceptor
+	 * @return Interceptor instance.
+	 */
+	private static Interceptor getInterceptor(String sessionInterceptor) {
+		if(StringUtils.isNullOrBlank(sessionInterceptor)) {
+			return null;
+		}
+		return ReflectionUtils.newInstance(sessionInterceptor);
 	}
 	
 	/**

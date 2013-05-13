@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -54,18 +54,19 @@ public class BeanPropertyDefinition<T> extends VariableDefinition<T> {
 	Type genericType;
 	
 	/**
-	 * Creates a new BeanPropertyDefinition object. 
-	 *
+	 * Creates a new BeanPropertyDefinition object.
+	 * 
 	 * @param name
-	 *        Property name.
+	 *            Property name.
 	 * @param type
-	 *        Property type.
-	 * @param beanClass 
-	 *        Bean class on which the property belongs.
-	 * @param getter 
-	 *        Getter method.
-	 * @param setter 
-	 *        Setter method.
+	 *            Property type.
+	 * @param genericType
+	 * @param beanClass
+	 *            Bean class on which the property belongs.
+	 * @param getter
+	 *            Getter method.
+	 * @param setter
+	 *            Setter method.
 	 */
 	public BeanPropertyDefinition(String name, Class<T> type, Type genericType, Class<?> beanClass, Method getter, Method setter) {
 		super(name, type);

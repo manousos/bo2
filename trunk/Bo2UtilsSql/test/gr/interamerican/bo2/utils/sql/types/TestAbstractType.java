@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -45,27 +45,33 @@ public class TestAbstractType {
 	 */
 	private class AbstractTypeImpl extends AbstractType<Integer>{
 
+		@Override
 		public Integer get(ResultSet rs, String columnIndex)
 				throws SQLException {
 			return null;
 		}
 
+		@Override
 		public Integer get(ResultSet rs, int columnIndex) throws SQLException {
 			return null;
 		}
 
+		@Override
 		public String sqlString(Integer t) {
 			return null;
 		}
 		
+		@Override
 		public Class<Integer> getJavaType() {
 			return Integer.class;
 		}
 
+		@Override
 		public Integer get(ResultSet rs, String columnIndex, boolean returnNullValues) throws SQLException {
 			return null;
 		}
 
+		@Override
 		public Integer get(ResultSet rs, int columnIndex, boolean returnNullValues) throws SQLException {
 			return null;
 		}

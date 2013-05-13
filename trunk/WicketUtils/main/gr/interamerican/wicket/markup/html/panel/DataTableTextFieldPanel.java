@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -58,7 +58,7 @@ implements IMarkupResourceStreamProvider, IMarkupCacheKeyProvider {
 		final StringBuilder builder = new StringBuilder();
 		builder.append("<html><body>"); //$NON-NLS-1$
 		builder.append("<wicket:panel>"); //$NON-NLS-1$
-		builder.append("<input type=\"text\" wicket:id=\"" + TEXTFIELD_ID + "\"/>");
+		builder.append("<input type=\"text\" wicket:id=\"" + TEXTFIELD_ID + "\"/>"); //$NON-NLS-1$ //$NON-NLS-2$
 		builder.append("</wicket:panel></body></html>"); //$NON-NLS-1$
 		return new StringAsResourceStream(builder.toString());
 	}

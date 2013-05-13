@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -21,13 +21,6 @@ import gr.interamerican.bo2.gui.components.BPanel;
 import gr.interamerican.bo2.gui.layout.Sizes;
 import gr.interamerican.bo2.gui.util.SystemMonitorPanel;
 import gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcess;
-import gr.interamerican.bo2.impl.open.runtime.concurrent.IsFinished;
-import gr.interamerican.bo2.utils.TimeUtils;
-import gr.interamerican.bo2.utils.adapters.Refresh;
-import gr.interamerican.bo2.utils.adapters.VoidOperation;
-import gr.interamerican.bo2.utils.conditions.Condition;
-import gr.interamerican.bo2.utils.conditions.ConditionOnProperty;
-import gr.interamerican.bo2.utils.runnables.Monitor;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -92,8 +85,7 @@ extends BPanel<MultiThreadedLongProcess> {
 	 * @param model
 	 */
 	public MultiThreadedLongProcessPanel(MultiThreadedLongProcess model) {
-		super(model);	
-		startRefreshThread();
+		super(model);
 	}
 
 	@Override
@@ -279,30 +271,6 @@ extends BPanel<MultiThreadedLongProcess> {
 	}
 
 	
-	/**
-	 * Starts the monitoring thread.
-	 *
-	 */
-	void startRefreshThread() {
-		int refreshInterval = 1;
-		if (this.getModel() instanceof BatchProcess) {
-			BatchProcess<?> bp = (BatchProcess<?>) this.getModel();
-			refreshInterval = bp.getParameters().getUiRefreshInterval();			
-		}
-		if (refreshInterval!=0) {
-			long millis = TimeUtils.seconds2millis(refreshInterval);
-			@SuppressWarnings("rawtypes")
-			Condition<MultiThreadedLongProcessPanel> stop = 
-				new ConditionOnProperty<MultiThreadedLongProcessPanel>
-				("model", MultiThreadedLongProcessPanel.class, new IsFinished()); //$NON-NLS-1$
-			VoidOperation<MultiThreadedLongProcessPanel> refreshMe = 
-				new Refresh<MultiThreadedLongProcessPanel>();
-			Monitor<MultiThreadedLongProcessPanel> monitor = 
-				new Monitor<MultiThreadedLongProcessPanel>
-				(this, millis, stop, refreshMe);
-			new Thread(monitor).start();			
-		}
-		
-	}
+	
 	
 }

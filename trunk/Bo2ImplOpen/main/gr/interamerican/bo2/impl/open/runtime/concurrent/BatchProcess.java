@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -29,6 +29,9 @@ import gr.interamerican.bo2.arch.exceptions.UnexpectedException;
 import gr.interamerican.bo2.arch.ext.Session;
 import gr.interamerican.bo2.arch.utils.ext.Bo2Session;
 import gr.interamerican.bo2.impl.open.creation.Factory;
+import gr.interamerican.bo2.impl.open.namedstreams.NamedStream;
+import gr.interamerican.bo2.impl.open.namedstreams.NamedStreamFactory;
+import gr.interamerican.bo2.impl.open.namedstreams.NamedStreamsProvider;
 import gr.interamerican.bo2.impl.open.runtime.RuntimeCommand;
 import gr.interamerican.bo2.impl.open.utils.Bo2;
 import gr.interamerican.bo2.utils.CollectionUtils;
@@ -39,9 +42,12 @@ import gr.interamerican.bo2.utils.Utils;
 import gr.interamerican.bo2.utils.adapters.Modification;
 import gr.interamerican.bo2.utils.concurrent.ThreadUtils;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -364,12 +370,41 @@ implements Runnable, MultiThreadedLongProcess {
 			setCriteria.execute(query);
 		}
 		query.init(provider);
-		query.open();		
+		query.open();
+		
+		registerSharedStreams();
 		createInitialQueueProcessors();
+		
 		//TODO: is it necessary?
 		long interval = queueProcessors.size() * 10;
 		ThreadUtils.sleepMillis(interval);		
 
+	}
+	
+	/**
+	 * Registers the shared streams contained in the {@link BatchProcessParm}s.
+	 * The manager for the streams is the default streams manager of the Bo2
+	 * deployment.
+	 * 
+	 * @throws InitializationException
+	 * @throws DataException
+	 */
+	void registerSharedStreams() throws InitializationException, DataException {
+		if(parameters.getNamedInputFiles()==null || parameters.getNamedInputFiles().isEmpty()) {
+			return;
+		}
+		NamedStreamsProvider nsp = provider.getResource(
+			Bo2.getDefaultDeployment().getDeploymentBean().getStreamsManagerName(), NamedStreamsProvider.class);
+		
+		for(Map.Entry<String, String> entry : parameters.getNamedInputFiles().entrySet()) {
+			try {
+				NamedStream<?> ns = NamedStreamFactory.input(new File(entry.getValue()), entry.getKey(), 30);
+				nsp.registerSharedStream(ns);
+			}catch (FileNotFoundException fnfe) {
+				throw new DataException(fnfe);
+			}
+		}
+		
 	}
 	
 	/**
@@ -571,7 +606,11 @@ implements Runnable, MultiThreadedLongProcess {
 	
 	@Override
 	public boolean isFinishedAbnormally() {
-		return isFinished() && (exceptionMessage!=null);
+		if (isFinished()) {
+			return 
+				(exceptionMessage!=null) || (!inputQueue.isEmpty());			
+		}
+		return false;
 	}
 	
 	@Override

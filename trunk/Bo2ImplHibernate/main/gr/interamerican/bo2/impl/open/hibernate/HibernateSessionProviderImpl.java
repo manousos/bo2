@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -64,6 +64,11 @@ implements HibernateSessionProvider {
 	private static final String HIBERNATE_CFG_XML = "HIBERNATE_CFG_XML"; //$NON-NLS-1$
 	
 	/**
+	 * Input properties Property name for hibernate interceptor.
+	 */
+	private static final String SESSION_INTERCEPTOR = "SESSION_INTERCEPTOR"; //$NON-NLS-1$
+	
+	/**
 	 * Hibernate SessionFactory used to create sessions
 	 */
 	private SessionFactory sessionFactory;
@@ -105,7 +110,8 @@ implements HibernateSessionProvider {
 		super.parseProperties();
 		String pathToCfg = ProviderUtils.getMandatoryProperty(getProperties(), HIBERNATE_CFG_XML);
 		String dbSchema = ProviderUtils.getMandatoryProperty(getProperties(), KEY_DBSCHEMA);
-		sessionFactory = HibernateConfigurations.getSessionFactory(pathToCfg, dbSchema);
+		String sessionInterceptor = getProperties().getProperty(SESSION_INTERCEPTOR);
+		sessionFactory = HibernateConfigurations.getSessionFactory(pathToCfg, dbSchema, sessionInterceptor);
 	}
 	
 	public Session getHibernateSession() {		

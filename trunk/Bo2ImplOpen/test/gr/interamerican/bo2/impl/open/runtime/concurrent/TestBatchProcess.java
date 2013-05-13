@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -545,16 +545,46 @@ public class TestBatchProcess {
 	 * Test for isFinished().
 	 */
 	@Test
-	public void testIsFinishedAbnormally_finishedNormally() {
+	public void testIsFinishedAbnormally_emptyQueueNoMessage() {
 		BatchProcess<String> bp = sample();
 		bp.createInitialQueueProcessors();
 		bp.forceQuit();
+		bp.inputQueue.clear();
 		ThreadUtils.sleepMillis(200);
 		Assert.assertTrue(bp.isFinished());
 		Assert.assertFalse(bp.isFinishedAbnormally());
+	}
+	
+	/**
+	 * Test for isFinished().
+	 */
+	@Test
+	public void testIsFinishedAbnormally_WithMessage() {
+		BatchProcess<String> bp = sample();
+		bp.createInitialQueueProcessors();
+		bp.forceQuit();		
+		bp.inputQueue.clear();
 		bp.exceptionMessage="Message"; //$NON-NLS-1$
+		ThreadUtils.sleepMillis(200);		
+		Assert.assertTrue(bp.isFinished());
 		Assert.assertTrue(bp.isFinishedAbnormally());
 	}
+	
+	/**
+	 * Test for isFinished().
+	 */
+	@Test
+	public void testIsFinishedAbnormally_NotEmptyQueue() {
+		BatchProcess<String> bp = sample();
+		bp.createInitialQueueProcessors();
+		bp.forceQuit();		
+		bp.inputQueue.add("Message"); //$NON-NLS-1$		
+		ThreadUtils.sleepMillis(200);		
+		Assert.assertTrue(bp.isFinished());
+		Assert.assertTrue(bp.isFinishedAbnormally());
+	}
+	
+	
 	
 	/**
 	 * Test for isFinished().

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -28,7 +28,7 @@ import org.junit.Test;
 public class TestFindUselessJoinsOperation {
 
 	/**
-	 * sqls to test.
+	 * sqls to test. map between the sql staement and the number of joins needed to be removed.
 	 */
 	static Map<String, Integer> sqls = new HashMap<String, Integer>();
 	static {
@@ -38,6 +38,7 @@ public class TestFindUselessJoinsOperation {
 		sqls.put("select * from a,b,c", 0); //$NON-NLS-1$
 		sqls.put("select a.* from a,b,c", 2); //$NON-NLS-1$
 		sqls.put("select a.a,(select b.b from b) from a,b", 1); //$NON-NLS-1$
+		sqls.put("select a.* from a,b,c group by b.a having max(b.a)>0", 1); //$NON-NLS-1$
 	}
 
 	/**

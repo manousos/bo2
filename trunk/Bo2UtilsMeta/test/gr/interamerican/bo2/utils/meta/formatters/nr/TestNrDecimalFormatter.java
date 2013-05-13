@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -25,6 +25,7 @@ public class TestNrDecimalFormatter {
 	/**
 	 * Test for the constructor.
 	 */
+	@SuppressWarnings("rawtypes")
 	@Test
 	public void testConstructor_1() {
 		NrDecimalFormatter f = new NrDecimalFormatter(new DecimalFormat());
@@ -34,6 +35,7 @@ public class TestNrDecimalFormatter {
 	/**
 	 * Test for the constructor.
 	 */
+	@SuppressWarnings("rawtypes")
 	@Test
 	public void testConstructor_2() {
 		NrDecimalFormatter f = new NrDecimalFormatter(2,',','.'); 

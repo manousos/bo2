@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -12,22 +12,20 @@
  ******************************************************************************/
 package gr.interamerican.bo2.gui.batch;
 
-import gr.interamerican.bo2.arch.batch.MultiThreadedLongProcess;
+import gr.interamerican.bo2.gui.components.BPanelForMap;
 import gr.interamerican.bo2.gui.frames.BFrame;
 import gr.interamerican.bo2.gui.layout.Layout;
 import gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcess;
 import gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessInput;
 import gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParm;
 import gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmFactoryImpl;
-import gr.interamerican.bo2.impl.open.runtime.concurrent.IsFinished;
-import gr.interamerican.bo2.impl.open.runtime.concurrent.LongProcessMail;
 import gr.interamerican.bo2.utils.ReflectionUtils;
 import gr.interamerican.bo2.utils.StringUtils;
-import gr.interamerican.bo2.utils.TimeUtils;
 import gr.interamerican.bo2.utils.concurrent.ThreadUtils;
-import gr.interamerican.bo2.utils.conditions.Condition;
-import gr.interamerican.bo2.utils.runnables.Monitor;
+import gr.interamerican.bo2.utils.reflect.analyze.TypeAnalysis;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -47,7 +45,7 @@ extends BFrame {
 	/**
 	 * Input panel.
 	 */
-	BatchProcessInputPanel inputPanel;
+	BPanelForMap<Properties> inputPanel;
 	
 	/**
 	 * Process panel.
@@ -66,17 +64,18 @@ extends BFrame {
 	 * Creates a new BatchProcessFrameForJob object. 
 	 * @param input 
 	 * @param criteria 
+	 * @param inputFileDefinitions 
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public BatchProcessFrameForJob(BatchProcessInput input, Object criteria) {
+	public BatchProcessFrameForJob(BatchProcessInput input, Object criteria, Map<String, String> inputFileDefinitions) {
 		super();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		BatchProcessParm<?> parameters = new BatchProcessParmFactoryImpl().createParameter(input, criteria);
+		BatchProcessParm<?> parameters = new BatchProcessParmFactoryImpl().createParameter(input, criteria, inputFileDefinitions);
 		batch = new BatchProcess(parameters);
 		
-		Properties model = createPropertiesWithInput(input, criteria);
-		inputPanel = new BatchProcessInputPanel(model, false);
+		Properties model = createModelWithInput(input, criteria);
+		inputPanel = new BPanelForMap<Properties>(model);
 		inputPanel.addButton("start", null, this); //$NON-NLS-1$
 		Layout.layAsStackOfLabeledFields(inputPanel, 5, 5);
 		setPanel(inputPanel);
@@ -90,32 +89,10 @@ extends BFrame {
 		long interval = batch.getInitialThreads() * 10;
 		ThreadUtils.sleepMillis(interval);
 		processPanel = new MultiThreadedLongProcessPanel(batch);
-		setPanel(processPanel);
-		startMonitoringThread();
+		setPanel(processPanel);		
 	}
 	
-	/**
-	 * Starts the monitoring thread.
-	 * 
-	 * TODO: duplicate of {@link BatchProcessFrame}
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	void startMonitoringThread() {		
-		BatchProcessParm bpi = batch.getParameters();
-		int interval = bpi.getMonitoringMailInterval();
-		String recipients = bpi.getMonitoringMailRecipients();
-		boolean start = (interval>0) && (!StringUtils.isNullOrBlank(recipients));
-		if (start) {			 
-			Condition<MultiThreadedLongProcess> stop = 
-				new IsFinished<MultiThreadedLongProcess>();
-			LongProcessMail mail = new LongProcessMail();
-			mail.setStatusMessageRecipients(recipients);
-			long millis = TimeUtils.minutes2millis(interval);
-			Monitor<MultiThreadedLongProcess> monitor = 
-				new Monitor(batch, millis, stop, mail);
-			new Thread(monitor).start();
-		}
-	}
+	
 	
 	/**
 	 * Creates a Properties object with the job input. This is used as a preview
@@ -126,13 +103,15 @@ extends BFrame {
 	 * 
 	 * @return Properties with the job input.
 	 */
-	Properties createPropertiesWithInput(BatchProcessInput input, Object criteria) {
-		Properties p = new Properties();
-		Map<String, Object> mapBpi = ReflectionUtils.getProperties(input);
+	Properties createModelWithInput(BatchProcessInput input, Object criteria) {
+		Properties model = new Properties();
+		TypeAnalysis typeAnalysis = TypeAnalysis.analyze(BatchProcessInput.class);
+		List<String> properties = new ArrayList<String>(typeAnalysis.getNamesOfProperties());
+		Map<String, Object> mapBpi = ReflectionUtils.getProperties(input, properties.toArray(new String[]{}));
 		Map<String, Object> mapCriteria = ReflectionUtils.getProperties(criteria);
-		copyMapToProperties(mapBpi, p);
-		copyMapToProperties(mapCriteria, p);
-		return p;
+		copyMapToProperties(mapBpi, model);
+		copyMapToProperties(mapCriteria, model);
+		return model;
 	}
 	
 	/**

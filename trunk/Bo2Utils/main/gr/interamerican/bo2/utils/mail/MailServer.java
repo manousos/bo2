@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -51,6 +51,10 @@ public class MailServer {
 	 */
 	void createSession() {
 		Properties props = System.getProperties();
+		if (host==null) {
+			String msg = "No SMTP host specified"; //$NON-NLS-1$
+			throw new RuntimeException(msg);
+		}
 		props.put(MailConstants.SMTP_HOST, host); 
 		if (port != null) {
 			props.put(MailConstants.SMTP_PORT, port); 

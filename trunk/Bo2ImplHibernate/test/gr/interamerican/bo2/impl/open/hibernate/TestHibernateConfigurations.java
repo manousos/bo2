@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -32,7 +32,7 @@ public class TestHibernateConfigurations {
 	@Test
 	public void testCreateSessionFactory_succeed() throws InitializationException {
 		String pathToCfg = "/gr/interamerican/rsrc/hibernate.cfg.xml"; //$NON-NLS-1$
-		SessionFactory factory = HibernateConfigurations.createSessionFactory(pathToCfg, "TEST"); //$NON-NLS-1$
+		SessionFactory factory = HibernateConfigurations.createSessionFactory(pathToCfg, "TEST", null); //$NON-NLS-1$
 		assertNotNull(factory);
 	}
 	
@@ -44,7 +44,7 @@ public class TestHibernateConfigurations {
 	@Test(expected=InitializationException.class)
 	public void testCreateSessionFactory_fail() throws InitializationException {
 		String pathToCfg = "/com/foo.bar"; //$NON-NLS-1$
-		HibernateConfigurations.createSessionFactory(pathToCfg, "TEST"); //$NON-NLS-1$
+		HibernateConfigurations.createSessionFactory(pathToCfg, "TEST", null); //$NON-NLS-1$
 	}
 	
 	/**
@@ -55,9 +55,9 @@ public class TestHibernateConfigurations {
 	@Test
 	public void testGetSessionFactory() throws InitializationException {
 		String pathToCfg = "/gr/interamerican/rsrc/hibernate.cfg.xml"; //$NON-NLS-1$
-		SessionFactory factory1 = HibernateConfigurations.getSessionFactory(pathToCfg, "TEST"); //$NON-NLS-1$
+		SessionFactory factory1 = HibernateConfigurations.getSessionFactory(pathToCfg, "TEST", null); //$NON-NLS-1$
 		assertNotNull(factory1);
-		SessionFactory factory2 = HibernateConfigurations.getSessionFactory(pathToCfg, "TEST"); //$NON-NLS-1$
+		SessionFactory factory2 = HibernateConfigurations.getSessionFactory(pathToCfg, "TEST", null); //$NON-NLS-1$
 		assertSame(factory1, factory2);
 	}
 	

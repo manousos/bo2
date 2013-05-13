@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -61,7 +61,7 @@ public class TestMultipleValidationsException {
 		String actual = mve.getAllMessages();
 		assertEquals(expected,actual);
 		
-		m.put(new RuntimeException(), "value2");
+		m.put(new RuntimeException(), "value2"); //$NON-NLS-1$
 		expected = "value\nvalue2\n"; //$NON-NLS-1$
 		String expected2="value2\nvalue\n"; //$NON-NLS-1$
 		actual = mve.getAllMessages();

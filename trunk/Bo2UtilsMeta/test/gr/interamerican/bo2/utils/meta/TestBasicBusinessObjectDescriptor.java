@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -64,7 +64,6 @@ public class TestBasicBusinessObjectDescriptor {
 	 * Return one list with BoPropertyDescriptors
 	 * @return List<BoPropertyDescriptor<?>>
 	 */
-	@SuppressWarnings("hiding")
 	private List<BoPropertyDescriptor<?>> getDescriptors(){
 		
 		 Bean1descriptor descriptor =  new Bean1descriptor();

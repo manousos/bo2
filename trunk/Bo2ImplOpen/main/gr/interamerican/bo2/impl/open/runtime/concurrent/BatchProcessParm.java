@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -11,6 +11,8 @@
  * See the GNU Lesser General Public License for more details.
  ******************************************************************************/
 package gr.interamerican.bo2.impl.open.runtime.concurrent;
+
+import java.util.Map;
 
 import gr.interamerican.bo2.arch.EntitiesQuery;
 import gr.interamerican.bo2.arch.Operation;
@@ -287,27 +289,41 @@ public interface BatchProcessParm<T> {
 	void setUiCanAddThreads(boolean uiCanAddThreads);
 	
 	/**
-	 * Gets the time interval for refreshing the UI automatically
-	 * in seconds. <br/>
+	 * Gets the input files for this batch process. The key
+	 * is the logical name of the stream and the value the actual
+	 * filesystem path.
+	 * <br/>
+	 * This may be null indicating that there are no input
+	 * files to setup.
 	 * 
-	 * If this property is zero or negative, then the UI will not
-	 * be refreshed automatically.
-	 * 
-	 * @return Returns the time interval between two automatic 
-	 *         refreshments of the UI.
+	 * @return Returns input files for this batch process.
 	 */
-	int getUiRefreshInterval();
+	Map<String, String> getNamedInputFiles();
 	
 	/**
-	 * Gets the time interval for refreshing the UI automatically
-	 * in seconds. <br/>
+	 * Sets the input files for this batch process.
 	 * 
-	 * @param uiRefreshInterval
-	 *        Time interval in seconds. If this value is zero or
-	 *        negative, then there will be no automatic refreshing
-	 *        of the UI.
+	 * @param namedInputFiles
 	 */
-	void setUiRefreshInterval(int uiRefreshInterval);
+	void setNamedInputFiles(Map<String, String> namedInputFiles);
 	
+	/**
+	 * Gets the time interval in minutes between two subsequent 
+	 * calls to tidy.
+	 *  
+	 * @return Returns the monitoring mail interval.
+	 */
+	int getTidyInterval();
+	
+	/**
+	 * Sets the time interval for tidying the batch process.
+	 * 
+	 * @param tidyInterval
+	 *        Interval in minutes
+	 */
+	void setTidyInterval(int tidyInterval);
+	
+	
+
 
 }

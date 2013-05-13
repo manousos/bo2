@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -27,7 +27,7 @@ implements Modification<T> {
 	/**
 	 * Object to find and replace.
 	 */
-	T replace;
+	T what;
 	/**
 	 * Object to replace with.
 	 */
@@ -38,17 +38,17 @@ implements Modification<T> {
 	/**
 	 * Creates a new ReplaceWith object. 
 	 *
-	 * @param replace
+	 * @param what
 	 * @param with
 	 */
-	public ReplaceWith(T replace, T with) {
+	public ReplaceWith(T what, T with) {
 		super();
-		this.replace = replace;
+		this.what = what;
 		this.with = with;
 	}
 	
 	public T execute(T a) {
-		if (Utils.equals(replace, a)) {
+		if (Utils.equals(what, a)) {
 			return with;
 		}		
 		return a;

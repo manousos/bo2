@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -71,6 +71,8 @@ public class Assertions {
 	
 	/**
 	 * Assert that an exception is not null and has a message.
+	 * 
+	 * @param ex
 	 */
 	public static void assertException(Exception ex) {
 		Assert.assertNotNull(ex);

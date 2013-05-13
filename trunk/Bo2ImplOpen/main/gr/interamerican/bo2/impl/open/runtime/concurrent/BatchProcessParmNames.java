@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -72,6 +72,11 @@ public class BatchProcessParmNames {
 	 * Property key for uiAutoRefresh.
 	 */
 	public static final String UI_REFRESH_INTERVAL = "uiRefreshInterval"; //$NON-NLS-1$
+	/**
+	 * Property key for tidyInterval.
+	 */
+	public static final String TIDY_INTERVAL = "tidyInterval"; //$NON-NLS-1$
+
 	
 	
 	/**
@@ -84,7 +89,7 @@ public class BatchProcessParmNames {
 	 */
 	public static final String[] FIELDS = { BATCH_PROCESS_NAME, QUERY_CLASS, OPERATION_CLASS, FORMATTER_CLASS,
 			PRE_PROCESSING_CLASS, POST_PROCESSING_CLASS, INPUT_PROPERTY, PROCESSORS_COUNT, MONITOR_MESSAGE_INTERVAL,
-			MONITOR_MESSAGE_RECIPIENTS, UI_CAN_ADD_THREADS, UI_REFRESH_INTERVAL, };
+			MONITOR_MESSAGE_RECIPIENTS, UI_CAN_ADD_THREADS, UI_REFRESH_INTERVAL, TIDY_INTERVAL };
 	
 	/**
 	 * Temporary set.

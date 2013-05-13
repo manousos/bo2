@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -150,6 +150,7 @@ public class StreamUtils {
 	 * @return Returns a byte array that contains the file contents. 
 	 */
 	public static byte[] getFileContents(File file) {
+		FileInputStream stream = null;
 		try {
 			long size = file.length();
 			if (size>Integer.MAX_VALUE) {
@@ -157,7 +158,7 @@ public class StreamUtils {
 				throw new RuntimeException(msg);
 			}
 			int iSize = Long.valueOf(size).intValue();		
-			FileInputStream stream = new FileInputStream(file);
+			stream = new FileInputStream(file);
 			byte[] buffer = new byte[iSize];
 			stream.read(buffer);
 			return buffer;
@@ -165,6 +166,14 @@ public class StreamUtils {
 			throw new RuntimeException(e);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
+		} finally {
+			try {
+				if (stream != null) {
+					stream.close();
+				}
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
 		}
 	}
 	

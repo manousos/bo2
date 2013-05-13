@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
@@ -48,7 +48,7 @@ public class TestConversionUtils {
 	/**
 	 * mapper to test
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	Mapper mapper = new Mapper(writer, booleanParser, map);
 	
 	/**
@@ -71,7 +71,7 @@ public class TestConversionUtils {
 	/**
 	 * Tests convert a no integer value to integer 
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test(expected = RuntimeException.class)
 	public void testConvert_ConversionException(){
 		Parser<Integer> intParser = new IntegerParser();
