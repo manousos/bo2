@@ -1,0 +1,12 @@
+gr.interamerican.bo2.impl.open.hibernate
+gr.interamerican.bo2.impl.open.hibernate.adapters
+gr.interamerican.bo2.impl.open.hibernate.conditions
+gr.interamerican.bo2.impl.open.hibernate.operations
+gr.interamerican.bo2.impl.open.hibernate.refreshmodes
+gr.interamerican.bo2.impl.open.hibernate.tuple
+gr.interamerican.bo2.impl.open.hibernate.tuple.instantiator
+gr.interamerican.bo2.impl.open.hibernate.tuple.resolver
+gr.interamerican.bo2.impl.open.hibernate.types
+gr.interamerican.bo2.impl.open.hibernate.utils.reflect.analyze
+gr.interamerican.bo2.impl.open.hibernate.utils.reflect.beans
+gr.interamerican.bo2.impl.open.po
