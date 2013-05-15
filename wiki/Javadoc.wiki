@@ -1,0 +1,4 @@
+= Bo2 projects Javadoc Reference =
+
+
+  * [http://bo2.googlecode.com/svn/trunk/docs/javadocs/Bo2Architecture/index.html Bo2Architecture]
