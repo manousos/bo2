@@ -1,0 +1,7 @@
+gr.interamerican.bo2.arch.utils
+gr.interamerican.bo2.arch.utils.adapters
+gr.interamerican.bo2.arch.utils.beans
+gr.interamerican.bo2.arch.utils.collections
+gr.interamerican.bo2.arch.utils.comparators
+gr.interamerican.bo2.arch.utils.copiers
+gr.interamerican.bo2.arch.utils.ext

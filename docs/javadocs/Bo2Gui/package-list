@@ -1,0 +1,12 @@
+gr.interamerican.bo2.gui.batch
+gr.interamerican.bo2.gui.batch.model
+gr.interamerican.bo2.gui.components
+gr.interamerican.bo2.gui.frames
+gr.interamerican.bo2.gui.handlers
+gr.interamerican.bo2.gui.layout
+gr.interamerican.bo2.gui.listeners
+gr.interamerican.bo2.gui.properties
+gr.interamerican.bo2.gui.resource
+gr.interamerican.bo2.gui.sql
+gr.interamerican.bo2.gui.util
+gr.interamerican.bo2.gui.util.model

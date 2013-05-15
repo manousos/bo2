@@ -1,0 +1,10 @@
+gr.interamerican.bo2.creation
+gr.interamerican.bo2.creation.annotations
+gr.interamerican.bo2.creation.beans
+gr.interamerican.bo2.creation.code.templatebean
+gr.interamerican.bo2.creation.creators
+gr.interamerican.bo2.creation.exception
+gr.interamerican.bo2.creation.proxies
+gr.interamerican.bo2.creation.resolvers
+gr.interamerican.bo2.creation.update
+gr.interamerican.bo2.creation.util
