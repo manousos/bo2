@@ -1,0 +1,4 @@
+#summary Bo2 bindings for Jasper reports.
+
+==Description==
+Binds a Bo2 query to a [http://www.jaspersoft.com/ jasper report].
