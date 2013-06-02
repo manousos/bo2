@@ -1,6 +1,6 @@
 #summary Principles guiding the development of Bo2.
 
-== Principles for long lasting maintainable software ==
+== Principles for maintainable software ==
   * Architecture-centric development process
   * Layered architecture
     * Data access
