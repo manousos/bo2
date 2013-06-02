@@ -1,0 +1,4 @@
+#summary MsOffice excel bindings for Bo2.
+
+==Description==
+Implementation of Bo2 queries for excel documents. The implementation is based on [http://jxl.sourceforge.net/ JXL]
