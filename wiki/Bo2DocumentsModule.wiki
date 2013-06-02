@@ -1,0 +1,18 @@
+#summary The Bo2 documents module builds a framework for the generation of business documents.
+
+==Description==
+The module defines the contract of an engine that creates business documents. 
+The implementation of the engine is based on OdfToolkit.
+
+==Libraries==
+  * Bo2UtilsDoc
+  * Bo2OdfToolkit
+
+==Dependencies==
+====Bo2 libraries====
+  * Bo2Utils
+  * Bo2Creation
+====Third party libraries====
+  * SLF4J
+  * Apache commons beans
+  * Javassist
