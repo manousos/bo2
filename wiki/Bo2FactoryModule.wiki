@@ -1,13 +1,13 @@
-#summary Clever factory
+#summary The Bo2 creation project relieves the developer from the burden of maintaining boilerplate code by automatically adding it at runtime.
 
-= Introduction =
-dd
-Add your content here.
+==Description==
+The developer declares an interface and then creates an abstract class that implements the interface. The abstract class does not need to provide an implementation to every interface method. The factory will create at runtime a new concrete class that inherits the initial abstract class and features all methods necessary to implement the declared interfaces.
 
 
-= Details =
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+==Dependencies==
+====Bo2 libraries====
+  * Bo2Utils
+====Third party libraries====
+  * SLF4J
+  * Javassist
