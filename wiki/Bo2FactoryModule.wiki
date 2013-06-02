@@ -3,7 +3,8 @@
 ==Description==
 The developer declares an interface and then creates an abstract class that implements the interface. The abstract class does not need to provide an implementation to every interface method. The factory will create at runtime a new concrete class that inherits the initial abstract class and features all methods necessary to implement the declared interfaces.
 
-
+==Libraries==
+  * Bo2Creation
 
 ==Dependencies==
 ====Bo2 libraries====
