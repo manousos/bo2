@@ -9,8 +9,8 @@ The Bo2 java library of reusable utilities.
 
 
 == Dependencies ==
-=== Bo2 libraries ===
+==== Bo2 libraries ====
 The !Bo2Utils does not depend on any other Bo2 library.
-=== Third party libraries ===
+==== Third party libraries ====
    * SLF4J
    * Apache commons beans 
