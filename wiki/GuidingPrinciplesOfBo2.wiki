@@ -1,0 +1,32 @@
+#summary Principles guiding the development of Bo2.
+
+== Principles for long lasting maintainable software ==
+  * Architecture-centric development process
+  * Program to interfaces
+  * Map an interface to each stereotype class
+  * Separate layers
+    * Data access
+    * Entity model
+    * Business logic
+    * User interface
+  * The business layer must be agnostic of the implementation details
+  * Keep the system open to yet unknown technologies
+  * Minimize the size of code
+     * Move utilities to separate 
+     * Eliminate boilerplate code
+  * Write once - run everywhere
+
+
+Architecture centric, code generation on runtime.
+
+Write once run everywhere.
+
+Runtime layer abstraction.
+
+Avoid platform specific code (Streams, etc)
+
+Provider interface.
+
+Separate utilities from business code
+
+Utilities must be in different project.
