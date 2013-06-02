@@ -1,0 +1,4 @@
+#summary JEE bindings for Bo2.
+
+==Description==
+Implementation of the Bo2 architecture for Java EE.
