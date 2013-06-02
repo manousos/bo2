@@ -8,7 +8,6 @@ The core Bo2 development framework.
   * Bo2ImplOpen
   * Bo2ImplHibernate
   * Bo2ImplJee
-  * Bo2ImplJta
   * Bo2ImplJotm
   * Bo2ImplMsOffice
   * Bo2Jasper
