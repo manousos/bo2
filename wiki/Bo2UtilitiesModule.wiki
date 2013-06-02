@@ -1,11 +1,14 @@
-#Bo2 utilities module
+= Bo2 Utilities Module =
+Provides reusable utilities.  
 
-= Introduction =
+= Libraries =
+  * Bo2Utils
 
 
-= Details =
+= Dependencies =
+== Bo2 libraries ==
+The !Bo2Utils does not depend on any other Bo2 library.
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+== Third party libraries ==
+   * SLF4J
+   * Apache commons beans 
