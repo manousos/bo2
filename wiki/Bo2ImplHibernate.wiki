@@ -1,0 +1,4 @@
+#summary Hibernate bindings for Bo2.
+
+==Description==
+Implementation of the Bo2 architecture based on hibernate.
