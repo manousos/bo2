@@ -1,0 +1,4 @@
+#summary The core Bo2 module. Architecture and implementations
+
+= Introduction =
+Core Bo2
