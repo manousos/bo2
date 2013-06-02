@@ -1,3 +1,5 @@
+#summary Bo2 utilities module
+
 == Bo2 Utilities Module ==
 Provides reusable utilities.  
 
