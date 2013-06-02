@@ -1,7 +1,7 @@
 #summary Bo2 utilities module
 
 == Description ==
-Provides reusable utilities.  
+The Bo2 java library of reusable utilities.  
 
 
 == Libraries ==
