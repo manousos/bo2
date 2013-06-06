@@ -71,7 +71,7 @@ public class TestMailServer {
 	 */
 	@Test
 	public void testGetSession() {
-		String host = "10.2.3.60"; //$NON-NLS-1$
+		String host = "localhost"; //$NON-NLS-1$
 		server.setHost(host);
 		server.setPort(null);
 		server.createSession();
@@ -84,7 +84,7 @@ public class TestMailServer {
 	 */
 	@Test
 	public void testCreateSession() {
-		String host = "10.2.3.60"; //$NON-NLS-1$
+		String host = "localhost"; //$NON-NLS-1$
 		server.setHost(host);
 		server.setPort(null);
 		server.createSession();

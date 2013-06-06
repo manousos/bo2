@@ -293,7 +293,8 @@ public class CollectionUtils {
 	 *        Type of elements.
 	 */
 	public static <T> void addNextI(Collection<T> collection, T nextElement, String indexPropertyName) {
-		T maxOwner = SelectionUtils.max(collection, indexPropertyName);
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		T maxOwner = SelectionUtils.<T,Comparable>max(collection, indexPropertyName);
 		Integer newIndex = 1;
 		if (maxOwner!=null) {
 			Integer maxIndex = (Integer) ReflectionUtils.getProperty(indexPropertyName, maxOwner);
@@ -326,7 +327,8 @@ public class CollectionUtils {
 	 * @see #addNextI(Collection, Object, String)
 	 */
 	public static <T> void addNextL(Collection<T> collection, T nextElement, String indexPropertyName) {
-		T maxOwner = SelectionUtils.max(collection, indexPropertyName);
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		T maxOwner = SelectionUtils.<T,Comparable>max(collection, indexPropertyName);
 		Long newIndex = 1L;
 		if (maxOwner!=null) {
 			Long maxIndex = (Long) ReflectionUtils.getProperty(indexPropertyName, maxOwner);
