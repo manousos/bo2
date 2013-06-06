@@ -19,7 +19,7 @@ import gr.interamerican.bo2.arch.exceptions.DataException;
 import gr.interamerican.bo2.arch.exceptions.PoNotFoundException;
 import gr.interamerican.bo2.arch.utils.ext.Bo2Session;
 import gr.interamerican.bo2.impl.open.creation.Factory;
-import gr.interamerican.bo2.impl.open.hibernate.utils.reflect.analyze.ModificationRecordFieldsAnalyzer;
+import gr.interamerican.bo2.impl.open.hibernate.utils.reflect.analyze.HibernateAwarePoAnalyzer;
 import gr.interamerican.bo2.impl.open.state.CrudStates;
 import gr.interamerican.bo2.impl.open.utils.Bo2;
 import gr.interamerican.bo2.utils.Debug;
@@ -312,7 +312,7 @@ implements PersistenceUtility<P> {
 	@SuppressWarnings("nls")
 	void specialLogHibernateException(String entityName, Serializable id, Object o) {
 		if (logger.isDebugEnabled()) {
-			ModificationRecordFieldsAnalyzer analyzer = new ModificationRecordFieldsAnalyzer();
+			HibernateAwarePoAnalyzer analyzer = new HibernateAwarePoAnalyzer();
 			String message = StringConstants.EMPTY;
 			try {
 				Tree<VariableDefinition<?>> root = analyzer.execute(o);

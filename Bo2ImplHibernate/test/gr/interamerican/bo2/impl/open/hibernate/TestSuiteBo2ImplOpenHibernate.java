@@ -12,6 +12,7 @@
  ******************************************************************************/
 package gr.interamerican.bo2.impl.open.hibernate;
 
+import gr.interamerican.bo2.arch.enums.TestSuiteBo2ArchEnums;
 import gr.interamerican.bo2.arch.ext.Cache;
 import gr.interamerican.bo2.arch.utils.CacheRegistry;
 import gr.interamerican.bo2.arch.utils.beans.CacheImpl;
@@ -63,7 +64,7 @@ import org.junit.runners.Suite.SuiteClasses;
 		
 		TestSuiteImplOpenTestsForHibernate.class,
 		
-		
+		TestSuiteBo2ArchEnums.class
 	}
 )
 public class TestSuiteBo2ImplOpenHibernate {

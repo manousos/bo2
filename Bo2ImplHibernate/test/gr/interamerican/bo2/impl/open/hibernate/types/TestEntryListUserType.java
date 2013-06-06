@@ -16,6 +16,7 @@ import static org.junit.Assert.assertEquals;
 import gr.interamerican.bo2.arch.ext.Cache;
 import gr.interamerican.bo2.arch.ext.TypedSelectable;
 import gr.interamerican.bo2.arch.utils.CacheRegistry;
+import gr.interamerican.bo2.arch.utils.beans.CacheImpl;
 import gr.interamerican.bo2.arch.utils.beans.TypedSelectableImpl;
 import gr.interamerican.bo2.utils.CollectionUtils;
 import gr.interamerican.bo2.utils.StringConstants;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -42,6 +44,19 @@ public class TestEntryListUserType {
 	 */
 	private final String ENTRY_USER_PROPERTIES_PATH = 
 		"/gr/interamerican/rsrc/hibernate/types/EntryUserTypeNumber.properties"; //$NON-NLS-1$
+	
+	/**
+	 * Tests setup.
+	 */
+	@BeforeClass
+	public static void setup() {
+		String name = "longCache"; //$NON-NLS-1$
+		Cache<?> cache = CacheRegistry.getRegisteredCache(name);
+		if (cache==null) {
+			Cache<Long> newCache = new CacheImpl<Long>();
+			CacheRegistry.registerCache(name, newCache, Long.class);
+		}
+	}
 	
 	/**
 	 * 
@@ -134,7 +149,7 @@ public class TestEntryListUserType {
 	 */
 	@SuppressWarnings("nls")
 	@Test(expected=RuntimeException.class)
-	public void testFromXMLString_fail(){		
+	public void testFromXMLString_fail(){
 		Cache<Long> cache = CacheRegistry.<Long>getRegisteredCache("longCache");
 		
 		TypedSelectable<Long> typed = new TypedSelectableImpl<Long>();

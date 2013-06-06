@@ -10,28 +10,21 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
  * See the GNU Lesser General Public License for more details.
  ******************************************************************************/
-package gr.interamerican.bo2.impl.open.hibernate.utils.reflect.analyze;
-
+package gr.interamerican.bo2.arch.enums;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-
-
 /**
- * Test suite for package <code>gr.interamerican.bo2.impl.open.hibernate</code>.
- *
+ * 
  */
 @RunWith(Suite.class)
 @SuiteClasses(
-	{	
-		TestModificationRecordFieldsAnalyzer.class,
-		TestHibernateAwarePoAnalyzer.class
+	{
+		TestCrudOperationsWithHibernate.class
 	}
 )
-public class TestSuiteBo2ImplOpenHibernateUtilsReflectAnalyze {
-	/* empty */	
+public class TestSuiteBo2ArchEnums {
+	/* empty */
 }
-
-

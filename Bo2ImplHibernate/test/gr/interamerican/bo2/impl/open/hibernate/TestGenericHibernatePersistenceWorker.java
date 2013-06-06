@@ -19,6 +19,7 @@ import gr.interamerican.bo2.arch.Provider;
 import gr.interamerican.bo2.arch.exceptions.DataException;
 import gr.interamerican.bo2.arch.exceptions.InitializationException;
 import gr.interamerican.bo2.arch.exceptions.PoNotFoundException;
+import gr.interamerican.bo2.impl.open.annotations.Bo2AnnoUtils;
 import gr.interamerican.bo2.impl.open.hibernate.refreshmodes.GetAndRefresh;
 import gr.interamerican.bo2.impl.open.hibernate.refreshmodes.JustGet;
 import gr.interamerican.bo2.impl.open.utils.Bo2;
@@ -48,6 +49,7 @@ public class TestGenericHibernatePersistenceWorker {
 	 */
 	public TestGenericHibernatePersistenceWorker() throws InitializationException {
 		super();
+		Bo2AnnoUtils.setManagerName(User.class, "LOCALDB"); //$NON-NLS-1$
 		userPw = new GenericHibernatePersistenceWorker<User>(User.class, RefreshMode.getDefaultMode());
 		bean = new PersistenceUtilityUserTestbean<PersistenceWorker<User>> (userPw);
 	}

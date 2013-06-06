@@ -22,7 +22,9 @@ import org.junit.Test;
 
 /**
  * Test for {@link ModificationRecordFieldsAnalyzer}.
+ * @deprecated
  */
+@Deprecated
 public class TestModificationRecordFieldsAnalyzer {
 	
 	/**
