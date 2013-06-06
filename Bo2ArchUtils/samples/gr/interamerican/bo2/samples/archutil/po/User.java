@@ -17,9 +17,13 @@ import gr.interamerican.bo2.arch.PersistentObject;
 import gr.interamerican.bo2.arch.ext.Codified;
 import gr.interamerican.bo2.arch.ext.TypedSelectable;
 import gr.interamerican.bo2.arch.utils.beans.ModificationRecordImpl;
+import gr.interamerican.bo2.utils.SelectionUtils;
 import gr.interamerican.bo2.utils.Utils;
+import gr.interamerican.bo2.utils.annotations.Child;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -56,6 +60,11 @@ implements TypedSelectable<Long>, PersistentObject<UserKey>, ModificationRecord 
 	 */
 	String usrid;
 	
+	/**
+	 * user profiles.
+	 */
+	@Child Set<UserProfile> profiles = new HashSet<UserProfile>();
+
 	/**
 	 * {@link ModificationRecord}.
 	 */
@@ -146,6 +155,25 @@ implements TypedSelectable<Long>, PersistentObject<UserKey>, ModificationRecord 
 	 */
 	public void setUsrid(String usrid) {
 		this.usrid = usrid;
+	}
+	
+	
+	/**
+	 * Gets the profiles.
+	 *
+	 * @return Returns the profiles
+	 */
+	public Set<UserProfile> getProfiles() {
+		return profiles;
+	}
+
+	/**
+	 * Assigns a new value to the profiles.
+	 *
+	 * @param profiles the profiles to set
+	 */
+	public void setProfiles(Set<UserProfile> profiles) {
+		this.profiles = profiles;
 	}
 	
 	/**
@@ -267,6 +295,18 @@ implements TypedSelectable<Long>, PersistentObject<UserKey>, ModificationRecord 
 	@Override
 	public void setLastModifiedBy(String lastModifiedBy) {
 		mdf.setLastModifiedBy(lastModifiedBy);
+	}
+	
+	/**
+	 * Gets the UserProfile associated with this that has the specified profileNo.
+	 * @param profileNo
+	 * @return UserProfile.
+	 */
+	public UserProfile getProfileById(Integer profileId) {
+		if (profiles==null) {
+			return null;
+		}
+		return SelectionUtils.selectFirstByProperty("profileId", profileId, profiles, UserProfile.class);		 //$NON-NLS-1$
 	}
 
 	
