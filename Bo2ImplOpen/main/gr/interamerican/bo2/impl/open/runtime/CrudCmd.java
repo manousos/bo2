@@ -13,6 +13,7 @@
 package gr.interamerican.bo2.impl.open.runtime;
 
 import gr.interamerican.bo2.arch.PersistenceUtility;
+import gr.interamerican.bo2.arch.PersistentObject;
 import gr.interamerican.bo2.arch.Worker;
 import gr.interamerican.bo2.arch.exceptions.DataException;
 import gr.interamerican.bo2.arch.exceptions.InitializationException;
@@ -20,7 +21,6 @@ import gr.interamerican.bo2.arch.exceptions.LogicException;
 import gr.interamerican.bo2.arch.exceptions.PoNotFoundException;
 import gr.interamerican.bo2.arch.exceptions.UnexpectedException;
 import gr.interamerican.bo2.impl.open.po.PoUtils;
-import gr.interamerican.bo2.test.def.posamples.Invoice;
 
 /**
  * CRUD operations by an {@link AbstractBo2RuntimeCmd}.
@@ -208,7 +208,7 @@ public class CrudCmd<P> {
 	}
 	
 	/**
-	 * Operation on an {@link Invoice}.
+	 * Operation on an {@link PersistentObject}
 	 */
 	abstract class PoCmd extends AbstractBo2RuntimeCmd {
 		

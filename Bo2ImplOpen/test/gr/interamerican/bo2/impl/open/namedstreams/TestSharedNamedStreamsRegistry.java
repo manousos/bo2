@@ -21,44 +21,41 @@ import java.util.Set;
 
 import junit.framework.Assert;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
  * Unit tests for {@link SharedNamedStreamsRegistry}.
  */
+@SuppressWarnings({ "nls", "unchecked", "rawtypes" })
 public class TestSharedNamedStreamsRegistry {
 	
 	/**
 	 * Clear the registry.
 	 */
-	@BeforeClass @AfterClass
-	public static void cleanup() {
+	@Before @After
+	public void cleanup() {
 		SharedNamedStreamsRegistry.name2stream.clear();
 		SharedNamedStreamsRegistry.stream2name.clear();
 		SharedNamedStreamsRegistry.providersAccessingStream.clear();
 	}
 	
-	static NamedStreamsProvider nsp1;
-	static NamedStream<?> stream;
-	String name = "name";
-
 	/**
 	 * Test registerStream
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Test
 	public void testRegisterStream() {
-		nsp1 = new MockAbstractNamedStreamsManager(new Properties());
-		stream = new MockNamedStream(StreamType.INPUTSTREAM, StreamResource.FILE, null, name, 5);
-		SharedNamedStreamsRegistry.register(name, stream, nsp1);
+		String name = "streamName";
+		NamedStreamsProvider nsp = new MockAbstractNamedStreamsManager(new Properties());
+		NamedStream<?> stream = new MockNamedStream(StreamType.INPUTSTREAM, StreamResource.FILE, null, name, 5);
+		SharedNamedStreamsRegistry.register(name, stream, nsp);
 		Assert.assertEquals(stream, SharedNamedStreamsRegistry.name2stream.get(name));
 		Assert.assertEquals(name, SharedNamedStreamsRegistry.stream2name.get(stream));
 		Set<NamedStreamsProvider> providers = SharedNamedStreamsRegistry.providersAccessingStream.get(stream);
 		Assert.assertNotNull(providers);
 		Assert.assertTrue(providers.size()==1);
-		Assert.assertEquals(nsp1, providers.iterator().next());
+		Assert.assertEquals(nsp, providers.iterator().next());
 	}
 	
 	/**
@@ -66,8 +63,12 @@ public class TestSharedNamedStreamsRegistry {
 	 */
 	@Test
 	public void testGetStream() {
+		String name = "streamName";
 		NamedStreamsProvider nsp = new MockAbstractNamedStreamsManager(new Properties());
-		Assert.assertEquals(stream, SharedNamedStreamsRegistry.getStream(name, nsp));
+		NamedStream<?> stream = new MockNamedStream(StreamType.INPUTSTREAM, StreamResource.FILE, null, name, 5);
+		SharedNamedStreamsRegistry.register(name, stream, nsp);
+		NamedStreamsProvider nsp1 = new MockAbstractNamedStreamsManager(new Properties());
+		Assert.assertEquals(stream, SharedNamedStreamsRegistry.getStream(name, nsp1));
 		Assert.assertTrue(SharedNamedStreamsRegistry.providersAccessingStream.get(stream).size()==2);
 	}
 	
@@ -78,10 +79,18 @@ public class TestSharedNamedStreamsRegistry {
 	 */
 	@Test
 	public void testReleaseSharedStreams() throws DataException {
-		SharedNamedStreamsRegistry.releaseSharedStreams(nsp1);
+		String name = "streamName";
+		NamedStreamsProvider nsp = new MockAbstractNamedStreamsManager(new Properties());
+		NamedStream<?> stream = new MockNamedStream(StreamType.INPUTSTREAM, StreamResource.FILE, null, name, 5);
+		SharedNamedStreamsRegistry.register(name, stream, nsp);
+		NamedStreamsProvider nsp1 = new MockAbstractNamedStreamsManager(new Properties());
+		Assert.assertEquals(stream, SharedNamedStreamsRegistry.getStream(name, nsp1));
+		SharedNamedStreamsRegistry.releaseSharedStreams(nsp);
 		Assert.assertTrue(SharedNamedStreamsRegistry.providersAccessingStream.get(stream).size()==1);
 		Assert.assertEquals(stream, SharedNamedStreamsRegistry.name2stream.get(name));
 		Assert.assertEquals(name, SharedNamedStreamsRegistry.stream2name.get(stream));
+		SharedNamedStreamsRegistry.releaseSharedStreams(nsp1);
+		Assert.assertNull(SharedNamedStreamsRegistry.providersAccessingStream.get(stream));
 	}
 
 }

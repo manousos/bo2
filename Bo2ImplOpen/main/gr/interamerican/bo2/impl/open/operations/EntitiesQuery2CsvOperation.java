@@ -20,6 +20,7 @@ import gr.interamerican.bo2.arch.exceptions.LogicException;
 import gr.interamerican.bo2.impl.open.namedstreams.NamedStream;
 import gr.interamerican.bo2.impl.open.namedstreams.NamedStreamsProvider;
 import gr.interamerican.bo2.impl.open.records.CsvRecord;
+import gr.interamerican.bo2.utils.ArrayUtils;
 import gr.interamerican.bo2.utils.CollectionUtils;
 import gr.interamerican.bo2.utils.adapters.GetProperties;
 import gr.interamerican.bo2.utils.meta.formatters.Formatter;
@@ -344,8 +345,10 @@ extends AbstractQueryCrawlerOperation<Q>{
 				out.writeString(row);
 			}
 		}
-		record.setFields(headers);
-		out.writeString(record.getBuffer());	
+		if(!ArrayUtils.isNullOrEmpty(headers)) {
+			record.setFields(headers);
+			out.writeString(record.getBuffer());
+		}
 	}
 	
 	@Override

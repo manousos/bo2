@@ -21,6 +21,7 @@ import org.junit.Test;
  * implementations of the tested type.
  */
 public class BaseTestForAbstractBasePo {
+	
 	/**
 	 * SamplesFactory
 	 */

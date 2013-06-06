@@ -24,10 +24,11 @@ import gr.interamerican.bo2.impl.open.runtime.CrudCmd;
 import gr.interamerican.bo2.impl.open.transformations.DeepCopy;
 import gr.interamerican.bo2.samples.archutil.po.User;
 import gr.interamerican.bo2.samples.archutil.po.UserKey;
+import gr.interamerican.bo2.samples.archutil.po.UserProfile;
+import gr.interamerican.bo2.samples.archutil.po.UserProfileKey;
 import gr.interamerican.bo2.test.def.posamples.Invoice;
 import gr.interamerican.bo2.test.def.posamples.InvoiceKey;
 import gr.interamerican.bo2.test.def.posamples.InvoiceLine;
-import gr.interamerican.bo2.test.def.posamples.InvoiceLineKey;
 import gr.interamerican.bo2.test.def.posamples.SamplesFactory;
 import gr.interamerican.bo2.test.utils.UtilityForBo2Test;
 import gr.interamerican.bo2.utils.ReflectionUtils;
@@ -59,10 +60,10 @@ public class TestPoFetcher {
 		new AbstractBo2RuntimeCmd() {			
 			@Override
 			public void work() throws LogicException, DataException, InitializationException, UnexpectedException {
-				InvoiceKey ik = Factory.create(InvoiceKey.class);
-				ik.setInvoiceNo("no no no"); //$NON-NLS-1$
-				Invoice invoice = PoFetcher.get(Invoice.class, ik);
-				Assert.assertNull(invoice);
+				UserKey uk = Factory.create(UserKey.class);
+				uk.setId(-1);
+				User user = PoFetcher.get(User.class, uk);
+				Assert.assertNull(user);
 			}
 		}.execute();
 		
@@ -75,10 +76,6 @@ public class TestPoFetcher {
 	 * Tests that an object can be fetched.
 	 * Tests that when a cache has been defined for a class, then
 	 * subsequent fetches of an element with the same id 
-	 * 
-	 * @throws UnexpectedException
-	 * @throws DataException
-	 * @throws LogicException
 	 */
 	@Test
 	public void testSet() {
@@ -191,44 +188,43 @@ public class TestPoFetcher {
 	@SuppressWarnings("nls")
 	@Test
 	public void testGet_withMethod() throws UnexpectedException, DataException, LogicException {
-		final String invoiceNo = "POFETCH";
+		final Integer userId = 555;
 		
-		PoFetcher.setCacheSize(Invoice.class, 5);		
-		PoFetcher.setGetChildMethod(InvoiceLine.class, Invoice.class, "getLineByNo", "lineNo");
+		PoFetcher.setCacheSize(User.class, 5);		
+		PoFetcher.setGetChildMethod(UserProfile.class, User.class, "getProfileById", "profileId");
 		
-		CrudCmd<Invoice> crud = new CrudCmd<Invoice>(Factory.createPw(Invoice.class),true);
-		Invoice invoice = SamplesFactory.getBo2Factory().sampleInvoiceFull(5);
-		invoice.setInvoiceNo(invoiceNo);		
-		crud.delete(invoice);		
-		crud.store(invoice);
+		CrudCmd<User> crud = new CrudCmd<User>(Factory.createPw(User.class),true);
+		User user = SamplesFactory.getBo2Factory().sampleUser(userId,2);
+		crud.delete(user);		
+		crud.store(user);
 		
-		final InvoiceLine[] lines = new InvoiceLine[4];
+		final UserProfile[] profiles = new UserProfile[1];
 		
 		
 		new AbstractBo2RuntimeCmd() {			
 			@Override
 			public void work() throws LogicException, DataException, InitializationException, UnexpectedException {	
-				InvoiceLineKey key = Factory.create(InvoiceLineKey.class);
-				key.setInvoiceNo(invoiceNo);
-				key.setLineNo(3);
-				lines[0] = PoFetcher.get(InvoiceLine.class, key); //Fetched using method	
-				Assert.assertNotNull(lines[0]);
+				UserProfileKey key = Factory.create(UserProfileKey.class);
+				key.setId(userId);
+				key.setProfileId(1);
+				profiles[0] = PoFetcher.get(UserProfile.class, key); //Fetched using method	
+				Assert.assertNotNull(profiles[0]);
 			}
 		}.execute();
 		
 		new AbstractBo2RuntimeCmd() {			
 			@Override
 			public void work() throws LogicException, DataException, InitializationException, UnexpectedException {	
-				InvoiceKey key = Factory.create(InvoiceKey.class);
-				key.setInvoiceNo(invoiceNo);
-				Invoice inv = PoFetcher.get(Invoice.class, key);
+				UserKey key = Factory.create(UserKey.class);
+				key.setId(userId);
+				User inv = PoFetcher.get(User.class, key);
 				Assert.assertNotNull(inv);
-				InvoiceLine line3 = inv.getLineByNo(3);
-				Assert.assertSame(lines[0], line3);
+				UserProfile up = inv.getProfileById(1);
+				Assert.assertSame(profiles[0], up);
 			}
 		}.execute();
 		
-		crud.delete(invoice);	
+		crud.delete(user);	
 	}
 	
 	/**

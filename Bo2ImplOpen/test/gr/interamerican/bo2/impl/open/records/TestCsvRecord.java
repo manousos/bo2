@@ -394,4 +394,20 @@ public class TestCsvRecord {
 		assertEquals(sample.getBuffer(), sample.toString());
 	}
 	
+	/**
+	 * test constructor with array.
+	 */
+	@Test
+	@SuppressWarnings("nls")
+	public void testCreation_withArray() {
+		String[] records = new String[]{"a", null, "c"};
+		CsvRecord sample = new CsvRecord(records);
+		
+		assertEquals(sample.getString(0), records[0]);
+		assertEquals(sample.getString(1), records[1]);
+		assertEquals(sample.getString(2), records[2]);
+		
+		assertEquals(sample.getBuffer(), "a;null;c");
+	}
+	
 }

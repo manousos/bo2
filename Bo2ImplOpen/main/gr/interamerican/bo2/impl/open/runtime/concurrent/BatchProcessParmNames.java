@@ -76,6 +76,13 @@ public class BatchProcessParmNames {
 	 * Property key for tidyInterval.
 	 */
 	public static final String TIDY_INTERVAL = "tidyInterval"; //$NON-NLS-1$
+	/**
+	 * Property key for entityHeader.
+	 */
+	public static final String ENTITY_HEADER = "entityHeader"; //$NON-NLS-1$
+
+	
+	
 
 	
 	
@@ -89,7 +96,7 @@ public class BatchProcessParmNames {
 	 */
 	public static final String[] FIELDS = { BATCH_PROCESS_NAME, QUERY_CLASS, OPERATION_CLASS, FORMATTER_CLASS,
 			PRE_PROCESSING_CLASS, POST_PROCESSING_CLASS, INPUT_PROPERTY, PROCESSORS_COUNT, MONITOR_MESSAGE_INTERVAL,
-			MONITOR_MESSAGE_RECIPIENTS, UI_CAN_ADD_THREADS, UI_REFRESH_INTERVAL, TIDY_INTERVAL };
+			MONITOR_MESSAGE_RECIPIENTS, UI_CAN_ADD_THREADS, UI_REFRESH_INTERVAL, TIDY_INTERVAL, ENTITY_HEADER };
 	
 	/**
 	 * Temporary set.

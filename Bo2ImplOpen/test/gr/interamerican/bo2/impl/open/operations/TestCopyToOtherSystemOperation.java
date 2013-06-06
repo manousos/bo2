@@ -21,8 +21,8 @@ import gr.interamerican.bo2.impl.open.creation.Factory;
 import gr.interamerican.bo2.impl.open.runtime.AbstractBo2RuntimeCmd;
 import gr.interamerican.bo2.impl.open.runtime.CrudCmd;
 import gr.interamerican.bo2.impl.open.workers.AbstractResourceConsumer;
-import gr.interamerican.bo2.test.def.posamples.Invoice;
-import gr.interamerican.bo2.test.def.posamples.InvoiceKey;
+import gr.interamerican.bo2.samples.archutil.po.User;
+import gr.interamerican.bo2.samples.archutil.po.UserKey;
 import gr.interamerican.bo2.test.def.posamples.SamplesFactory;
 
 import org.junit.After;
@@ -36,9 +36,9 @@ import org.junit.Test;
  */
 public class TestCopyToOtherSystemOperation {
 	/**
-	 * Invoice No.
+	 * User id.
 	 */
-	private static final String INVOICENO = "INV45678"; //$NON-NLS-1$
+	private static final Integer USERID = 555;
 	
 	/**
 	 * From manager.
@@ -53,17 +53,17 @@ public class TestCopyToOtherSystemOperation {
 	/**
 	 * CRUD command for setup and teardown.
 	 */
-	CrudCmd<Invoice> crudFrom;
+	CrudCmd<User> crudFrom;
 	/**
 	 * CRUD command for setup and teardown.
 	 */
-	CrudCmd<Invoice> crudTo;	
+	CrudCmd<User> crudTo;	
 	
 	
 	/**
 	 * Test sample.
 	 */
-	Invoice sample;
+	User sample;
 	
 	
 	
@@ -73,19 +73,18 @@ public class TestCopyToOtherSystemOperation {
 	 */
 	public TestCopyToOtherSystemOperation() {
 		super();
-		PersistenceWorker<Invoice> from = Factory.createPw(Invoice.class);
+		PersistenceWorker<User> from = Factory.createPw(User.class);
 		AbstractResourceConsumer rcFrom = (AbstractResourceConsumer) from;
 		rcFrom.setManagerName(FROM);
-		crudFrom = new CrudCmd<Invoice>(from,true);
+		crudFrom = new CrudCmd<User>(from,true);
 		
-		PersistenceWorker<Invoice> to = Factory.createPw(Invoice.class);
+		PersistenceWorker<User> to = Factory.createPw(User.class);
 		AbstractResourceConsumer rcTo = (AbstractResourceConsumer) to;
 		rcTo.setManagerName(TO);
-		crudTo = new CrudCmd<Invoice>(to,true);
+		crudTo = new CrudCmd<User>(to,true);
 		
 		SamplesFactory factory = SamplesFactory.getBo2Factory();
-		sample = factory.sampleInvoiceFull(3);
-		sample.setInvoiceNo(INVOICENO);
+		sample = factory.sampleUser(USERID, 3);
 	}
 
 	/**
@@ -126,8 +125,8 @@ public class TestCopyToOtherSystemOperation {
 			@Override
 			public void work() throws LogicException, DataException,
 			InitializationException, UnexpectedException {				
-				CopyToOtherSystemOperation<Invoice, InvoiceKey> op =
-					new CopyToOtherSystemOperation<Invoice, InvoiceKey>(Invoice.class, FROM, TO);
+				CopyToOtherSystemOperation<User, UserKey> op =
+					new CopyToOtherSystemOperation<User, UserKey>(User.class, FROM, TO);
 				op.setKey(sample.getKey());
 				op.init(getProvider());
 				op.open();
@@ -136,7 +135,7 @@ public class TestCopyToOtherSystemOperation {
 			}
 		}.execute();
 		
-		Invoice copied = crudTo.read(sample);
+		User copied = crudTo.read(sample);
 		Assert.assertEquals(sample, copied);
 	}
 

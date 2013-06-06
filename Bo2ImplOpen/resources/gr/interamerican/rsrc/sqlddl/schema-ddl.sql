@@ -167,3 +167,36 @@
         add constraint FK_INV_CUST_2_INV
         foreign key (INVOICE_NO) 
         references TEST.Invoice;
+        
+--Users, UserProfiles, Roles
+
+        CREATE TABLE "TEST"."ROLES"
+		(
+		   ID int PRIMARY KEY NOT NULL,
+		   ROLE_DSC varchar(90) DEFAULT '' NOT NULL
+		);
+        
+        CREATE TABLE "TEST"."USERS"
+		(
+		   ID int PRIMARY KEY NOT NULL,
+		   USR_ID char(8) DEFAULT '' NOT NULL,
+		   USR_NM char(30) DEFAULT '' NOT NULL,
+		   ROLE_ID int DEFAULT 0
+		);
+		
+		ALTER TABLE "TEST"."USERS"
+		ADD CONSTRAINT FK_USERROLE
+		FOREIGN KEY (ROLE_ID)
+		REFERENCES "TEST"."ROLES"(ID);
+		
+		CREATE TABLE "TEST"."USERPROFILE"
+		(
+		   ID int NOT NULL,
+		   PROFILE_ID int NOT NULL,
+		   PROF_NM char(30) DEFAULT '' NOT NULL
+		);
+		
+		alter table TEST.USERPROFILE 
+        add constraint FK_PROFILE_2_USER
+        foreign key (ID) 
+        references TEST.USERS;

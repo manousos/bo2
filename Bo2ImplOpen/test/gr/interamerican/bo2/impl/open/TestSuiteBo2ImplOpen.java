@@ -12,7 +12,6 @@
  ******************************************************************************/
 package gr.interamerican.bo2.impl.open;
 
-import gr.interamerican.bo2.arch.enums.TestSuiteBo2ArchEnums;
 import gr.interamerican.bo2.impl.open.annotations.TestSuiteBo2ImplOpenAnnotations;
 import gr.interamerican.bo2.impl.open.beans.TestSuiteBo2ImplOpenBeans;
 import gr.interamerican.bo2.impl.open.creation.TestSuiteBo2ImplOpenCreation;
@@ -54,7 +53,6 @@ import org.junit.runners.Suite.SuiteClasses;
 		TestSuiteBo2ImplOpenStreams.class,
 		TestSuiteBo2ImplOpenUtils.class,
 		TestSuiteBo2ImplOpenOperations.class,
-		TestSuiteBo2ArchEnums.class,
 		TestSuiteBo2ImplOpenWorkers.class,		
 		TestSuiteBo2ImplOpenParse.class,
 		TestSuiteBo2ImplOpenDoc.class,

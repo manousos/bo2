@@ -29,6 +29,7 @@ import gr.interamerican.bo2.arch.exceptions.UnexpectedException;
 import gr.interamerican.bo2.arch.ext.Session;
 import gr.interamerican.bo2.arch.utils.ext.Bo2Session;
 import gr.interamerican.bo2.impl.open.creation.Factory;
+import gr.interamerican.bo2.impl.open.namedstreams.NamedPrintStream;
 import gr.interamerican.bo2.impl.open.namedstreams.NamedStream;
 import gr.interamerican.bo2.impl.open.namedstreams.NamedStreamFactory;
 import gr.interamerican.bo2.impl.open.namedstreams.NamedStreamsProvider;
@@ -37,6 +38,7 @@ import gr.interamerican.bo2.impl.open.utils.Bo2;
 import gr.interamerican.bo2.utils.CollectionUtils;
 import gr.interamerican.bo2.utils.ExceptionUtils;
 import gr.interamerican.bo2.utils.SelectionUtils;
+import gr.interamerican.bo2.utils.StringConstants;
 import gr.interamerican.bo2.utils.StringUtils;
 import gr.interamerican.bo2.utils.Utils;
 import gr.interamerican.bo2.utils.adapters.Modification;
@@ -354,6 +356,27 @@ implements Runnable, MultiThreadedLongProcess {
 	}	
 	
 	/**
+	 * Prints the headers in the log files.
+	 * @throws InitializationException 
+	 */
+	void pritHeaders() throws InitializationException {
+		NamedPrintStream successes = SharedStreams.successes(provider, this.getName());
+		NamedPrintStream failures = SharedStreams.failures(provider, this.getName());		
+		String header = parameters.getEntityHeader();
+		if (!StringUtils.isNullOrBlank(header)) {
+			successes.writeString(header);
+			header = header+StringConstants.SEMICOLON+"Error message"; //$NON-NLS-1$
+			failures.writeString(header);
+		}
+		NamedPrintStream stackTraces = SharedStreams.optionalStacktraces(provider, this.getName());
+		if (stackTraces!=null) {
+			String stackHead = ">>>Stack traces of batch process:" + this.getName(); //$NON-NLS-1$
+			stackTraces.writeString(stackHead); 			
+		}
+		
+	}
+	
+	/**
 	 * Initializes the query and starts the initial processor threads.
 	 * 
 	 * @throws InitializationException
@@ -364,6 +387,7 @@ implements Runnable, MultiThreadedLongProcess {
 		provider = Bo2.getProvider();
 		Bo2Session.setProvider(provider);
 		provider.getTransactionManager().begin();
+		pritHeaders();
 		Query query = parameters.getQuery();
 		Modification<Object> setCriteria = parameters.getQueryParametersSetter();
 		if (setCriteria!=null) {

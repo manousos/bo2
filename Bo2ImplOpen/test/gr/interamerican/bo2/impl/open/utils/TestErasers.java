@@ -13,9 +13,9 @@
 package gr.interamerican.bo2.impl.open.utils;
 
 import gr.interamerican.bo2.impl.open.creation.Factory;
+import gr.interamerican.bo2.samples.archutil.po.User;
 import gr.interamerican.bo2.test.def.posamples.Invoice;
 import gr.interamerican.bo2.test.def.posamples.InvoiceCustomer;
-import gr.interamerican.bo2.test.def.posamples.InvoiceLine;
 import gr.interamerican.bo2.utils.adapters.Modification;
 import junit.framework.Assert;
 
@@ -54,7 +54,7 @@ public class TestErasers {
 	 */
 	@Test
 	public void testGetEraser_onNonRegistered() {		
-		Modification<InvoiceLine> del = Erasers.getEraser(InvoiceLine.class);		
+		Modification<User> del = Erasers.getEraser(User.class);		
 		Assert.assertNotNull(del);
 	}
 	

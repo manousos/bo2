@@ -16,12 +16,13 @@ import static org.junit.Assert.fail;
 import gr.interamerican.bo2.arch.PersistenceWorker;
 import gr.interamerican.bo2.arch.PersistentObject;
 import gr.interamerican.bo2.arch.Provider;
+import gr.interamerican.bo2.arch.exceptions.CouldNotCommitException;
+import gr.interamerican.bo2.arch.exceptions.CouldNotRollbackException;
 import gr.interamerican.bo2.arch.exceptions.DataException;
 import gr.interamerican.bo2.arch.exceptions.InitializationException;
 import gr.interamerican.bo2.arch.exceptions.PoNotFoundException;
 import gr.interamerican.bo2.impl.open.creation.Factory;
 import gr.interamerican.bo2.impl.open.utils.Bo2;
-import gr.interamerican.bo2.test.utils.UtilityForBo2Test;
 
 import org.junit.After;
 import org.junit.Before;
@@ -36,6 +37,11 @@ extends AbstractTestClass {
 	 * manager.
 	 */
 	private static Provider manager;
+	
+	/**
+	 * Did the current test fail?
+	 */
+	private boolean failed = false;
 	
 	
 	/**
@@ -68,14 +74,19 @@ extends AbstractTestClass {
 	 */
 	@Before
 	public void before() throws InitializationException {
-		manager = Bo2.getDeployment(UtilityForBo2Test.BATCH_NO_TRAN).getProvider();
+		failed = false;
+		manager = Bo2.getDefaultDeployment().getProvider();
 	}
 	
 	/**
 	 * @throws DataException
+	 * @throws CouldNotCommitException 
 	 */
 	@After
-	public void after() throws DataException {
+	public void after() throws DataException, CouldNotCommitException {
+		if(!failed) {
+			manager.getTransactionManager().commit();
+		}
 		manager.close();
 	}
 	
@@ -108,6 +119,7 @@ extends AbstractTestClass {
 	 * 
 	 * @param t
 	 * @param type
+	 * @throws CouldNotRollbackException 
 	 */
 	void doFail(Throwable t, String type) {
 		@SuppressWarnings("nls")
@@ -116,6 +128,13 @@ extends AbstractTestClass {
 		System.err.println(message);
 		t.printStackTrace();
 		fail(message);	
+		
+		try {
+			manager.getTransactionManager().rollback();
+		} catch (CouldNotRollbackException e) {
+			throw new RuntimeException(e);
+		}
+		
 	}
 	
 	

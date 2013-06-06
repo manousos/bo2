@@ -19,7 +19,6 @@ import static org.junit.Assert.assertSame;
 import gr.interamerican.bo2.arch.DetachStrategy;
 import gr.interamerican.bo2.samples.almostEmpty.AlmostEmpty1;
 import gr.interamerican.bo2.samples.archutil.po.User;
-import gr.interamerican.bo2.test.def.posamples.Invoice;
 import gr.interamerican.bo2.utils.reflect.beans.VariableDefinition;
 
 import java.lang.reflect.Field;
@@ -67,7 +66,7 @@ public class TestFactory {
 	@Test
 	public void testGetDefaultDetachStrategy() {
 		DetachStrategy strategy = 
-			Factory.getDefaultDetachStrategy(Invoice.class);
+			Factory.getDefaultDetachStrategy(User.class);
 		assertNotNull(strategy);
 		strategy = Factory.getDefaultDetachStrategy(AlmostEmpty1.class);
 		assertNull(strategy);

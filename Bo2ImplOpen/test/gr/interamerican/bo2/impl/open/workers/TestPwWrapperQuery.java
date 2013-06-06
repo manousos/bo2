@@ -21,22 +21,21 @@ import gr.interamerican.bo2.arch.exceptions.LogicException;
 import gr.interamerican.bo2.arch.exceptions.UnexpectedException;
 import gr.interamerican.bo2.impl.open.creation.Factory;
 import gr.interamerican.bo2.impl.open.runtime.AbstractBo2RuntimeCmd;
-import gr.interamerican.bo2.test.def.posamples.CompanyUser;
-import gr.interamerican.bo2.test.def.posamples.CompanyUserKey;
-import gr.interamerican.bo2.test.def.samples.enums.Sex;
+import gr.interamerican.bo2.samples.archutil.po.User;
+import gr.interamerican.bo2.samples.archutil.po.UserKey;
 
 import org.junit.Test;
+import org.mockito.Mockito;
 
 /**
  * 
  */
 public class TestPwWrapperQuery {
-
 	
 	/**
 	 * query to test
 	 */
-	PwWrapperQuery<CompanyUser, CompanyUserKey> query = new PwWrapperQuery<CompanyUser, CompanyUserKey>(CompanyUser.class);
+	PwWrapperQuery<User, UserKey> query = new PwWrapperQuery<User, UserKey>(User.class);
 	
 	
 	/**
@@ -47,31 +46,23 @@ public class TestPwWrapperQuery {
 	 */
 	@Test
 	public void testPwWrapperQuery() throws UnexpectedException, DataException, LogicException {
-		/*
-		 * setup data for this test.
-		 */
-		new AbstractBo2RuntimeCmd() { 			
-			@Override public void work() throws LogicException, 
-			DataException, InitializationException, UnexpectedException {
-				CompanyUser po = Factory.create(CompanyUser.class);
-				PersistenceWorker<CompanyUser> pw = openPw(CompanyUser.class);
-				po.setId(10L);
-				po.setSex(Sex.MALE);
-				pw.store(po);
-			}
-		}.execute();
+		@SuppressWarnings("unchecked")
+		PersistenceWorker<User> pw = Mockito.mock(PersistenceWorker.class);
+		final User existingUser = Factory.create(User.class);
+		existingUser.setId(1);
+		
+		Mockito.when(pw.read(existingUser)).thenReturn(existingUser);
+		query.pw = pw;
 		
 		new AbstractBo2RuntimeCmd() {			
 			@Override public void work() throws LogicException, 
 			DataException, InitializationException, UnexpectedException {						
 				query.init(getProvider());
 				query.open();
-				CompanyUserKey key = Factory.create(CompanyUserKey.class);
-				key.setId(10L);
-				query.setCriteria(key);
+				query.setCriteria(existingUser.getKey());
 				query.getRow();
 				query.execute();
-				assertEquals(Sex.MALE,query.getEntity().getSex());
+				assertEquals(existingUser, query.getEntity());
 			}
 		}.execute();
 	}
@@ -92,8 +83,8 @@ public class TestPwWrapperQuery {
 			DataException, InitializationException, UnexpectedException {						
 				query.init(getProvider());
 				query.open();
-				CompanyUserKey key = Factory.create(CompanyUserKey.class);
-				key.setId(1L);
+				UserKey key = Factory.create(UserKey.class);
+				key.setId(-1);
 				query.setCriteria(key);
 				query.execute();
 				query.next();
@@ -144,8 +135,8 @@ public class TestPwWrapperQuery {
 	 */
 	@Test
 	public void testGetCriteria(){
-		CompanyUserKey key = Factory.create(CompanyUserKey.class);
-		key.setId(2L);
+		UserKey key = Factory.create(UserKey.class);
+		key.setId(2);
 		query.setCriteria(key);
 		assertEquals(key,query.getCriteria());
 	}

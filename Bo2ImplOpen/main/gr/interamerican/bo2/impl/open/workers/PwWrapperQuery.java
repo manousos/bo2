@@ -57,7 +57,7 @@ implements EntitiesQuery<P>, CriteriaDependent<K> {
 	/**
 	 * Persistence worker.
 	 */
-	@Child private PersistenceWorker<P> pw;
+	@Child PersistenceWorker<P> pw;
 	
 	/**
 	 * Entity class.

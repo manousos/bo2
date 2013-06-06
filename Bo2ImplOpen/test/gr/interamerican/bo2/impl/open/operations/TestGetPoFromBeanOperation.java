@@ -22,7 +22,6 @@ import gr.interamerican.bo2.arch.exceptions.LogicException;
 import gr.interamerican.bo2.impl.open.creation.Factory;
 import gr.interamerican.bo2.impl.open.utils.Bo2;
 import gr.interamerican.bo2.samples.archutil.po.User;
-import gr.interamerican.bo2.test.def.posamples.Invoice;
 import gr.interamerican.bo2.test.utils.UtilityForBo2Test;
 import gr.interamerican.bo2.utils.ReflectionUtils;
 import gr.interamerican.bo2.utils.reflect.beans.VariableDefinition;
@@ -82,9 +81,9 @@ public class TestGetPoFromBeanOperation {
 	 */
 	@Test
 	public void testGetKeyProperties() throws LogicException {
-		GetPoFromBeanOperation<Invoice> getPo = new GetPoFromBeanOperation<Invoice>(Invoice.class);
+		GetPoFromBeanOperation<User> getPo = new GetPoFromBeanOperation<User>(User.class);
 		String[] actuals = getPo.getKeyProperties();
-		String expecteds[] = new String[]{"invoiceNo"}; //$NON-NLS-1$
+		String expecteds[] = new String[]{"id"}; //$NON-NLS-1$
 		assertArrayEquals(expecteds, actuals);
 	}
 

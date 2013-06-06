@@ -17,6 +17,8 @@ import gr.interamerican.bo2.arch.def.NamedFieldsContainer;
 import gr.interamerican.bo2.arch.def.OrderedFieldsContainer;
 import gr.interamerican.bo2.arch.exceptions.DataAccessException;
 import gr.interamerican.bo2.arch.exceptions.DataException;
+import gr.interamerican.bo2.utils.StreamUtils;
+import gr.interamerican.bo2.utils.sql.SqlProcessor;
 import gr.interamerican.bo2.utils.sql.SqlUtils;
 import gr.interamerican.bo2.utils.sql.types.Type;
 
@@ -67,6 +69,20 @@ implements Query, NamedFieldsContainer, OrderedFieldsContainer {
 	 * @return Returns the SQL string for the query.
 	 */	
 	protected abstract String sql();
+	
+	/**
+	 * Utility method meant to get an SQL statement from a resource
+	 * file. This is meant for use in the implementation of {@link #sql()}
+	 * 
+	 * @param path
+	 *        Resource path.
+	 *        
+	 * @return SQL statement.
+	 */
+	protected String getSqlFromResourceFile(String path) {
+		String sqlFromFile = StreamUtils.getStringFromResourceFile(path); 
+		return SqlProcessor.normalizeSql(sqlFromFile);
+	}
 	
 	/**
 	 * Parameters for the query.

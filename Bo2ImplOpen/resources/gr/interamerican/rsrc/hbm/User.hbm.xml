@@ -8,7 +8,6 @@
 	<class name="User" table="USERS">
 
 		<composite-id name="key" class="gr.interamerican.bo2.samples.archutil.po.UserKey">
-			<tuplizer class="gr.interamerican.bo2.impl.open.hibernate.tuple.Bo2PojoComponentTuplizer" entity-mode="pojo"/>
 			<key-property name="id" type="integer">
 				<column name="id"></column>
 			</key-property>	
