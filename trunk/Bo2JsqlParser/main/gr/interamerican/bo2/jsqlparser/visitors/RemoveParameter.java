@@ -246,7 +246,9 @@ extends EmptyVisitor {
 	@Override
 	public void visit(PlainSelect plainSelect) {
 		Expression where = plainSelect.getWhere();
-		where.accept(this);
+		if (where != null) {
+			where.accept(this);
+		}
 	}
 	
 	/*
