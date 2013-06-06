@@ -37,7 +37,11 @@ import org.slf4j.LoggerFactory;
  * Analyzes all fields of an object structure that are {@link ModificationRecord}s.
  * {@link HibernateProxy} and {@link AbstractPersistentCollection} instances are not
  * explored further.
+ * 
+ * @deprecated Use {@link HibernateAwarePoAnalyzer} instead. This one is bugged.
+ * 
  */
+@Deprecated
 public class ModificationRecordFieldsAnalyzer extends AbstractObjectStructureAnalyzer {
 	
 	/**
@@ -113,7 +117,7 @@ public class ModificationRecordFieldsAnalyzer extends AbstractObjectStructureAna
 	
 	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	protected VariableDefinition<?> createVariableDefinition(Object object) {
+	protected VariableDefinition<?> createVariableDefinition(Object object, String fieldName, Class<?> fieldType) {
 		if(object instanceof PersistentObject) {
 			VariableDefinition result = new VariableDefinitionForPersistentObjects(StringConstants.EMPTY, object.getClass());
 			result.setValue(object);
@@ -124,7 +128,7 @@ public class ModificationRecordFieldsAnalyzer extends AbstractObjectStructureAna
 			result.setValue(object);
 			return result;
 		}
-		return super.createVariableDefinition(object);
+		return super.createVariableDefinition(object, "unknown", object.getClass());
 	}
 	
 	/**
