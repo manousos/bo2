@@ -37,6 +37,8 @@ import java.util.List;
  * 
  * The default separator is semicolon, but it is possible to change
  * the separator to any character. <br/>
+ * 
+ * {@link CsvRecord}s are zero based.
  */
 public class CsvRecord 
 implements ModifiableIndexedFieldsRecord<Integer>  {
@@ -66,6 +68,33 @@ implements ModifiableIndexedFieldsRecord<Integer>  {
 	 */
 	private List<Integer> fieldIndexes;
 	
+	/**
+	 * Creates a new CsvRecord object. The supplied array is defensively
+	 * copied to an internal array.
+	 *  
+	 * @param records
+	 *        Records. 
+	 */
+	public CsvRecord(String[] records) {
+		this(records.length);
+		for (int i = 0; i < records.length; i++) {
+			setString(i, records[i]);
+		}
+	}
+	
+	/**
+	 * Creates a new CsvRecord object. The supplied array is defensively
+	 * copied to an internal array.
+	 * 
+	 * @param records 
+	 *        Records.
+	 * @param separator
+	 *        Separator.
+	 */
+	public CsvRecord(String[] records, char separator) {
+		this(records);
+		this.separator = separator;
+	} 
 	
 	/**
 	 * Creates a new CsvRecord.

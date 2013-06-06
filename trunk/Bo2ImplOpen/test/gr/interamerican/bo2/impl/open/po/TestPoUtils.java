@@ -26,8 +26,11 @@ import gr.interamerican.bo2.arch.exceptions.UnexpectedException;
 import gr.interamerican.bo2.arch.utils.beans.MoneyImpl;
 import gr.interamerican.bo2.impl.open.creation.Factory;
 import gr.interamerican.bo2.impl.open.runtime.AbstractBo2RuntimeCmd;
+import gr.interamerican.bo2.impl.open.runtime.CrudCmd;
 import gr.interamerican.bo2.samples.archutil.po.User;
 import gr.interamerican.bo2.samples.archutil.po.UserKey;
+import gr.interamerican.bo2.samples.archutil.po.UserProfile;
+import gr.interamerican.bo2.samples.implopen.pw.UserPwImpl;
 import gr.interamerican.bo2.test.def.posamples.ArrayWithAnnot;
 import gr.interamerican.bo2.test.def.posamples.ArrayWithoutAnnot;
 import gr.interamerican.bo2.test.def.posamples.ExtendedInvoice;
@@ -37,7 +40,6 @@ import gr.interamerican.bo2.test.def.posamples.InvoiceCustomer;
 import gr.interamerican.bo2.test.def.posamples.InvoiceCustomerList;
 import gr.interamerican.bo2.test.def.posamples.InvoiceCustomerSet;
 import gr.interamerican.bo2.test.def.posamples.InvoiceKey;
-import gr.interamerican.bo2.test.def.posamples.InvoiceLine;
 import gr.interamerican.bo2.test.def.posamples.MoneyPo;
 import gr.interamerican.bo2.test.def.posamples.SamplesFactory;
 import gr.interamerican.bo2.test.def.posamples.TimestampPo;
@@ -51,7 +53,6 @@ import gr.interamerican.bo2.test.impl.posamplesConcrete.InvoiceImpl;
 import gr.interamerican.bo2.test.impl.posamplesConcrete.MoneyPoImpl;
 import gr.interamerican.bo2.test.impl.posamplesConcrete.TimestampPoImpl;
 import gr.interamerican.bo2.test.impl.samples.PoPo;
-import gr.interamerican.bo2.test.scenarios.DeleteInvoiceData;
 import gr.interamerican.bo2.test.utils.UtilityForBo2Test;
 import gr.interamerican.bo2.utils.DateUtils;
 import gr.interamerican.bo2.utils.ReflectionUtils;
@@ -76,14 +77,14 @@ import org.mockito.Mockito;
 public class TestPoUtils {
 	
 	/**
-	 * Sample invoice.
+	 * User.
 	 */
-	private Invoice invoice;
+	private User user;
 	
 	/**
-	 * Sample invoiceNo.
+	 * User id.
 	 */
-	private String invoiceNo = "1"; //$NON-NLS-1$
+	private Integer userId = 555;
 
 	/**
 	 * tests deepCopy with concrete objects
@@ -117,8 +118,6 @@ public class TestPoUtils {
 		testDeepCopy(SamplesFactory.getFactored(),false);
 	}
 	
-	
-	
 	/**
 	 * Tests deepCopy(p) and deepCopyPreservingModificationRecord(p).
 	 * 
@@ -127,37 +126,32 @@ public class TestPoUtils {
 	 */
 	@SuppressWarnings("nls")
 	public void testDeepCopy(SamplesFactory factory, boolean resetMdfRec) {
-		Invoice one = factory.sampleInvoiceFull(4);
-		one.setInvoiceNo("AAA"); 
+		User one = factory.sampleUser(userId, 4);
 		
 		/*
 		 * Set last modified properties for the test.
 		 */
 		one.setLastModified(DateUtils.today());
 		one.setLastModifiedBy("X");		
-		for (InvoiceLine invoiceLine : one.getLines()) {
-			invoiceLine.setLastModified(DateUtils.today());
-			invoiceLine.setLastModifiedBy("X");	
-		}
 		
-		Invoice two;
+		User two;
 		if (resetMdfRec) {
 			two = PoUtils.deepCopy(one);			
 		} else {
 			two = PoUtils.deepCopyPreservingModificationRecord(one);
 		}
 		
-		Set<InvoiceLine> oneLines = one.getLines();
-		Set<InvoiceLine> twoLines = two.getLines();
+		Set<UserProfile> oneProfiles = one.getProfiles();
+		Set<UserProfile> twoProfiles = two.getProfiles();
 		
-		Iterator<InvoiceLine> oneIter = oneLines.iterator();
+		Iterator<UserProfile> oneIter = oneProfiles.iterator();
 		while(oneIter.hasNext()) {
-			InvoiceLine oneLine = oneIter.next();
-			InvoiceLine twoLine = null;
+			UserProfile oneLine = oneIter.next();
+			UserProfile twoLine = null;
 			
-			Iterator<InvoiceLine> twoIter = twoLines.iterator();
+			Iterator<UserProfile> twoIter = twoProfiles.iterator();
 			while (twoIter.hasNext()) {
-				InvoiceLine temp = twoIter.next();
+				UserProfile temp = twoIter.next();
 				if(oneLine.equals(temp)) {
 					twoLine = temp;
 				}
@@ -166,85 +160,16 @@ public class TestPoUtils {
 			assertTrue(PoUtils.deepEquals(oneLine, twoLine));
 			assertTrue(oneLine.equals(twoLine));
 			if (resetMdfRec) {
-				assertNull(twoLine.getLastModified());
-				assertNull(twoLine.getLastModifiedBy());				
+				assertNull(two.getLastModified());
+				assertNull(two.getLastModifiedBy());				
 			} else {
-				assertEquals(oneLine.getLastModified(), twoLine.getLastModified());
-				assertEquals(oneLine.getLastModifiedBy(), twoLine.getLastModifiedBy());
+				assertEquals(one.getLastModified(), two.getLastModified());
+				assertEquals(one.getLastModifiedBy(), two.getLastModifiedBy());
 			}
 		}
 		
 		assertFalse(one==two);
-		assertFalse(one.getCustomer()==two.getCustomer());
-		assertTrue(PoUtils.deepEquals(one.getCustomer(), two.getCustomer()));
 		assertTrue(PoUtils.deepEquals(one, two));
-		
-		if (resetMdfRec) {
-			assertNull(two.getLastModified());
-			assertNull(two.getLastModifiedBy());				
-		} else {
-			assertEquals(one.getLastModified(), two.getLastModified());
-			assertEquals(one.getLastModifiedBy(), two.getLastModifiedBy());
-		}
-	}
-	
-	/**
-	 * Tests that a deep copy of a persistent object is also a persistent object
-	 * when the modification record is preserved.
-	 * @throws LogicException 
-	 * @throws DataException 
-	 * @throws UnexpectedException 
-	 */
-	@Test
-	public void testDeepCopyPreserveMdfIsPersistent() throws UnexpectedException, DataException, LogicException {
-		new AbstractBo2RuntimeCmd() {
-			@Override public void work() throws LogicException, 
-			DataException, InitializationException, UnexpectedException {
-				open(DeleteInvoiceData.class).execute();
-				Invoice inv1 = SamplesFactory.getBo2Factory().sampleInvoiceFull(1);
-				inv1.setInvoiceNo(invoiceNo);
-				PersistenceWorker<Invoice> ipw = openPw(Invoice.class);
-				inv1 = ipw.store(inv1);
-				
-				InvoiceLine line = inv1.getLines().iterator().next();
-				InvoiceLine copy = PoUtils.deepCopyPreservingModificationRecord(line);
-				Assert.assertFalse(inv1.getLines().add(copy));
-				inv1.getLines().clear();
-				inv1.getLines().add(copy);
-				copy.setAmount(200.0);
-				
-				inv1 = ipw.update(inv1);
-			}
-		}.execute();
-	}
-	/**
-	 * Tests that a deep copy of a persistent object is not a persistent object
-	 * when the modification record is not preserved.
-	 * @throws LogicException 
-	 * @throws DataException 
-	 * @throws UnexpectedException 
-	 */
-	@Test(expected=DataException.class)
-	public void testDeepCopyIsNotPersistent() throws UnexpectedException, DataException, LogicException {
-		new AbstractBo2RuntimeCmd() {
-			@Override public void work() throws LogicException, 
-			DataException, InitializationException, UnexpectedException {
-				open(DeleteInvoiceData.class).execute();
-				Invoice inv1 = SamplesFactory.getBo2Factory().sampleInvoiceFull(1);
-				inv1.setInvoiceNo(invoiceNo);
-				PersistenceWorker<Invoice> ipw = openPw(Invoice.class);
-				inv1 = ipw.store(inv1);
-				
-				InvoiceLine line = inv1.getLines().iterator().next();
-				InvoiceLine copy = PoUtils.deepCopy(line);
-				Assert.assertFalse(inv1.getLines().add(copy));
-				inv1.getLines().clear();
-				inv1.getLines().add(copy);
-				copy.setAmount(200.0);
-				
-				inv1 = ipw.update(inv1);
-			}
-		}.execute();
 	}
 	
 	/**
@@ -451,39 +376,24 @@ public class TestPoUtils {
 	 */
 	@Test
 	public void testReattach() throws UnexpectedException, DataException, LogicException {
-		new AbstractBo2RuntimeCmd() {
-			@Override public void work() throws LogicException, 
-			DataException, InitializationException, UnexpectedException {
-				open(DeleteInvoiceData.class).execute();
-				invoice = SamplesFactory.getBo2Factory().sampleInvoiceFull(1);
-				invoice.setInvoiceNo(invoiceNo);
-				PersistenceWorker<Invoice> pw = openPw(Invoice.class);
-				invoice = pw.store(invoice);
-			}
-		}.execute();
+		PersistenceWorker<User> pw = new UserPwImpl();
+		CrudCmd<User> crud = new CrudCmd<User>(pw,true);
+		
+		user = SamplesFactory.getBo2Factory().sampleUser(userId, 1);
+		crud.delete(user);
+		crud.store(user);
 		
 		/*
-		 * re-attach and initialize some proxies.
+		 * re-attach
 		 */
 		new AbstractBo2RuntimeCmd() {
 			@Override public void work() throws LogicException, 
 			DataException, InitializationException, UnexpectedException {
-				PoUtils.reattach(invoice, getProvider());
-				invoice.getLines().iterator().next().getSubLines().size();
+				PoUtils.reattach(user, getProvider());
 			}
 		}.execute();
 		
-		/*
-		 * clear the database.
-		 */
-		new AbstractBo2RuntimeCmd() {
-			@Override public void work() throws LogicException, 
-			DataException, InitializationException, UnexpectedException {
-				PersistenceWorker<Invoice> pw = openPw(Invoice.class);
-				invoice = pw.read(invoice);
-				pw.delete(invoice);
-			}
-		}.execute();
+		crud.delete(user);
 		
 	}
 	

@@ -323,6 +323,21 @@ public interface BatchProcessParm<T> {
 	 */
 	void setTidyInterval(int tidyInterval);
 	
+	/**
+	 * Gets the header row to print on the log files.
+	 * 
+	 * @return returns the entity header.
+	 */
+	String getEntityHeader();
+	
+	/**
+	 * Sets the entityHeader.
+	 * 
+	 * @param entityHeader
+	 */
+	void setEntityHeader(String entityHeader);
+	
+	
 	
 
 

@@ -3,8 +3,7 @@
 <hibernate-mapping package="gr.interamerican.bo2.test.def.posamples">
 	<class name="Customer" table="Customer">
 
-		<composite-id name="key" class="CustomerKey">
-			<tuplizer class="gr.interamerican.bo2.impl.open.hibernate.tuple.Bo2PojoComponentTuplizer" entity-mode="pojo"/>
+		<composite-id name="key" class="gr.interamerican.bo2.test.impl.posamples.CustomerKeyImpl">
 			<key-property name="customerNo">
 				<column name="CUSTOMER_NO" sql-type="varchar(32)" not-null="true"/>
 			</key-property>

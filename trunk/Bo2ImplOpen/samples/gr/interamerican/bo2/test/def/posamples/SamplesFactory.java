@@ -15,6 +15,8 @@ package gr.interamerican.bo2.test.def.posamples;
 import gr.interamerican.bo2.arch.utils.collections.PoSet;
 import gr.interamerican.bo2.creation.ObjectFactory;
 import gr.interamerican.bo2.impl.open.creation.Factory;
+import gr.interamerican.bo2.samples.archutil.po.User;
+import gr.interamerican.bo2.samples.archutil.po.UserProfile;
 import gr.interamerican.bo2.test.def.samples.InvoiceInfo;
 import gr.interamerican.bo2.test.utils.UtilityForBo2Test;
 import gr.interamerican.bo2.utils.DateUtils;
@@ -231,7 +233,31 @@ public class SamplesFactory {
 		invoice.getRules().add(rule);
 		
 		return invoice;
-	}	
+	}
+	
+	/**
+	 * Returns a sample User with the specified number of profiles.
+	 * @param userId 
+	 * 
+	 * @param countOfProfiles
+	 * @return User.
+	 */
+	@SuppressWarnings("nls")
+	public User sampleUser(int userId, int countOfProfiles) {
+		User u = new User();
+		u.setUsrid("USRID_00");
+		u.setName("name");
+		u.setId(userId);
+		for(int i=0; i<countOfProfiles; i++) {
+			UserProfile up = new UserProfile();
+			up.setUserId(userId);
+			up.setProfileId(i);
+			up.setName("name" + String.valueOf(i));
+			u.getProfiles().add(up);
+		}
+		
+		return u;
+	}
 	
 	/**
 	 * Creates an {@link Invoice}

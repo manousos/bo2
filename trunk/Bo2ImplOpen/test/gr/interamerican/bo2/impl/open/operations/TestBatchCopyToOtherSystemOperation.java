@@ -21,8 +21,8 @@ import gr.interamerican.bo2.impl.open.creation.Factory;
 import gr.interamerican.bo2.impl.open.runtime.AbstractBo2RuntimeCmd;
 import gr.interamerican.bo2.impl.open.runtime.CrudCmd;
 import gr.interamerican.bo2.impl.open.workers.AbstractResourceConsumer;
-import gr.interamerican.bo2.test.def.posamples.Invoice;
-import gr.interamerican.bo2.test.def.posamples.InvoiceKey;
+import gr.interamerican.bo2.samples.archutil.po.User;
+import gr.interamerican.bo2.samples.archutil.po.UserKey;
 import gr.interamerican.bo2.test.def.posamples.SamplesFactory;
 
 import java.util.HashSet;
@@ -39,14 +39,14 @@ import org.junit.Test;
  */
 public class TestBatchCopyToOtherSystemOperation {
 	/**
-	 * Invoice No 1.
+	 * User No 1.
 	 */
-	private static final String INVOICENO1 = "INV456781"; //$NON-NLS-1$
+	private static final Integer UserNO1 = 555;
 	
 	/**
-	 * Invoice No 2.
+	 * User No 2.
 	 */
-	private static final String INVOICENO2 = "INV456782"; //$NON-NLS-1$
+	private static final Integer UserNO2 = 556;
 	
 	/**
 	 * From manager.
@@ -61,21 +61,21 @@ public class TestBatchCopyToOtherSystemOperation {
 	/**
 	 * CRUD command for setup and teardown.
 	 */
-	CrudCmd<Invoice> crudFrom;
+	CrudCmd<User> crudFrom;
 	/**
 	 * CRUD command for setup and teardown.
 	 */
-	CrudCmd<Invoice> crudTo;	
+	CrudCmd<User> crudTo;	
 	
 	/**
 	 * Test sample.
 	 */
-	Invoice sample1;
+	User sample1;
 	
 	/**
 	 * Test sample.
 	 */
-	Invoice sample2;
+	User sample2;
 	
 	/**
 	 * Creates a new TestCopyToOtherSystemOperation object. 
@@ -83,22 +83,22 @@ public class TestBatchCopyToOtherSystemOperation {
 	 */
 	public TestBatchCopyToOtherSystemOperation() {
 		super();
-		PersistenceWorker<Invoice> from = Factory.createPw(Invoice.class);
+		PersistenceWorker<User> from = Factory.createPw(User.class);
 		AbstractResourceConsumer rcFrom = (AbstractResourceConsumer) from;
 		rcFrom.setManagerName(FROM);
-		crudFrom = new CrudCmd<Invoice>(from,true);
+		crudFrom = new CrudCmd<User>(from,true);
 		
-		PersistenceWorker<Invoice> to = Factory.createPw(Invoice.class);
+		PersistenceWorker<User> to = Factory.createPw(User.class);
 		AbstractResourceConsumer rcTo = (AbstractResourceConsumer) to;
 		rcTo.setManagerName(TO);
-		crudTo = new CrudCmd<Invoice>(to,true);
+		crudTo = new CrudCmd<User>(to,true);
 		
 		SamplesFactory factory = SamplesFactory.getBo2Factory();
-		sample1 = factory.sampleInvoiceFull(3);
-		sample1.setInvoiceNo(INVOICENO1);
+		sample1 = factory.sampleUser(UserNO1, 3);
+		sample1.setId(UserNO1);
 		
-		sample2 = factory.sampleInvoiceFull(2);
-		sample2.setInvoiceNo(INVOICENO2);
+		sample2 = factory.sampleUser(UserNO2, 2);
+		sample2.setId(UserNO2);
 	}
 
 	/**
@@ -144,10 +144,10 @@ public class TestBatchCopyToOtherSystemOperation {
 			@Override
 			public void work() throws LogicException, DataException,
 			InitializationException, UnexpectedException {				
-				BatchCopyToOtherSystemOperation<Invoice, InvoiceKey> op =
-					new BatchCopyToOtherSystemOperation<Invoice, InvoiceKey>(Invoice.class, FROM, TO);
+				BatchCopyToOtherSystemOperation<User, UserKey> op =
+					new BatchCopyToOtherSystemOperation<User, UserKey>(User.class, FROM, TO);
 				
-				Set<InvoiceKey> keys = new HashSet<InvoiceKey>();
+				Set<UserKey> keys = new HashSet<UserKey>();
 				keys.add(sample1.getKey());
 				keys.add(sample2.getKey());
 				op.setKeys(keys);
@@ -159,10 +159,10 @@ public class TestBatchCopyToOtherSystemOperation {
 			}
 		}.execute();
 		
-		Invoice copied = crudTo.read(sample1);
+		User copied = crudTo.read(sample1);
 		Assert.assertEquals(sample1, copied);
 		
-		Invoice copied2 = crudTo.read(sample2);
+		User copied2 = crudTo.read(sample2);
 		Assert.assertEquals(sample2, copied2);
 	}
 

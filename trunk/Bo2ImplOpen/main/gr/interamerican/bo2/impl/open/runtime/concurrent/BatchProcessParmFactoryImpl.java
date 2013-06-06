@@ -26,6 +26,7 @@ import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParm
 import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmNames.UI_CAN_ADD_THREADS;
 import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmNames.UI_REFRESH_INTERVAL;
 import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmNames.TIDY_INTERVAL;
+import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmNames.ENTITY_HEADER;
 import static gr.interamerican.bo2.utils.CollectionUtils.getMandatoryProperty;
 import static gr.interamerican.bo2.utils.StringUtils.isNullOrBlank;
 import gr.interamerican.bo2.arch.EntitiesQuery;
@@ -70,6 +71,9 @@ implements BatchProcessParmsFactory {
 		
 		int initialThreads = getInitialThreads(properties);
 		input.setInitialThreads(initialThreads);
+		
+		String entityHeader = properties.getProperty(ENTITY_HEADER);
+		input.setEntityHeader(entityHeader);
 
 		String formatterClassName = properties.getProperty(FORMATTER_CLASS);		
 		Formatter formatter = createFormatter(formatterClassName);
@@ -182,6 +186,7 @@ implements BatchProcessParmsFactory {
 		output.setMonitoringMailInterval(Utils.notNull(input.getMonitoringMailInterval(), 0)); //0 is never send
 		output.setMonitoringMailRecipients(input.getMonitoringMailRecipients());
 		
+		
 		String operationClassName = ExceptionUtils.notNull(input.getOperationClassName()).trim();
 		output.setOperationClass((Class<? extends Operation>) Factory.getType(operationClassName));
 		
@@ -191,7 +196,9 @@ implements BatchProcessParmsFactory {
 		String queryClassName = ExceptionUtils.notNull(input.getQueryClassName());
 		output.setQuery((EntitiesQuery<?>) Factory.create(queryClassName.trim()));
 		
-		output.setUiCanAddThreads(Utils.notNull(input.getUiCanAddThreads(), false));		
+		output.setUiCanAddThreads(Utils.notNull(input.getUiCanAddThreads(), false));
+		
+		
 		
 		if(criteria!=null) {
 			Modification<Object> copy = new CopyFromBeans<Object>(criteria);

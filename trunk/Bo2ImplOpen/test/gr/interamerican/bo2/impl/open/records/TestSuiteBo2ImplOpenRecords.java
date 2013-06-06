@@ -27,6 +27,7 @@ import org.junit.runners.Suite.SuiteClasses;
 		TestBufferSpec.class,
 		TestBuffer.class,
 		TestCsvRecord.class,
+		TestSimpleCsvRecordComparator.class,
 		TestFieldNotFoundException.class,
 		TestStringIndexedCsvRecord.class,
 		TestSimpleRecord.class,

@@ -27,7 +27,6 @@ import gr.interamerican.bo2.arch.ext.Session;
 import gr.interamerican.bo2.arch.utils.ext.Bo2Session;
 import gr.interamerican.bo2.impl.open.creation.Factory;
 import gr.interamerican.bo2.impl.open.namedstreams.NamedPrintStream;
-import gr.interamerican.bo2.impl.open.namedstreams.NamedStreamsProvider;
 import gr.interamerican.bo2.impl.open.utils.Bo2;
 import gr.interamerican.bo2.utils.ExceptionUtils;
 import gr.interamerican.bo2.utils.ReflectionUtils;
@@ -53,12 +52,6 @@ import java.util.Queue;
  */
 public class QueueProcessor<T> 
 implements Runnable, LongProcess {
-	
-	/**
-	 * Manager name for the NamedStreamsManager that is used to 
-	 * get the log file streams.
-	 */
-	public static final String MANAGER_NAME = "LOGFILES"; //$NON-NLS-1$
 		
 	/**
 	 * Name of this QueueProcessor.
@@ -251,12 +244,9 @@ implements Runnable, LongProcess {
 			operation.init(provider);
 			operation.open();
 			
-			NamedStreamsProvider nsp = provider.getResource(MANAGER_NAME, NamedStreamsProvider.class);	
-			String successLogName = streamname + "_SUCCESSES"; //$NON-NLS-1$
-			successesLog = (NamedPrintStream) nsp.getSharedStream(successLogName);
-			String failuresLogName = streamname + "_FAILURES"; //$NON-NLS-1$
-			failuresLog = (NamedPrintStream) nsp.getSharedStream(failuresLogName);
-			stacktracesLog = getOptionalStacktracesLog(nsp);
+			successesLog = SharedStreams.successes(provider, streamname);
+			failuresLog = SharedStreams.failures(provider, streamname);
+			stacktracesLog = SharedStreams.optionalStacktraces(provider, streamname);
 			
 			return true;
 		} catch (DataException de) {
@@ -286,6 +276,21 @@ implements Runnable, LongProcess {
 	public void run() {		
 		initialize();
 		loop();
+	}
+	
+	/**
+	 * Exception safe call to <code>close()</code>.
+	 * 
+	 * DataException thrown by close() are loged to the System.err
+	 * stream. <br/>
+	 * This method is called only <code>renewPollAndProcess()</code>.
+	 */
+	private void safeClose() {
+		try {
+			close();			
+		} catch (DataException de) {
+			de.printStackTrace();
+		}
 	}
 	
 	/**
@@ -319,6 +324,7 @@ implements Runnable, LongProcess {
 	 * next element in the queue.
 	 */
 	void renewPollAndProcess() {
+		safeClose();
 		operation = newOperation;
 		newOperation=null;
 		if (initialize()) { 
@@ -557,21 +563,7 @@ implements Runnable, LongProcess {
 		return endTime;
 	}
 
-	/**
-	 * Initializes a stream for the optional stack traces log file.
-	 * 
-	 * @param nsp
-	 * @return Stream to the log.
-	 */
-	NamedPrintStream getOptionalStacktracesLog(NamedStreamsProvider nsp) {
-		String stacktracesLogName = streamname + "_STACKTRACES"; //$NON-NLS-1$
-		try {
-			return (NamedPrintStream) nsp.getSharedStream(stacktracesLogName);
-		} catch (InitializationException e) {
-			//the log file is optional.
-		}
-		return null;
-	}
+	
 	
 	/**
 	 * Sets a new operation to replace the current operation.

@@ -13,6 +13,7 @@
 package gr.interamerican.bo2.impl.open.namedstreams;
 
 import gr.interamerican.bo2.arch.exceptions.DataException;
+import gr.interamerican.bo2.utils.ExceptionUtils;
 import gr.interamerican.bo2.utils.StringUtils;
 
 import java.util.HashMap;
@@ -20,10 +21,18 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Registry for shared named streams.
  */
 public class SharedNamedStreamsRegistry {
+	
+	/**
+	 * Logger.
+	 */
+	static final Logger LOG = LoggerFactory.getLogger(SharedNamedStreamsRegistry.class.getName());
 
 	/**
 	 * Name to stream.
@@ -60,6 +69,7 @@ public class SharedNamedStreamsRegistry {
 			throw new RuntimeException(msg);
 		}
 		if(!name2stream.containsKey(name)) {
+			LOG.debug("Registered shared stream with name " + name);
 			name2stream.put(name, stream);
 			stream2name.put(stream, name);
 		}
@@ -68,6 +78,8 @@ public class SharedNamedStreamsRegistry {
 		}
 		Set<NamedStreamsProvider> providersOfStream = providersAccessingStream.get(stream);
 		providersOfStream.add(nsp);
+		String msg = stream.getName() + " [+] now shared by " + providersOfStream.size();
+		LOG.debug(msg);
 	}
 	
 	/**
@@ -97,14 +109,19 @@ public class SharedNamedStreamsRegistry {
 	 * @param nsp
 	 * @throws DataException
 	 */
+	@SuppressWarnings("nls")
 	public static synchronized void releaseSharedStreams(NamedStreamsProvider nsp) throws DataException {
 		Set<NamedStream<?>> releasedStreams = new HashSet<NamedStream<?>>();
 		for(Map.Entry<NamedStream<?>, Set<NamedStreamsProvider>> entry : providersAccessingStream.entrySet()) {
 			NamedStream<?> stream = entry.getKey();
 			Set<NamedStreamsProvider> providers = entry.getValue();
-			if(providers.remove(nsp) && providers.isEmpty()) {
+			providers.remove(nsp);
+			String msg = stream.getName() + " [-] now shared by " + providers.size();
+			LOG.debug(msg);
+			if(providers.isEmpty()) {
 				String name = stream2name.remove(stream);
 				name2stream.remove(name);
+				LOG.debug(name + " closed\n" + ExceptionUtils.getThrowableStackTrace(new Throwable("This is not an error. It's for debugging purposes.")));
 				stream.close();
 				releasedStreams.add(stream);
 			}

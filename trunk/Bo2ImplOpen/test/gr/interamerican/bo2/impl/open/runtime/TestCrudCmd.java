@@ -18,7 +18,7 @@ import gr.interamerican.bo2.arch.exceptions.LogicException;
 import gr.interamerican.bo2.arch.exceptions.PoNotFoundException;
 import gr.interamerican.bo2.arch.exceptions.UnexpectedException;
 import gr.interamerican.bo2.impl.open.creation.Factory;
-import gr.interamerican.bo2.test.def.posamples.Customer;
+import gr.interamerican.bo2.samples.archutil.po.User;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -37,23 +37,25 @@ public class TestCrudCmd {
 	@SuppressWarnings("nls")
 	@Test
 	public void testAllMethods() throws UnexpectedException, DataException, LogicException {
-		PersistenceWorker<Customer> pw = Factory.createPw(Customer.class);		
-		CrudCmd<Customer> cmd = new CrudCmd<Customer>(pw);
+		PersistenceWorker<User> pw = Factory.createPw(User.class);		
+		CrudCmd<User> cmd = new CrudCmd<User>(pw);
 		
-		Customer cust = Factory.create(Customer.class);
-		cust.setCustomerNo("TestCrudCmd");
+		User user = Factory.create(User.class);
+		user.setId(555);
+		user.setName("name");
+		user.setUsrid("usrid00");
 		
-		Customer saved = cmd.store(cust);
+		User saved = cmd.store(user);
 		Assert.assertNotNull(saved);
-		Customer read = cmd.read(cust);
+		User read = cmd.read(user);
 		Assert.assertNotNull(read);
-		read.setCustomerName("Updated");		
-		Customer updated = cmd.update(read);
+		read.setName("Updated");
+		User updated = cmd.update(read);
 		Assert.assertNotNull(updated);
 		
-		cmd.delete(updated);		
+		cmd.delete(updated);
 		try {
-			read = cmd.read(cust);
+			read = cmd.read(user);
 		} catch (PoNotFoundException e) {
 			/*
 			 * Expecting a PoNotFoundException.
@@ -66,13 +68,13 @@ public class TestCrudCmd {
 	 */
 	@Test
 	public void testConstructors() {
-		PersistenceWorker<Customer> pw = Factory.createPw(Customer.class);		
+		PersistenceWorker<User> pw = Factory.createPw(User.class);		
 		
-		CrudCmd<Customer> cmd1 = new CrudCmd<Customer>(pw, true);
+		CrudCmd<User> cmd1 = new CrudCmd<User>(pw, true);
 		Assert.assertEquals(pw, cmd1.pw);
 		Assert.assertTrue(cmd1.ignorePnfeOnDelete);
 		
-		CrudCmd<Customer> cmd2 = new CrudCmd<Customer>(pw, false);
+		CrudCmd<User> cmd2 = new CrudCmd<User>(pw, false);
 		Assert.assertEquals(pw, cmd2.pw);
 		Assert.assertFalse(cmd2.ignorePnfeOnDelete);
 	}
