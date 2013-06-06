@@ -18,8 +18,8 @@ import gr.interamerican.bo2.arch.Question;
 import gr.interamerican.bo2.arch.exceptions.DataException;
 import gr.interamerican.bo2.arch.ext.CrudPerformer;
 import gr.interamerican.bo2.impl.open.creation.Factory;
-import gr.interamerican.bo2.test.def.posamples.Invoice;
-import gr.interamerican.bo2.test.def.posamples.InvoiceKey;
+import gr.interamerican.bo2.samples.archutil.po.User;
+import gr.interamerican.bo2.samples.archutil.po.UserKey;
 import gr.interamerican.wicket.bo2.protocol.http.Bo2WicketRequestCycle;
 import gr.interamerican.wicket.bo2.test.MockApplicationForWicketBo2;
 import gr.interamerican.wicket.markup.html.panel.service.BeanPanelDef;
@@ -57,14 +57,14 @@ public class TestCrudAction {
 		Bo2WicketRequestCycle.beginRequest(rc);
 		
 		
-		NextInvoiceKeyQuestion q = Mockito.mock(NextInvoiceKeyQuestion.class);
-		Class<NextInvoiceKeyQuestion> clazz = (Class<NextInvoiceKeyQuestion>) q.getClass();
+		NextUserKeyQuestion q = Mockito.mock(NextUserKeyQuestion.class);
+		Class<NextUserKeyQuestion> clazz = (Class<NextUserKeyQuestion>) q.getClass();
 		
-		BeanPanelDef<Invoice> definition = Factory.create(BeanPanelDef.class);
-		Invoice invoice1 = Factory.create(Invoice.class);
-		Invoice invoice2 = Factory.create(Invoice.class);
+		BeanPanelDef<User> definition = Factory.create(BeanPanelDef.class);
+		User user1 = Factory.create(User.class);
+		User user2 = Factory.create(User.class);
 		
-		IModel<Invoice> model = new Model<Invoice>(invoice1);
+		IModel<User> model = new Model<User>(user1);
 		
 		ServicePanel panel = Mockito.mock(ServicePanel.class);
 		
@@ -76,20 +76,20 @@ public class TestCrudAction {
 		
 		CrudPerformer performer = Mockito.mock(CrudPerformer.class);
 		
-		CrudAction<InvoiceKey, Invoice, NextInvoiceKeyQuestion> action =
-			new CrudAction<InvoiceKey, Invoice, TestCrudAction.NextInvoiceKeyQuestion>
-			(definition, Invoice.class, clazz, performer);
+		CrudAction<UserKey, User, NextUserKeyQuestion> action =
+			new CrudAction<UserKey, User, TestCrudAction.NextUserKeyQuestion>
+			(definition, User.class, clazz, performer);
 		
 		Mockito.when(
-			performer.perform((Invoice)Mockito.any(), (PersistenceWorker<Invoice>)Mockito.any())).
-			thenReturn(invoice2);
+			performer.perform((User)Mockito.any(), (PersistenceWorker<User>)Mockito.any())).
+			thenReturn(user2);
 		
 		AjaxRequestTarget target = Mockito.mock(AjaxRequestTarget.class);
 		
 		action.callBack(target);
 		
-		Invoice actual = model.getObject();
-		Assert.assertEquals(invoice2, actual);
+		User actual = model.getObject();
+		Assert.assertEquals(user2, actual);
 		
 		Bo2WicketRequestCycle.endRequest(rc);		
 	}
@@ -97,9 +97,7 @@ public class TestCrudAction {
 	/**
 	 * Next key question.
 	 */
-	interface NextInvoiceKeyQuestion 
-	extends Question<InvoiceKey>, PoDependent<Invoice> {/*empty*/}
-	
-	
+	interface NextUserKeyQuestion 
+	extends Question<UserKey>, PoDependent<User> {/*empty*/}
 
 }
