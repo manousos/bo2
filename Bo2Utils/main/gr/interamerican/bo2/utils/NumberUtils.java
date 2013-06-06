@@ -196,11 +196,11 @@ public class NumberUtils {
     }
     
 	
-	/**
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ java.lang.BigDecimal οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ int οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½.
+    /**
+	 * Δημιουργεί ένα java.lang.BigDecimal με παράμετρό ένα int αριθμό.
 	 * 
-	 * @param n	οΏ½ int οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ BigDecimal
-	 * @return	οΏ½ BigDecimal οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½  
+	 * @param n	ο int αριθμός που θα μετατραπεί σε BigDecimal
+	 * @return	ο BigDecimal που θα δημιουργηθεί  
 	 */
 	public static BigDecimal int2BigDecimal(int n) {
 		String s = Integer.toString(n); 

@@ -12,6 +12,7 @@
  ******************************************************************************/
 package gr.interamerican.bo2.utils.mail;
 
+import gr.interamerican.bo2.utils.Bo2UtilsEnvironment;
 import gr.interamerican.bo2.utils.CollectionUtils;
 import gr.interamerican.bo2.utils.StringConstants;
 import gr.interamerican.bo2.utils.StringUtils;
@@ -33,7 +34,7 @@ public class TestMailMessage {
 	 */
 	@BeforeClass
 	public static void setup() {
-		MailServer.INSTANCE.setHost("10.2.3.60");
+		MailServer.INSTANCE.setHost("localhost");
 		MailServer.INSTANCE.setPort(null);
 	}
 	

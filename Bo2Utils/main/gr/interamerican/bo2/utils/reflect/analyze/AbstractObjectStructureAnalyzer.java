@@ -14,9 +14,9 @@ package gr.interamerican.bo2.utils.reflect.analyze;
 
 import gr.interamerican.bo2.utils.ReflectionUtils;
 import gr.interamerican.bo2.utils.StringUtils;
-import gr.interamerican.bo2.utils.VariableDefinitionFactory;
 import gr.interamerican.bo2.utils.adapters.AnyOperation;
 import gr.interamerican.bo2.utils.beans.Tree;
+import gr.interamerican.bo2.utils.conditions.Condition;
 import gr.interamerican.bo2.utils.reflect.beans.VariableDefinition;
 
 import java.sql.Time;
@@ -44,7 +44,7 @@ implements AnyOperation<Object, Tree<VariableDefinition<?>>> {
 	/**
 	 * Logger.
 	 */
-	private static final Logger logger = LoggerFactory.getLogger(AbstractObjectStructureAnalyzer.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractObjectStructureAnalyzer.class);
 	
 	/**
 	 * If this is true, duplication checks are performed with the 
@@ -55,6 +55,12 @@ implements AnyOperation<Object, Tree<VariableDefinition<?>>> {
 	 * StackOverFlowException.
 	 */
 	protected boolean ignoreDuplicates = true;
+	
+	/**
+	 * Conditions that are checked to determine whether a VariableDefinition
+	 * is a leaf of the Tree.
+	 */
+	protected Set<Condition<Object>> leafConditions = new HashSet<Condition<Object>>();
 	
 	/**
 	 * Set with the types that are not further analyzed.
@@ -97,13 +103,15 @@ implements AnyOperation<Object, Tree<VariableDefinition<?>>> {
 		leafTypes.add(Time.class);
 		leafTypes.add(Timestamp.class);
 		leafTypes.add(Enum.class);
+		
+		leafConditions.add(new IsLeafTypeCondition());
 	}
 	
 	public Tree<VariableDefinition<?>> execute(Object a) {
-		VariableDefinition<?> root = createVariableDefinition(a);
+		VariableDefinition<?> root = createVariableDefinition(a, "root", a.getClass()); //$NON-NLS-1$
 		Tree<VariableDefinition<?>> tree = createRootNode(root);
 		preExistingNodes.clear();		
-		if (!isLeaf(root.getType())) {
+		if (!isLeaf(a)) {
 			if(ignoreDuplicates) {
 				preExistingNodes.put(a, tree);
 			}
@@ -131,12 +139,20 @@ implements AnyOperation<Object, Tree<VariableDefinition<?>>> {
 	 * 
 	 * @param object
 	 *        Object to create a VariableDefinition for.
+	 * @param fieldName
+	 *        Declared name of the field holding this object.
+	 * @param fieldType 
+	 *        Declared type of the field holding this object.
 	 *        
 	 * @return VariableDefinition.
 	 */
-	protected VariableDefinition<?> createVariableDefinition(Object object) {
-		return VariableDefinitionFactory.asVariableDefinition(object);
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	protected VariableDefinition<?> createVariableDefinition(Object object, String fieldName, Class<?> fieldType) {
+		VariableDefinition vd = new VariableDefinition(fieldName, fieldType);
+		vd.setValue(object);
+		return vd;
 	}
+	
 	
 	/**
 	 * Creates a node from a VariableDefinition.
@@ -161,7 +177,7 @@ implements AnyOperation<Object, Tree<VariableDefinition<?>>> {
 			addNodesOfCollection(tree);
 		} else if (ReflectionUtils.isArray(clazz)) {
 			addNodesOfArray(tree);
-		} else if (!isLeaf(clazz)) {
+		} else if (!isLeaf(root.getValue())) {
 			addNodesOfSingleElement(tree);
 		}
 	}
@@ -185,7 +201,7 @@ implements AnyOperation<Object, Tree<VariableDefinition<?>>> {
 					"Exception while creating node for field:", field.getName(),
 					"\nException: ", re.toString(),
 					"\nTree structure so far\n", tree.toString());				
-				logger.error(msg);
+				LOGGER.error(msg);
 			}
 		}
 	}
@@ -199,11 +215,11 @@ implements AnyOperation<Object, Tree<VariableDefinition<?>>> {
 	 *        Child node.
 	 */
 	private void addNodeOfCollectionOrArray(Tree<VariableDefinition<?>> branch, Object element) {
-		boolean isPreexisting = preExistingNodes.containsKey(element);
+		boolean isPreexisting = isPreexisting(element);
 		if (!isPreexisting) {
-			VariableDefinition<?> vd = createVariableDefinition(element);
+			VariableDefinition<?> vd = createVariableDefinition(element, "element", element.getClass()); //$NON-NLS-1$
 			Tree<VariableDefinition<?>> node = createRootNode(vd);
-			if (element!=null && (!isLeaf(vd.getType()))) {
+			if (element!=null && (!isLeaf(element))) {
 				if(ignoreDuplicates) {
 					preExistingNodes.put(element, node);
 				}
@@ -221,6 +237,9 @@ implements AnyOperation<Object, Tree<VariableDefinition<?>>> {
 	private void addNodesOfArray(Tree<VariableDefinition<?>> tree) {
 		VariableDefinition<?> branch = tree.getRootElement();
 		Object owner = branch.getValue();
+		if(isLeaf(owner)) {
+			return;
+		}
 		if (owner!=null) {
 			Object[] array = (Object[]) owner;
 			for (Object object : array) {
@@ -237,6 +256,9 @@ implements AnyOperation<Object, Tree<VariableDefinition<?>>> {
 	private void addNodesOfCollection(Tree<VariableDefinition<?>> tree) {
 		VariableDefinition<?> branch = tree.getRootElement();
 		Object owner = branch.getValue();
+		if(isLeaf(owner)) {
+			return;
+		}
 		if (owner!=null) {
 			Collection<?> collection = (Collection<?>) owner;
 			for (Object object : collection) {
@@ -249,17 +271,14 @@ implements AnyOperation<Object, Tree<VariableDefinition<?>>> {
 	 * Indicates if the instances of a class are described as leafs in the tree 
 	 * or if they form branches.
 	 * 
-	 * @param clazz
-	 *        Class being checked.
+	 * @param object
+	 *        Object being checked.
 	 * 
 	 * @return Returns true if the instances of the class are described as leafs.
 	 */
-	private boolean isLeaf(Class<?> clazz) {
-		if(clazz==null) {
-			return true;
-		}
-		for (Class<?> leafType : leafTypes) {
-			if (leafType.isAssignableFrom(clazz)) {
+	private boolean isLeaf(Object object) {
+		for(Condition<Object> condition : leafConditions) {
+			if(condition.check(object)) {
 				return true;
 			}
 		}
@@ -276,10 +295,10 @@ implements AnyOperation<Object, Tree<VariableDefinition<?>>> {
 	 */	
 	private void addFieldNode
 	(VariableDefinition<?> vd, Tree<VariableDefinition<?>> tree) {
-		boolean isPreexisting = preExistingNodes.containsKey(vd.getValue());			
+		boolean isPreexisting = isPreexisting(vd.getValue());			
 		if (!isPreexisting) {
 			Tree<VariableDefinition<?>> node = new Tree<VariableDefinition<?>>(vd, vd.getName());
-			if (!isLeaf(vd.getType()) && vd.getValue()!=null) {
+			if (!isLeaf(vd.getValue()) && vd.getValue()!=null) {
 				if(ignoreDuplicates) {
 					preExistingNodes.put(vd.getValue(), node);
 				}
@@ -287,6 +306,44 @@ implements AnyOperation<Object, Tree<VariableDefinition<?>>> {
 			}
 			tree.add(node);				
 		}
+	}
+	
+	/**
+	 * Checks if an object exists already on the Tree. Only uses reference equality!!!
+	 * 
+	 * @param subject
+	 * @return True, if this exact instance is already on the Tree.
+	 */
+	boolean isPreexisting(Object subject) {
+		for(Object registered : preExistingNodes.keySet()) {
+			if(subject == registered) {
+				LOGGER.debug("Preexisting node. Will not explore further. " + subject.toString()); //$NON-NLS-1$
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Condition that determines if a VariableDefinition is a leaf
+	 * based on its type.
+	 */
+	class IsLeafTypeCondition implements Condition<Object>{
+		
+		@Override
+		public boolean check(Object t) {
+			if(t==null) {
+				return true;
+			}
+			Class<?> clazz = t.getClass();
+			for(Class<?> leafType : leafTypes) {
+				if(leafType.isAssignableFrom(clazz)) {
+					return true;
+				}
+			}
+			return false;
+		}
+		
 	}
 	
 
