@@ -1,15 +1,3 @@
-/*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the GNU Lesser Public License v3
- * which accompanies this distribution, and is available at
- * http://www.gnu.org/copyleft/lesser.html
- * 
- * This library is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
- * See the GNU Lesser General Public License for more details.
- ******************************************************************************/
 package gr.interamerican.wicket.factories;
 
 import gr.interamerican.wicket.behavior.ValidationStyleBehavior;
@@ -45,10 +33,10 @@ import org.apache.wicket.model.PropertyModel;
 public class ComponentFactory {
 
 	/**
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ DropDownChoice component, 
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ to wicketId οΏ½οΏ½οΏ½ Component,
-	 * οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ object οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½,
-	 * οΏ½οΏ½οΏ½ οΏ½οΏ½ collection οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½.
+	 * Επιστρέφει ένα DropDownChoice component, 
+	 * δίνοντας to wicketId του Component,
+	 * το πεδίο του object που θέλουμε να δείχνουμε,
+	 * και το collection των αντικειμένων τα οποία θα δείχνουμε.
 	 * 
 	 * @param <P>
 	 * @param wicketId
@@ -65,13 +53,13 @@ public class ComponentFactory {
 	}
 	
 	/**
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ CheckBox οΏ½οΏ½ οΏ½οΏ½ wicketId οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ 
-	 * οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½ markupContainer.
+	 * Δημιουργεί CheckBox με τα wicketId που του δίνουμε 
+	 * και τα προσθέτει στον markupContainer.
 	 * 
 	 * @param cmp
-	 * 		O markupContainer,οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ Textfields.
+	 * 		O markupContainer,στον οποίο θα προστεθούν τα Textfields.
 	 * @param wicketIds
-	 * 		οΏ½οΏ½ wicketIds οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ CheckBox.
+	 * 		Τα wicketIds με τα οποία θα δημιουργηθούν τα CheckBox.
 	 */
 	public static void addCheckBoxes(MarkupContainer cmp, String[] wicketIds) {
 		for (String booleanField : wicketIds) {
@@ -81,13 +69,13 @@ public class ComponentFactory {
 	
 
 	/**
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ Label οΏ½οΏ½ οΏ½οΏ½ wicketId οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ 
-	 * οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½ markupContainer.
+	 * Δημιουργεί Label με τα wicketId που του δίνουμε 
+	 * και τα προσθέτει στον markupContainer.
 	 * 
 	 * @param cmp
-	 * 		O markupContainer,οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ Label.
+	 * 		O markupContainer,στον οποίο θα προστεθούν τα Label.
 	 * @param wicketIds
-	 * 		οΏ½οΏ½ wicketIds οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ Label.
+	 * 		Τα wicketIds με τα οποία θα δημιουργηθούν τα Label.
 	 */
 	public static void addLabels(MarkupContainer cmp, String[] wicketIds) {
 		for (String field : wicketIds) {
@@ -97,14 +85,14 @@ public class ComponentFactory {
 	}
 	
 	/**
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ TextField<String> οΏ½οΏ½ οΏ½οΏ½οΏ½ Model<String> οΏ½οΏ½ οΏ½οΏ½ wicketId 
-	 * οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½ markupContainer οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½ 
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½ bind οΏ½οΏ½οΏ½οΏ½ Object οΏ½οΏ½οΏ½ model οΏ½οΏ½οΏ½ MarkupContainer.
+	 * Δημιουργεί TextField<String> με νέο Model<String> με τα wicketId 
+	 * που του δίνουμε και τα προσθέτει στον markupContainer χωρίς να τα 
+	 * κάνει bind στον Object του model του MarkupContainer.
 	 * 
 	 * @param cmp
-	 * 		O markupContainer,οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ Textfields.
+	 * 		O markupContainer,στον οποίο θα προστεθούν τα Textfields.
 	 * @param fields
-	 * 		οΏ½οΏ½ wicketIds οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ Textfields.
+	 * 		Τα wicketIds με τα οποία θα δημιουργηθούν τα Textfields.
 	 * 
 	 */
 	public static void addTextFieldsWithoutBinding(MarkupContainer cmp, String[] fields) {
@@ -114,13 +102,13 @@ public class ComponentFactory {
 	}
 	
 	/**
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ TextField<String> οΏ½οΏ½ οΏ½οΏ½ wicketId οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ 
-	 * οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½ markupContainer.
+	 * Δημιουργεί TextField<String> με τα wicketId που του δίνουμε 
+	 * και τα προσθέτει στον markupContainer.
 	 * 
 	 * @param cmp
-	 * 		O markupContainer,οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ Textfields.
+	 * 		O markupContainer,στον οποίο θα προστεθούν τα Textfields.
 	 * @param wicketIds
-	 * 		οΏ½οΏ½ wicketIds οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ Textfields.
+	 * 		Τα wicketIds με τα οποία θα δημιουργηθούν τα Textfields.
 	 */
 	public static void addTextFields(MarkupContainer cmp, String[] wicketIds) {
 		for (String field : wicketIds) {
@@ -132,13 +120,13 @@ public class ComponentFactory {
 	}
 
 	/**
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ TextArea οΏ½οΏ½ οΏ½οΏ½ wicketId οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ 
-	 * οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½ markupContainer.
+	 * Δημιουργεί TextArea με τα wicketId που του δίνουμε 
+	 * και τα προσθέτει στον markupContainer.
 	 * 
 	 * @param cmp
-	 * 		O markupContainer,οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ TextArea.
+	 * 		O markupContainer,στον οποίο θα προστεθούν τα TextArea.
 	 * @param wicketIds
-	 * 		οΏ½οΏ½ wicketIds οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ TextArea.
+	 * 		Τα wicketIds με τα οποία θα δημιουργηθούν τα TextArea.
 	 */
 	public static void addTextAreaFields(MarkupContainer cmp, String[] wicketIds) {
 		for (String field : wicketIds) {
@@ -148,13 +136,13 @@ public class ComponentFactory {
 		}
 	}
 	/**
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ Disabled TextField<String> οΏ½οΏ½ οΏ½οΏ½ wicketId οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ 
-	 * οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½ markupContainer.
+	 * Δημιουργεί Disabled TextField<String> με τα wicketId που του δίνουμε 
+	 * και τα προσθέτει στον markupContainer.
 	 * 
 	 * @param cmp
-	 * 		O markupContainer,οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ Textfields.
+	 * 		O markupContainer,στον οποίο θα προστεθούν τα Textfields.
 	 * @param wicketIds
-	 * 		οΏ½οΏ½ wicketIds οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ Textfields.
+	 * 		Τα wicketIds με τα οποία θα δημιουργηθούν τα Textfields.
 	 */
 	@SuppressWarnings("rawtypes")
 	public static void addDisableTextFields(MarkupContainer cmp, String[] wicketIds) {
@@ -164,13 +152,13 @@ public class ComponentFactory {
 	}
 	
 	/**
-  	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ DateField οΏ½οΏ½ οΏ½οΏ½ wicketId οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ 
-	 * οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½ markupContainer.
+  	 * Δημιουργεί DateField με τα wicketId που του δίνουμε 
+	 * και τα προσθέτει στον markupContainer.
 	 * 
 	 * @param cmp
-	 * 		O markupContainer,οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ DateFields.
+	 * 		O markupContainer,στον οποίο θα προστεθούν τα DateFields.
 	 * @param wicketIds
-	 * 		οΏ½οΏ½ wicketIds οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ DateField.
+	 * 		Τα wicketIds με τα οποία θα δημιουργηθούν τα DateField.
      */
     public static void addDateFields(MarkupContainer cmp, String[] wicketIds) {
     	for (String f : wicketIds) { 
@@ -180,14 +168,14 @@ public class ComponentFactory {
     
    
     /**
-     * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ DateField οΏ½οΏ½ οΏ½οΏ½οΏ½ Model<Date> οΏ½οΏ½ οΏ½οΏ½ wicketId 
-	 * οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½ markupContainer οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½ 
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½ bind οΏ½οΏ½οΏ½οΏ½ Object οΏ½οΏ½οΏ½ model οΏ½οΏ½οΏ½ MarkupContainer.
+     * Δημιουργεί DateField με νέο Model<Date> με τα wicketId 
+	 * που του δίνουμε και τα προσθέτει στον markupContainer χωρίς να τα 
+	 * κάνει bind στον Object του model του MarkupContainer.
      * 
      * @param cmp
-	 * 		O markupContainer,οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ DateFields.
+	 * 		O markupContainer,στον οποίο θα προστεθούν τα DateFields.
 	 * @param wicketIds
-	 * 		οΏ½οΏ½ wicketIds οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ DateField.
+	 * 		Τα wicketIds με τα οποία θα δημιουργηθούν τα DateField.
      * 
      */
     public static void addDateFieldsWithoutBinding(MarkupContainer cmp, String[] wicketIds) {
@@ -198,13 +186,13 @@ public class ComponentFactory {
     
     
     /**
-     * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ DateTextField οΏ½οΏ½ οΏ½οΏ½ wicketId οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ 
-	 * οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½ markupContainer.
+     * Δημιουργεί DateTextField με τα wicketId που του δίνουμε 
+	 * και τα προσθέτει στον markupContainer.
 	 * 
 	 * @param cmp
-	 * 		O markupContainer,οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ DateTextField.
+	 * 		O markupContainer,στον οποίο θα προστεθούν τα DateTextField.
 	 * @param wicketIds
-	 * 		οΏ½οΏ½ wicketIds οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ DateTextField.
+	 * 		Τα wicketIds με τα οποία θα δημιουργηθούν τα DateTextField.
      * 
      */
     public static void addDateTextFields(MarkupContainer cmp, String[] wicketIds) {
@@ -215,16 +203,16 @@ public class ComponentFactory {
     
     
     /**
-     * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ DateTextField οΏ½οΏ½ οΏ½οΏ½ wicketId οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ 
-	 * οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½ markupContainer οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ bind οΏ½οΏ½ οΏ½οΏ½
-	 * Object οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½.
+     * Δημιουργεί DateTextField με τα wicketId που του δίνουμε 
+	 * και τα προσθέτει στον markupContainer κάνοντας τα bind με το
+	 * Object που του περνάμε.
 	 * 
 	 * @param cmp
-	 * 		O markupContainer,οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ DateTextField.
+	 * 		O markupContainer,στον οποίο θα προστεθούν τα DateTextField.
 	 * @param wicketIds
-	 * 		οΏ½οΏ½ wicketIds οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ DateTextField.
+	 * 		Τα wicketIds με τα οποία θα δημιουργηθούν τα DateTextField.
      * @param modelObject 
-     * 		  To object οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ bind.	
+     * 		  To object στο οποίο θα τα κάνουμε bind.	
      * 		
      */
     public static void addDateTextFields(MarkupContainer cmp, String[] wicketIds, Object modelObject) {
@@ -240,16 +228,16 @@ public class ComponentFactory {
     }
     
     /**
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ TextField<Double> οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½, οΏ½οΏ½ οΏ½οΏ½ wicketId 
-	 * οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½ markupContainer. οΏ½οΏ½οΏ½ textField 
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½.
+	 * Δημιουργεί TextField<Double> τα οποία είναι υποχρεωτικά, με τα wicketId 
+	 * που του δίνουμε και τα προσθέτει στον markupContainer. Στα textField 
+	 * θέτουμε το μέγιστο αριθμο των επιτρεπόμενων δεκαδικών ψηφίων.
 	 * 
 	 * @param cmp
-	 * 		O markupContainer,οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ Textfields.
+	 * 		O markupContainer,στον οποίο θα προστεθούν τα Textfields.
 	 * @param wicketIds
-	 * 		οΏ½οΏ½ wicketIds οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ Textfields.
+	 * 		Τα wicketIds με τα οποία θα δημιουργηθούν τα Textfields.
 	 * @param decimals 
-	 * 		  O οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½.
+	 * 		  O μέγιστος αριθμός των επιτρεπόμενων δεκαδικών ψηφίων.
 	 * 
      */
     public static void addRequiredDoubleTextField(MarkupContainer cmp, String[] wicketIds, Integer decimals){
@@ -262,16 +250,16 @@ public class ComponentFactory {
     }
     
 	/**
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ TextField<Double> οΏ½οΏ½ οΏ½οΏ½ wicketId οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ 
-	 * οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½ markupContainer.οΏ½οΏ½οΏ½ textField 
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½.
+	 * Δημιουργεί TextField<Double> με τα wicketId που του δίνουμε 
+	 * και τα προσθέτει στον markupContainer.Στα textField 
+	 * θέτουμε το μέγιστο αριθμο των επιτρεπόμενων δεκαδικών ψηφίων.
 	 * 
 	 * @param cmp
-	 * 		O markupContainer,οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ Textfields.
+	 * 		O markupContainer,στον οποίο θα προστεθούν τα Textfields.
 	 * @param wicketIds
-	 * 		οΏ½οΏ½ wicketIds οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ Textfields.
+	 * 		Τα wicketIds με τα οποία θα δημιουργηθούν τα Textfields.
 	 * @param decimals 
-	 * 		  O οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½.
+	 * 		  O μέγιστος αριθμός των επιτρεπόμενων δεκαδικών ψηφίων.
 	 */
 	public static void addDoubleTextField(MarkupContainer cmp, String[] wicketIds, Integer decimals) {
 		final Integer dec;
@@ -287,16 +275,16 @@ public class ComponentFactory {
 	}
 	
 	/**
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ TextField<Double> οΏ½οΏ½ οΏ½οΏ½ wicketId (field) οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ 
-	 * οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ bind οΏ½οΏ½οΏ½ CompoundPropertyModel<T> model.
-	 * οΏ½οΏ½οΏ½ textField 
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½.
+	 * Δημιουργεί TextField<Double> με το wicketId (field) που του δίνουμε 
+	 * και κάνει bind στο CompoundPropertyModel<T> model.
+	 * Στα textField 
+	 * θέτουμε επίσης το μέγιστο αριθμο των επιτρεπόμενων δεκαδικών ψηφίων.
 	 * @param <T> 
 	 * @param field 
 	 * 
-	 * 		οΏ½οΏ½ wicketId οΏ½οΏ½οΏ½ TextField.
-	 * @param model οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ field οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ binding.
-	 * @param decimals οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½
+	 * 		το wicketId του TextField.
+	 * @param model το μοντέλο που θα περιεχει το field στο οποίο θα κάνουμε το binding.
+	 * @param decimals Ο μέγιστος αριθμός των επιτρεπόμενων δεκαδικών ψηφίων
 	 * @return TF
 	 */
 	
@@ -312,16 +300,16 @@ public class ComponentFactory {
 		return new DoubleTextField(field,doubleModel,dec);		
 	}
 	/**
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ TextField<Double> οΏ½οΏ½ οΏ½οΏ½ wicketId οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ 
-	 * οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½ markupContainer.οΏ½οΏ½οΏ½ textField 
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½.
+	 * Δημιουργεί TextField<Double> με τα wicketId που του δίνουμε 
+	 * και τα προσθέτει στον markupContainer.Στα textField 
+	 * θέτουμε το μέγιστο αριθμο των επιτρεπόμενων δεκαδικών ψηφίων.
 	 * 
 	 * @param cmp
-	 * 		O markupContainer,οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ Textfields.
+	 * 		O markupContainer,στον οποίο θα προστεθούν τα Textfields.
 	 * @param wicketIds
-	 * 		οΏ½οΏ½ wicketIds οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ Textfields.
+	 * 		Τα wicketIds με τα οποία θα δημιουργηθούν τα Textfields.
 	 * @param modelObject
-	 * 		οΏ½οΏ½ object οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ bind to component. 
+	 * 		Το object που κάνει bind to component. 
 	 * @param decimals 
 	 */
 	public static void addDoubleTextFields(MarkupContainer cmp, String[] wicketIds, Object modelObject,Integer decimals){
@@ -341,15 +329,15 @@ public class ComponentFactory {
 
 	
 	/**
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ TextField<Double> οΏ½οΏ½ οΏ½οΏ½ wicketId οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ 
-	 * οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½ markupContainer οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½ 
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½ bind οΏ½οΏ½οΏ½οΏ½ Object οΏ½οΏ½οΏ½ model.οΏ½οΏ½οΏ½ textField 
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½.
+	 * Δημιουργεί TextField<Double> με τα wicketId που του δίνουμε 
+	 * και τα προσθέτει στον markupContainer χωρίς να τα 
+	 * κάνει bind στον Object του model.Στα textField 
+	 * θέτουμε το μέγιστο αριθμο των επιτρεπόμενων δεκαδικών ψηφίων.
 	 * 
 	 * @param cmp
-	 * 		O markupContainer,οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ Textfields.
+	 * 		O markupContainer,στον οποίο θα προστεθούν τα Textfields.
 	 * @param wicketIds
-	 * 		οΏ½οΏ½ wicketIds οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ Textfields.
+	 * 		Τα wicketIds με τα οποία θα δημιουργηθούν τα Textfields.
 	 * @param decimals 
 	 * 
 	 */
@@ -366,14 +354,14 @@ public class ComponentFactory {
 	}
 	
 	/**
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ TextField<BigDecimal> οΏ½οΏ½ οΏ½οΏ½ wicketId οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ 
-	 * οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½ markupContainer οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ bind οΏ½οΏ½ οΏ½οΏ½
-	 * Object οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½. 
+	 * Δημιουργεί TextField<BigDecimal> με τα wicketId που του δίνουμε 
+	 * και τα προσθέτει στον markupContainer κάνοντας τα bind με το
+	 * Object που του περνάμε. 
 	 * 
 	 * @param cmp
-	 * 		O markupContainer,οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ Textfields.
+	 * 		O markupContainer,στον οποίο θα προστεθούν τα Textfields.
 	 * @param wicketIds
-	 * 		οΏ½οΏ½ wicketIds οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ Textfields.
+	 * 		Τα wicketIds με τα οποία θα δημιουργηθούν τα Textfields.
 	 * @param modelObject 
 	 */
 	public static void addBigDecimalTextFields(MarkupContainer cmp, String[] wicketIds, Object modelObject){
@@ -383,16 +371,16 @@ public class ComponentFactory {
 	}
 
 	/**
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ TextField<BigDecimal> οΏ½οΏ½ οΏ½οΏ½ wicketId οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ 
-	 * οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½ markupContainer.οΏ½οΏ½οΏ½ textField 
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½.
+	 * Δημιουργεί TextField<BigDecimal> με τα wicketId που του δίνουμε 
+	 * και τα προσθέτει στον markupContainer.Στα textField 
+	 * θέτουμε το μέγιστο αριθμο των επιτρεπόμενων δεκαδικών ψηφίων.
 	 * 
 	 * @param cmp
-	 * 		O markupContainer,οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ Textfields.
+	 * 		O markupContainer,στον οποίο θα προστεθούν τα Textfields.
 	 * @param wicketIds
-	 * 		οΏ½οΏ½ wicketIds οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ Textfields.
+	 * 		Τα wicketIds με τα οποία θα δημιουργηθούν τα Textfields.
 	 * @param decimals 
-	 * 		  O οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½.
+	 * 		  O μέγιστος αριθμός των επιτρεπόμενων δεκαδικών ψηφίων.
 	 */
 	public static void addBigDecimalTextFields(MarkupContainer cmp, String[] wicketIds, Integer decimals){
 		final Integer dec;
@@ -408,14 +396,14 @@ public class ComponentFactory {
 	}
 
 	/**
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ TextField<BigDecimal> οΏ½οΏ½ οΏ½οΏ½οΏ½ Model<BigDecimal> οΏ½οΏ½ οΏ½οΏ½ wicketId 
-	 * οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½ markupContainer οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½ 
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½ bind οΏ½οΏ½οΏ½οΏ½ Object οΏ½οΏ½οΏ½ model οΏ½οΏ½οΏ½ MarkupContainer.
+	 * Δημιουργεί TextField<BigDecimal> με νέο Model<BigDecimal> με τα wicketId 
+	 * που του δίνουμε και τα προσθέτει στον markupContainer χωρίς να τα 
+	 * κάνει bind στον Object του model του MarkupContainer.
 	 * 
 	 * @param cmp
-	 * 		O markupContainer,οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ Textfields.
+	 * 		O markupContainer,στον οποίο θα προστεθούν τα Textfields.
 	 * @param fields
-	 * 		οΏ½οΏ½ wicketIds οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ Textfields.
+	 * 		Τα wicketIds με τα οποία θα δημιουργηθούν τα Textfields.
 	 *
 	 */
 	public static void addBigDecimalTextFieldsWithoutBinding(MarkupContainer cmp, String[] fields) {
@@ -425,16 +413,16 @@ public class ComponentFactory {
 	}
 
 	/**
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ TextField<BigDecimal> οΏ½οΏ½ οΏ½οΏ½ wicketId (field) οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ 
-	 * οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ bind οΏ½οΏ½οΏ½ CompoundPropertyModel<T> model.
-	 * οΏ½οΏ½οΏ½ textField 
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½.
+	 * Δημιουργεί TextField<BigDecimal> με το wicketId (field) που του δίνουμε 
+	 * και κάνει bind στο CompoundPropertyModel<T> model.
+	 * Στα textField 
+	 * θέτουμε επίσης το μέγιστο αριθμο των επιτρεπόμενων δεκαδικών ψηφίων.
 	 * @param <T> 
 	 * @param field 
 	 * 
-	 * 		οΏ½οΏ½ wicketId οΏ½οΏ½οΏ½ TextField.
-	 * @param model οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ field οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ binding.
-	 * @param decimals οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½
+	 * 		το wicketId του TextField.
+	 * @param model το μοντέλο που θα περιεχει το field στο οποίο θα κάνουμε το binding.
+	 * @param decimals Ο μέγιστος αριθμός των επιτρεπόμενων δεκαδικών ψηφίων
 	 * @return TF
 	 */
 	
@@ -451,13 +439,13 @@ public class ComponentFactory {
 	}
 
 	/**
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ TextField<Long> οΏ½οΏ½ οΏ½οΏ½ wicketId οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ 
-	 * οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½ markupContainer.
+	 * Δημιουργεί TextField<Long> με τα wicketId που του δίνουμε 
+	 * και τα προσθέτει στον markupContainer.
 	 * 
 	 * @param cmp
-	 * 		O markupContainer,οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ Textfields.
+	 * 		O markupContainer,στον οποίο θα προστεθούν τα Textfields.
 	 * @param wicketIds
-	 * 		οΏ½οΏ½ wicketIds οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ Textfields.
+	 * 		Τα wicketIds με τα οποία θα δημιουργηθούν τα Textfields.
 	 */
 	public static void addLongTextField(MarkupContainer cmp, String[] wicketIds) {
 		for (String field : wicketIds) {
@@ -469,13 +457,13 @@ public class ComponentFactory {
 	}
 
 	/**
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ TextField<Integer> οΏ½οΏ½ οΏ½οΏ½ wicketId οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ 
-	 * οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½ markupContainer.
+	 * Δημιουργεί TextField<Integer> με τα wicketId που του δίνουμε 
+	 * και τα προσθέτει στον markupContainer.
 	 * 
 	 * @param cmp
-	 * 		O markupContainer,οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ Textfields.
+	 * 		O markupContainer,στον οποίο θα προστεθούν τα Textfields.
 	 * @param wicketIds
-	 * 		οΏ½οΏ½ wicketIds οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ Textfields.
+	 * 		Τα wicketIds με τα οποία θα δημιουργηθούν τα Textfields.
 	 */
 	public static void addIntegerTextField(MarkupContainer cmp, String[] wicketIds) {
 		for (String field : wicketIds) {
@@ -488,14 +476,14 @@ public class ComponentFactory {
 	
 
 	/**
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ Percentage TextField οΏ½οΏ½ οΏ½οΏ½ wicketId οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ 
-	 * οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½ markupContainer.
+	 * Δημιουργεί Percentage TextField με τα wicketId που του δίνουμε 
+	 * και τα προσθέτει στον markupContainer.
 	 * 
 	 * @param cmp
-	 * 		O markupContainer,οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ Textfields.
+	 * 		O markupContainer,στον οποίο θα προστεθούν τα Textfields.
 	 * @param wicketIds
-	 * 		οΏ½οΏ½ wicketIds οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ Textfields.
-	 * @param decimals οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½
+	 * 		Τα wicketIds με τα οποία θα δημιουργηθούν τα Textfields.
+	 * @param decimals ο αριθμός των δεκαδικών
 	 */
 	public static void addPercentageTextField(MarkupContainer cmp, String[] wicketIds, int decimals) {
 		for (String field : wicketIds) {
@@ -505,12 +493,12 @@ public class ComponentFactory {
 	}
 	
 	/**
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ Label οΏ½οΏ½ οΏ½οΏ½ message οΏ½οΏ½οΏ½ οΏ½οΏ½ wicketId οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½.
+	 * Επιστρέφει ένα Label με το message και το wicketId που του δίνουμε.
 	 * 
 	 * @param id 
-	 * 		  οΏ½οΏ½ wicketId οΏ½οΏ½οΏ½ Label.
+	 * 		  Το wicketId του Label.
 	 * @param message 
-	 * 		  To οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ Label.
+	 * 		  To μήνυμα που θα εμφανίζει το Label.
 	 * 
 	 * @return Label
 	 * 
@@ -521,13 +509,13 @@ public class ComponentFactory {
 	}
 	
 	/**
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ Label οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ Enum οΏ½οΏ½οΏ½ οΏ½οΏ½ 
-	 * wicketId οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½.
+	 * Επιστρέφει ένα Label με το με την τιμή του Enum και το 
+	 * wicketId που του δίνουμε.
 	 * 
 	 * @param id 
-	 * 		  οΏ½οΏ½ wicketId οΏ½οΏ½οΏ½ Label.
+	 * 		  Το wicketId του Label.
 	 * @param enumeration 
-	 * 		  οΏ½ οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ Label.
+	 * 		  Η τιμή που θα εμφανίζει το Label.
 	 * 
 	 * @return Label
 	 * 
@@ -538,13 +526,13 @@ public class ComponentFactory {
 	}
 	
 	/**
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ AjaxCheckBox οΏ½οΏ½ οΏ½οΏ½ wicketId οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ 
-	 * οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½ markupContainer.
+	 * Δημιουργεί AjaxCheckBox με τα wicketId που του δίνουμε 
+	 * και τα προσθέτει στον markupContainer.
 	 * 
 	 * @param markupContainer
-	 * 		O markupContainer,οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ AjaxCheckBox.
+	 * 		O markupContainer,στον οποίο θα προστεθούν τα AjaxCheckBox.
 	 * @param checkBoxes
-	 * 		οΏ½οΏ½ wicketIds οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ AjaxCheckBox.
+	 * 		Τα wicketIds με τα οποία θα δημιουργηθούν τα AjaxCheckBox.
 	 * 
 	 */
 	public static void addAjaxCheckBox(MarkupContainer markupContainer, String[] checkBoxes){
@@ -566,14 +554,14 @@ public class ComponentFactory {
 	/**
 	 * 
 	 * 
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ TextField<Integer> οΏ½οΏ½ οΏ½οΏ½ wicketId οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ 
-	 * οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½ markupContainer οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ bind οΏ½οΏ½ οΏ½οΏ½
-	 * Object οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½. .
+	 * Δημιουργεί TextField<Integer> με τα wicketId που του δίνουμε 
+	 * και τα προσθέτει στον markupContainer κάνοντας τα bind με το
+	 * Object που του περνάμε. .
 	 * 
 	 * @param cmp
-	 * 		O markupContainer,οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ Textfields.
+	 * 		O markupContainer,στον οποίο θα προστεθούν τα Textfields.
 	 * @param wicketIds
-	 * 		οΏ½οΏ½ wicketIds οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ Textfields.
+	 * 		Τα wicketIds με τα οποία θα δημιουργηθούν τα Textfields.
 	 * @param modelObject 
 	 * 		  The Object that contains the property.
 	 */

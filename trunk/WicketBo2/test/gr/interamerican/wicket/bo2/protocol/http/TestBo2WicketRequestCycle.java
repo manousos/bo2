@@ -25,6 +25,7 @@ import gr.interamerican.bo2.arch.exceptions.LogicException;
 import gr.interamerican.bo2.arch.utils.ext.Bo2Session;
 import gr.interamerican.bo2.impl.open.namedstreams.NamedStreamsProvider;
 import gr.interamerican.bo2.impl.open.streams.StreamsProvider;
+import gr.interamerican.bo2.samples.archutil.po.User;
 import gr.interamerican.bo2.samples.operations.EmptyOperation;
 import gr.interamerican.bo2.test.def.posamples.Invoice;
 import gr.interamerican.wicket.bo2.test.MockApplicationForWicketBo2;
@@ -96,8 +97,8 @@ public class TestBo2WicketRequestCycle {
 			wicketTester.getApplication(), wicketTester.getWicketRequest(),
 			wicketTester.getWicketResponse());
 		rc.onBeginRequest();
-		PersistenceWorker<Invoice> pw = 
-			Bo2WicketRequestCycle.openPw(Invoice.class);
+		PersistenceWorker<User> pw = 
+			Bo2WicketRequestCycle.openPw(User.class);
 		Assert.assertNotNull(pw);		
 		rc.onEndRequest();
 		Assert.assertNull(Bo2Session.getSession());
