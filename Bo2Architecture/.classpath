@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry kind="src" path="main"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/SLF4J-1.5.8_(LOG4J)"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/Bo2Utils"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry kind="output" path="bin"/>
-</classpath>
