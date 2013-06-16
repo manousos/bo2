@@ -14,4 +14,4 @@
   * Minimize the size of code
      * Move utilities to separate 
      * Eliminate boilerplate code
-  * Write once - run everywhere
+  * [WriteOnceRunAnywhere Write Once Run Anywhere]
