@@ -1,0 +1,6 @@
+#summary The WORA principle in Bo2
+
+= Introduction =
+[http://en.wikipedia.org/wiki/Write_once,_run_anywhere WORA] is one of the most important features of java. Years ago, the [http://www.interamerican.gr mother company] of Bo2 made an assessment in order to select between Java and .NET. Despite having years of experience with Microsoft development tools and numerous Visual Basic applications the selection was Java. The main reason was WORA.
+
+
