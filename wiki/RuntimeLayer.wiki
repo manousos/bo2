@@ -1,0 +1,7 @@
+#summary Runtime layer is a term used for the execution platform.
+
+The term runtime layer or execution platform does not only refer to the JVM implementation or the operating system. It is used to describe every characteristic of the environment that results in different management of resources. 
+
+For example JEE is a different environment that JSE. JSE on zOS is different than on CICS or Unix etc. 
+
+The same program could use files in a local filesystem or in a cloud service like Google Drive. In this case we can think of these two as different runtime environments.
