@@ -1,17 +1,17 @@
 #summary Principles guiding the development of Bo2.
 
 == Principles for maintainable software ==
-  * Architecture-centric development process
-  * Layered architecture
+  * [ArchitectureCentricDevelopmentProcess Architecture-centric development process]
+  * [Bo2Layers Layered architecture]
     * Data access
     * Entity model
     * Business logic
     * User interface
-  * Program to interfaces
-  * Map an interface to each stereotype class
+  * [ProgramToInterfaces Program to interfaces]
+  * [InterfacePerStereotype Map an interface to each stereotype class]
   * The business layer must be agnostic of the implementation details
   * Keep the system open to yet unknown technologies
-  * Minimize the size of code
+  * [MinimizeCode Minimize the size of code]
      * Move utilities to separate 
      * Eliminate boilerplate code
   * [WriteOnceRunAnywhere Write Once Run Anywhere]
