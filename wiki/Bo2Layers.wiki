@@ -1,0 +1,10 @@
+#summary Bo2 defines a multi-layered architecture.
+
+= Introduction =
+Bo2 distinguishes the following layers:
+
+  * [UserInterfaceLayer User interface]
+  * [RuntimeLayer Runtime layer]
+  * [BusinessLogicLayer Business logic]
+  * [DomainModel Business entities]
+  * [DataAccessLayer Data access layer]
