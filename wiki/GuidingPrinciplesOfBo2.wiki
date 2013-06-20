@@ -2,11 +2,7 @@
 
 == Principles for maintainable software ==
   * [ArchitectureCentricDevelopmentProcess Architecture-centric development process]
-  * [Bo2Layers Layered architecture]
-    * Data access
-    * Entity model
-    * Business logic
-    * User interface
+  * [Bo2Layers Layered architecture]  
   * [ProgramToInterfaces Program to interfaces]
   * [InterfacePerStereotype Map an interface to each stereotype class]
   * [TechnologyAgnosticBusinessLayer Keep the business layer agnostic of implementation technologies]
