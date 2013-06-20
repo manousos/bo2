@@ -9,9 +9,9 @@
     * User interface
   * [ProgramToInterfaces Program to interfaces]
   * [InterfacePerStereotype Map an interface to each stereotype class]
-  * The business layer must be agnostic of the implementation details
+  * [TechnologyAgnosticBusinessLayer Keep the business layer agnostic of implementation technologies]
   * Keep the system open to yet unknown technologies
   * [MinimizeCode Minimize the size of code]
-     * Move utilities to separate 
-     * Eliminate boilerplate code
+     * [ReuseUtilities Reuse utilities]
+     * [EliminateBoilerplateCode Eliminate boilerplate code]
   * [WriteOnceRunAnywhere Write Once Run Anywhere]
