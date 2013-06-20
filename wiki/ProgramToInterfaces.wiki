@@ -1,16 +1,14 @@
 #summary One-sentence summary of this page.
 
-= Introduction =
+==Introduction==
 According to the [http://c2.com/cgi/wiki?InformationHiding information hiding] principle, a class that invokes a method of another class does not need and should not know anything about the other class, but the method signature. This type of loose coupling makes it easy to change the implementation details of the other class or even replace the class with another that has a method with the same signature. 
 
 In java (and other object oriented languages) this is achieved by declaring variables with an interface type and not with a class type. This makes it possible to change the class that implements the specific interfaces at will without changing the code that uses it. As [http://en.wikipedia.org/wiki/Erich_Gamma Erich Gamma] [http://www.artima.com/lejava/articles/designprinciples.html quoted] _"This principle is really about dependency relationships which have to be carefully managed in a large app."_
 
 
-= Bo2 approach =
+==Bo2 approach==
 The Bo2 architecture follows this principle. All types of the Bo2Architecture project are interfaces. The developer can choose from  implementations of each interface according to his needs.
 
 Bo2 promotes the same principle with the [http://bo2.googlecode.com/svn/trunk/docs/javadocs/Bo2Creation/gr/interamerican/bo2/creation/ObjectFactory.html ObjectFactory]. Objects should be declared with their interface and they should be instantiated by the object factory's create method. The object factory selects the appropriate implementation type and creates an instance of it.
 
 The Bo2Creation project provides an implementation of ObjectFactory. It gives the feature to define with setup the implementation type of each interface. It also provides the feature of automatically compiling at runtime a class that implements an interface according to predefined rules. This functionality is further extended in the Bo2ImplOpen project to include automatic creation of classes implementing interfaces declared by the Bo2Architecture. 
-
-
