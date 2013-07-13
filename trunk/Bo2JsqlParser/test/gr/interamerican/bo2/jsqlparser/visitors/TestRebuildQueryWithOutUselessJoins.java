@@ -40,7 +40,7 @@ public class TestRebuildQueryWithOutUselessJoins {
 	 */
 	@Test
 	public void testGetResult() throws SqlParseException, JSQLParserException {
-		String sql = "select a.a,b.b from a,b,d"; //$NON-NLS-1$
+		String sql = "select a.a,b.b from a,b,d union all select w from q"; //$NON-NLS-1$
 		RebuildQueryWithOutUselessJoins rebuild = new RebuildQueryWithOutUselessJoins();
 		rebuild.setUselessJoins(UselessJoinsFinder.INSTANCE.find(sql));
 		JSqlParser parser = new CCJSqlParserManager();
@@ -51,6 +51,7 @@ public class TestRebuildQueryWithOutUselessJoins {
 		Select plain = (Select) st;
 		plain.accept(rebuild);
 		Assert.assertFalse(rebuild.getResult().contains("d")); //$NON-NLS-1$
+		Assert.assertTrue(rebuild.getResult().contains("all")); //$NON-NLS-1$
 	}
 
 }

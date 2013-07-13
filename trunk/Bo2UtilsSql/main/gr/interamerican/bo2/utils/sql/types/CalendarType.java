@@ -57,7 +57,7 @@ implements Type<Calendar> {
 		return DateUtils.getCalendar(dt);
 	}	
 	
-	public String sqlString(Calendar t) {
+	public synchronized String sqlString(Calendar t) {
 		if (t==null) {
 			return StringConstants.NULL;
 		}

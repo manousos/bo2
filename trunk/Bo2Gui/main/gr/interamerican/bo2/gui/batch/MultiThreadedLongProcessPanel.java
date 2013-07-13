@@ -43,7 +43,14 @@ extends BPanel<MultiThreadedLongProcess> {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	
+	/**
+	 * multiplication factor for the height of aggregatePanel so that is visible in the panel.
+	 */
+	private static final double erma = 1.1;
+	/**
+	 * sets the number of initially visible {@link LongProcessPanel}
+	 */
+	private static final int initialVisiblePanels = 6;
 	/**
 	 * Labels.
 	 */
@@ -88,6 +95,7 @@ extends BPanel<MultiThreadedLongProcess> {
 		super(model);
 	}
 
+
 	@Override
 	public void paint() {
 		removeAll();
@@ -101,26 +109,35 @@ extends BPanel<MultiThreadedLongProcess> {
 			JPanel panel = drawSubProcessPanel(subProcess, previous);
 			previous = panel;
 		}		
-		defineSize(reference);		
 
 		revalidate();
 		repaint();
 	}
 	
-	
-	
-	
+	/**
+	 * @return the default size used for the frame.
+	 */
+	public Dimension getDefaultSize() {
+		Component reference = defineReferenceComponent();
+		double preferredWidth = aggregatePanel.getPreferredSize().getWidth() + 50/* scrollbar width */;
+		double preferredHeight = reference.getPreferredSize().getHeight()
+				+ (aggregatePanel.getPreferredSize().getHeight() * initialVisiblePanels);
+		Dimension size = Sizes.dimension(preferredWidth, preferredHeight);
+		return size;
+	}
+
 	/**
 	 * Calculates and sets the size.
 	 * 
 	 * @param reference
+	 * @return
 	 */
-	void defineSize(Component reference) {
+	Dimension defineSize(Component reference) {
 		double preferredWidth = aggregatePanel.getPreferredSize().getWidth();
-		double preferredHeight = reference.getHeight() 
-		                      + (aggregatePanel.getPreferredSize().getHeight() * 10);
+		double preferredHeight = reference.getPreferredSize().getHeight()
+				+ (aggregatePanel.getPreferredSize().getHeight() * (erma * subProcessesPanels.size() + 3));
 		Dimension size = Sizes.dimension(preferredWidth, preferredHeight);
-		setPreferredSize(size);
+		return size;
 	}
 	
 	/**
@@ -234,6 +251,8 @@ extends BPanel<MultiThreadedLongProcess> {
 				JPanel panel = drawSubProcessPanel(subProcess, previous);
 				previous = panel;
 			}
+			setSize(defineSize(defineReferenceComponent()));
+			setPreferredSize(getSize());
 			revalidate();
 			repaint();
 		}
@@ -269,8 +288,5 @@ extends BPanel<MultiThreadedLongProcess> {
 		BatchProcess<?> batch = (BatchProcess<?>)model;
 		batch.addQueueProcessors(1);
 	}
-
-	
-	
 	
 }

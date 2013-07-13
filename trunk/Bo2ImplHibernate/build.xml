@@ -1,0 +1,36 @@
+<project name="mvnant" default="demo">
+
+	<typedef resource="org/apache/maven/artifact/ant/antlib.xml" />
+
+	<target name="demo">
+		<dependencies pathId="cp" type="jar" useScope="runtime">
+			<pom file="${basedir}/pom.xml"/>
+		</dependencies>
+		
+		<property name="mycp" refid="cp"/>
+		
+		<echo message="Classpath = ${mycp}"/>
+	</target>
+	
+	<target name="batchDemo">
+		<dependencies pathId="cp" type="jar" useScope="runtime">
+			<pom file="${basedir}/pom.xml">
+				<profile id="UAT" />
+			</pom>
+		</dependencies>
+		
+        <java classname="gr.interamerican.bo2.impl.open.runtime.MultiLauncher" fork="true">
+            <jvmarg value="-Xms4096m" />
+            <jvmarg value="-Xmx4096m"/>
+            <jvmarg value="-XX:PermSize=128m" />
+            <jvmarg value="-XX:MaxPermSize=128m" />
+            <jvmarg value="-Duser.language=el" />
+            <classpath id="LauncherCp">
+                <path refid="cp" />
+            </classpath>
+            <arg value="gr.interamerican.jobs.bo.es.reports.CountReportsCmd" />
+        </java>
+	</target>
+
+</project>
+

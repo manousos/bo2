@@ -31,6 +31,4 @@ public class TestBatchProcessFrame {
 		BatchProcessFrame frame = new BatchProcessFrame(model);
 		Assert.assertNotNull(frame.inputPanel);
 	}
-
-	
 }

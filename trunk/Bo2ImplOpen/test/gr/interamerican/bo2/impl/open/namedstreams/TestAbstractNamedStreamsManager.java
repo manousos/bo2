@@ -17,14 +17,17 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import gr.interamerican.bo2.arch.exceptions.DataException;
 import gr.interamerican.bo2.arch.exceptions.InitializationException;
+import gr.interamerican.bo2.impl.open.creation.Factory;
 import gr.interamerican.bo2.samples.implopen.mocks.MockAbstractNamedStreamsManager;
 import gr.interamerican.bo2.samples.implopen.mocks.MockFailingAbstractNamedStreamsManager;
 import gr.interamerican.bo2.samples.implopen.mocks.MockNamedStream;
 import gr.interamerican.bo2.test.utils.UtilityForBo2Test;
+import gr.interamerican.bo2.utils.Bo2UtilsEnvironment;
 import gr.interamerican.bo2.utils.StringConstants;
 import gr.interamerican.bo2.utils.StringUtils;
 
 import java.io.PrintStream;
+import java.nio.charset.Charset;
 import java.util.Properties;
 
 import junit.framework.Assert;
@@ -73,6 +76,9 @@ public class TestAbstractNamedStreamsManager {
 		assertEquals(name, def.getName());
 		assertEquals(path, def.getUri());
 		assertEquals(type, def.getType());
+		assertEquals(Bo2UtilsEnvironment.getDefaultTextCharset(), def.getEncoding());
+		assertEquals(0, def.getRecordLength());
+		
 	}
 	
 	/**
@@ -207,7 +213,7 @@ public class TestAbstractNamedStreamsManager {
 		AbstractNamedStreamsManager impl = 
 			new MockAbstractNamedStreamsManager(properties);
 		NamedStream<PrintStream> ns = 
-			new MockNamedStream<PrintStream>(StreamType.PRINTSTREAM, StreamResource.SYSTEM, System.out, "Sysout_alt", 0);
+			new MockNamedStream<PrintStream>(StreamType.PRINTSTREAM, StreamResource.SYSTEM, System.out, "Sysout_alt", 0, Bo2UtilsEnvironment.getDefaultTextCharset());
 		impl.registerStream(ns);
 		NamedStream<?> actual = impl.getStream(ns.getName());
 		assertSame(ns,actual);
@@ -226,7 +232,7 @@ public class TestAbstractNamedStreamsManager {
 		
 		final String name = "Sysout_alt";
 		NamedStream<PrintStream> ns = 
-			new MockNamedStream<PrintStream>(StreamType.PRINTSTREAM, StreamResource.SYSTEM, System.out, name, 0);
+			new MockNamedStream<PrintStream>(StreamType.PRINTSTREAM, StreamResource.SYSTEM, System.out, name, 0, Bo2UtilsEnvironment.getDefaultTextCharset());
 		impl.registerSharedStream(ns);
 		NamedStream<?> actual = impl.getSharedStream(ns.getName());
 		
@@ -597,6 +603,27 @@ public class TestAbstractNamedStreamsManager {
 		def.setUri("M");		
 		AbstractNamedStreamsManager man = new MockAbstractNamedStreamsManager(p);		
 		man.openInMemoryStream(def);
+	}
+	
+	/**
+	 * Tests handleOptionalDefinitionElement
+	 */
+	@Test
+	public void testHandleOptionalDefinitionElement() {
+		Properties p = UtilityForBo2Test.getLocalFsProperties();
+		AbstractNamedStreamsManager man = new MockAbstractNamedStreamsManager(p);
+		
+		NamedStreamDefinition nsd = Factory.create(NamedStreamDefinition.class);
+		Charset utf8 = Charset.forName("UTF-8");
+		String attribute = AbstractNamedStreamsManager.ENCODING_PREFIX + utf8.name();
+		man.handleOptionalDefinitionElement(nsd, attribute);
+		assertEquals(utf8, nsd.getEncoding());
+		
+		nsd = Factory.create(NamedStreamDefinition.class);
+		int recordLength = 101;
+		attribute = AbstractNamedStreamsManager.RECORD_LENGTH_PREFIX + String.valueOf(recordLength);
+		man.handleOptionalDefinitionElement(nsd, attribute);
+		assertEquals(recordLength, nsd.getRecordLength());
 	}
 	
 }

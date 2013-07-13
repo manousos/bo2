@@ -52,6 +52,16 @@ implements SearchFlowPanelDef<C, B> {
 	private Flag pickActionFlag;
 	
 	/**
+	 * Second selected result {@link CallbackAction}
+	 */
+	private CallbackAction secondPickAction;
+
+	/**
+	 * Authorization flag for secondPickAction. 
+	 */
+	private Flag secondPickActionFlag;
+	
+	/**
 	 * RefreshListAfterPickAction.
 	 */
 	private Boolean refreshListAfterPickAction;
@@ -150,6 +160,12 @@ implements SearchFlowPanelDef<C, B> {
 	 * Indicates if multiple selections are allowed.
 	 */
 	private Boolean allowMultipleSelections;
+	
+	/**
+	 * Indicates whether the single bean panel form of the CrudPickerPanel results 
+	 * panel includes a file upload item. 
+	 */
+	private Boolean singleBeanFormContainsFileUpload;
 	
 	/**
 	 * Multiple selections model.
@@ -277,6 +293,22 @@ implements SearchFlowPanelDef<C, B> {
 		this.pickAction = pickAction;
 	}
 	
+	public CallbackAction getSecondPickAction() {
+		return secondPickAction;
+	}
+
+	public void setSecondPickAction(CallbackAction secondPickAction) {
+		this.secondPickAction = secondPickAction;
+	}
+
+	public Flag getSecondPickActionFlag() {
+		return secondPickActionFlag;
+	}
+
+	public void setSecondPickActionFlag(Flag secondPickActionFlag) {
+		this.secondPickActionFlag = secondPickActionFlag;
+	}
+
 	public Boolean getRefreshListAfterPickAction() {
 		return refreshListAfterPickAction;
 	}
@@ -628,6 +660,14 @@ implements SearchFlowPanelDef<C, B> {
 
 	public void setRequestConfirmOnDelete(Boolean requestConfirmOnDelete) {
 		this.requestConfirmOnDelete = requestConfirmOnDelete;
+	}
+
+	public Boolean getSingleBeanFormContainsFileUpload() {
+		return singleBeanFormContainsFileUpload;
+	}
+
+	public void setSingleBeanFormContainsFileUpload(Boolean singleBeanFormContainsFileUpload) {
+		this.singleBeanFormContainsFileUpload = singleBeanFormContainsFileUpload;
 	}
 	
 }

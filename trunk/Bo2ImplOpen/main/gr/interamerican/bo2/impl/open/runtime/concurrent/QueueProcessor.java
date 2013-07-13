@@ -343,7 +343,7 @@ implements Runnable, LongProcess {
 			} catch (TransactionManagerException e) {
 				inputQueue.add(input);
 				exceptionMessage = ExceptionUtils.getThrowableStackTrace(e);
-				quit = true;
+				tidy();
 				logFailure(input, e);
 			}
 		}
@@ -388,7 +388,10 @@ implements Runnable, LongProcess {
 	}
 	
 	/**
-	 * Handles a failure.
+	 * Handles a failure. In scenarios where a PersistenceContext
+	 * is used, it is necessary to use tidy() to destroy any context
+	 * that may contain database modifications of the failed
+	 * transaction not flushed yet.
 	 * 
 	 * @param input
 	 * @param ex
@@ -398,6 +401,7 @@ implements Runnable, LongProcess {
 		failuresCount++;
 		logFailure(input, ex);
 		tm.rollback();
+		tidy();
 	}
 	
 	/**
@@ -416,16 +420,27 @@ implements Runnable, LongProcess {
 	 * @param input
 	 * @param ex 
 	 */
+	@SuppressWarnings("nls")
 	void logFailure(T input, Exception ex) {
+		String addendum = " REATTEMPTED AUTOMATICALLY (failure was TransactionManagerException)";
+		boolean tmEx = ex instanceof TransactionManagerException;
 		String inputString = safeToString(input);
+		
 		String msg = StringUtils.concat (			 
 			inputString, SEMICOLON,
-			ex.toString());
+			ex.toString(), SEMICOLON);
+		if(tmEx) {
+			msg = msg + addendum;
+		}
 		failuresLog.getStream().println(msg);
+		
 		if(stacktracesLog != null) {
 			String trace = StringUtils.concat (
 				inputString, NEWLINE,
 				ExceptionUtils.getThrowableStackTrace(ex), NEWLINE);
+			if(tmEx) {
+				trace = trace + addendum + NEWLINE;
+			}
 			stacktracesLog.getStream().println(trace);
 		}
 	}

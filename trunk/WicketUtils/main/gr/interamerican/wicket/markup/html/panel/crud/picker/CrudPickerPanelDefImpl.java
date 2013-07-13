@@ -139,6 +139,11 @@ implements CrudPickerPanelDef<B> {
 	private AjaxEnabledCondition<B> updateValidator;
 	
 	/**
+	 * Validator upon selecting an existing item for editing.
+	 */
+	private AjaxEnabledCondition<B> preEditValidator;
+	
+	/**
 	 * Validator upon updating an existing item.
 	 */
 	private AjaxEnabledCondition<B> deleteValidator;
@@ -275,6 +280,14 @@ implements CrudPickerPanelDef<B> {
 	public AjaxEnabledCondition<B> getUpdateValidator() {
 		return updateValidator;
 	}
+	
+	public void setPreEditValidator(AjaxEnabledCondition<B> validator) {
+		this.preEditValidator = validator;
+	}
+
+	public AjaxEnabledCondition<B> getPreEditValidator() {
+		return preEditValidator;
+	}
 
 	public CallbackAction getRefreshAfterDataOpAction() {
 		return refreshAfterDataOpAction;
@@ -379,4 +392,5 @@ implements CrudPickerPanelDef<B> {
 	public Boolean getHideSingleBeanPanelButtons() {
 		return hideSingleBeanPanelButtons;
 	}
+
 }

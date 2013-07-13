@@ -18,6 +18,8 @@ import gr.interamerican.bo2.impl.open.namedstreams.AbstractNamedStream;
 import gr.interamerican.bo2.impl.open.namedstreams.StreamResource;
 import gr.interamerican.bo2.impl.open.namedstreams.StreamType;
 
+import java.nio.charset.Charset;
+
 /**
  * Mock {@link AbstractNamedStream}.
  * @param <T> 
@@ -37,9 +39,10 @@ public class MockNamedStream<T> extends AbstractNamedStream<T> {
 	 * @param stream
 	 * @param name
 	 * @param recordLength
+	 * @param encoding 
 	 */
-	public MockNamedStream(StreamType streamType, StreamResource resourceType, T stream, String name, int recordLength) {
-		super(streamType, resourceType, stream, name, recordLength, stream);
+	public MockNamedStream(StreamType streamType, StreamResource resourceType, T stream, String name, int recordLength, Charset encoding) {
+		super(streamType, resourceType, stream, name, recordLength, stream, encoding);
 	}
 	
 	

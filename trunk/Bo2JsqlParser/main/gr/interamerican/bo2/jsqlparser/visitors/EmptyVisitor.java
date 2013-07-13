@@ -77,6 +77,39 @@ import net.sf.jsqlparser.statement.update.Update;
 public class EmptyVisitor 
 implements StatementVisitor, SelectVisitor, 
 FromItemVisitor, SelectItemVisitor, ExpressionVisitor {
+
+	/**
+	 * Select.
+	 */
+	protected static final String SELECT = "select"; //$NON-NLS-1$
+	/**
+	 * From.
+	 */
+	protected static final String FROM = "from"; //$NON-NLS-1$
+	/**
+	 * Where.
+	 */
+	protected static final String WHERE = "where"; //$NON-NLS-1$
+	/**
+	 * Group by.
+	 */
+	protected static final String GROUP_BY = "group by"; //$NON-NLS-1$
+	/**
+	 * Union.
+	 */
+	protected static final String UNION = "union"; //$NON-NLS-1$
+	/**
+	 * all.
+	 */
+	protected static final String ALL = "all"; //$NON-NLS-1$
+	/**
+	 * Having.
+	 */
+	protected static final String HAVING = "having"; //$NON-NLS-1$
+	/**
+	 * Order by.
+	 */
+	protected static final String ORDER_BY = "order by"; //$NON-NLS-1$
 	
 	@Override
 	public void visit(net.sf.jsqlparser.schema.Column tableColumn) {/* empty */}

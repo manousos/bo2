@@ -18,6 +18,7 @@ import gr.interamerican.bo2.arch.exceptions.DataOperationNotSupportedException;
 import gr.interamerican.bo2.impl.open.utils.Exceptions;
 
 import java.io.PrintStream;
+import java.nio.charset.Charset;
 
 /**
  * Implementation of NamedStream for InputStream.
@@ -33,11 +34,12 @@ public class NamedPrintStream extends AbstractNamedStream<PrintStream> {
 	 * @param stream
 	 * @param name
 	 * @param resource 
+	 * @param encoding 
 	 */
 	NamedPrintStream(
 			StreamResource resourceType, PrintStream stream, 
-			String name, Object resource) {
-		super(StreamType.PRINTSTREAM, resourceType, stream, name, 0, resource);
+			String name, Object resource, Charset encoding) {
+		super(StreamType.PRINTSTREAM, resourceType, stream, name, 0, resource, encoding);
 	}
 	
 	public boolean find(byte[] key) 
@@ -56,7 +58,7 @@ public class NamedPrintStream extends AbstractNamedStream<PrintStream> {
 	}
 
 	public void writeRecord(byte[] record) {
-		stream.println(new String(record));	
+		stream.println(new String(record, encoding));
 	}
 
 	public void writeString(String string) {
@@ -66,4 +68,5 @@ public class NamedPrintStream extends AbstractNamedStream<PrintStream> {
 	public void close() throws DataException {
 		stream.close();
 	}
+	
 }

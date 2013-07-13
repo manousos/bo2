@@ -18,6 +18,7 @@ import gr.interamerican.bo2.impl.open.utils.Exceptions;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 
 
 /**
@@ -35,11 +36,12 @@ public class NamedOutputStream extends AbstractNamedStream<OutputStream> {
 	 * @param name
 	 * @param recordLength
 	 * @param resource 
+	 * @param encoding 
 	 */
 	NamedOutputStream(
 			StreamResource resourceType, OutputStream stream, 
-			String name, int recordLength, Object resource) {
-		super(StreamType.OUTPUTSTREAM, resourceType, stream, name, recordLength, resource);
+			String name, int recordLength, Object resource, Charset encoding) {
+		super(StreamType.OUTPUTSTREAM, resourceType, stream, name, recordLength, resource, encoding);
 	}
 
 	public boolean find(byte[] key) 
@@ -68,7 +70,7 @@ public class NamedOutputStream extends AbstractNamedStream<OutputStream> {
 
 	public void writeString(String string) 
 	throws DataException, DataOperationNotSupportedException {
-		writeRecord(string.getBytes());
+		writeRecord(string.getBytes(encoding));
 	}
 
 	public void close() throws DataException {
@@ -78,4 +80,5 @@ public class NamedOutputStream extends AbstractNamedStream<OutputStream> {
 			throw new DataException(e);
 		}
 	}
+	
 }

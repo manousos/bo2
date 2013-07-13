@@ -81,7 +81,6 @@ implements EntitiesQuery<T> {
 	 * 
 	 * @throws DataException 
 	 */
-	@SuppressWarnings("unused")
 	protected T[] createArray() throws DataException {
 		return array;
 	}

@@ -159,6 +159,9 @@ extends BFrame {
 		processPanel = new MultiThreadedLongProcessPanel(batch);
 		setPanel(processPanel);
 		setTitle(name);
+		setPreferredSize(processPanel.getDefaultSize());
+		setSize(processPanel.getDefaultSize());
+		repaint();
 		startMonitor();
 	}
 	
@@ -267,14 +270,5 @@ extends BFrame {
 		long period = minutes * 60;
 		return new PeriodicCommand(op, period);
 	}
-	
-	
-
-	
-	
-
-	
-	
-
 
 }

@@ -122,7 +122,7 @@ extends AbstractNamedStreamsManager {
 			throw notSupported(streamToConvert, typeOfNewStream);
 		}
 		NamedPrintStream nps = (NamedPrintStream) streamToConvert;
-		return NamedStreamFactory.systemStream(nameOfNewStream, nps.getStream());
+		return NamedStreamFactory.systemStream(nameOfNewStream, nps.getStream(), nps.getEncoding());
 	}
 	
 	/**
@@ -175,9 +175,9 @@ extends AbstractNamedStreamsManager {
 		switch (typeOfNewStream) {
 		case INPUTSTREAM:
 			return NamedStreamFactory.input
-				(bytes, nameOfNewStream, streamToConvert.getRecordLength());
+				(bytes, nameOfNewStream, streamToConvert.getRecordLength(), streamToConvert.getEncoding());
 		case BUFFEREDREADER:
-			return NamedStreamFactory.reader (bytes, nameOfNewStream);
+			return NamedStreamFactory.reader(bytes, nameOfNewStream, streamToConvert.getEncoding());
 		}
 		throw notSupported(streamToConvert, typeOfNewStream);
 	}
@@ -204,17 +204,17 @@ extends AbstractNamedStreamsManager {
 		case INPUTSTREAM:
 			bytes = baos.toByteArray();
 			return NamedStreamFactory.input
-				(bytes, nameOfNewStream, streamToConvert.getRecordLength());
+				(bytes, nameOfNewStream, streamToConvert.getRecordLength(), streamToConvert.getEncoding());
 		case BUFFEREDREADER:
 			bytes = baos.toByteArray();
-			return NamedStreamFactory.reader(bytes, nameOfNewStream);
+			return NamedStreamFactory.reader(bytes, nameOfNewStream, streamToConvert.getEncoding());
 		case OUTPUTSTREAM:
 			return new NamedOutputStream(
 				StreamResource.BYTES, baos, nameOfNewStream, 
-				streamToConvert.getRecordLength(), baos);
+				streamToConvert.getRecordLength(), baos, streamToConvert.getEncoding());
 		case PRINTSTREAM:
 			PrintStream ps = new PrintStream(baos);
-			return new NamedPrintStream(StreamResource.BYTES, ps, nameOfNewStream, baos);			
+			return new NamedPrintStream(StreamResource.BYTES, ps, nameOfNewStream, baos, streamToConvert.getEncoding());			
 		}
 		throw notSupported(streamToConvert, typeOfNewStream);
 	}

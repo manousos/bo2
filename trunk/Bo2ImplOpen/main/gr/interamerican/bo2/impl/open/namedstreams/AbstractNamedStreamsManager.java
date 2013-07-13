@@ -25,13 +25,13 @@ import gr.interamerican.bo2.utils.NumberUtils;
 import gr.interamerican.bo2.utils.StringConstants;
 import gr.interamerican.bo2.utils.StringUtils;
 import gr.interamerican.bo2.utils.TokenUtils;
-import gr.interamerican.bo2.utils.Utils;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Properties;
 
@@ -41,6 +41,16 @@ import java.util.Properties;
  */
 public abstract class AbstractNamedStreamsManager 
 implements NamedStreamsProvider {
+	
+	/**
+	 * Prefix of encoding attribute of a stream definition description.
+	 */
+	static final String ENCODING_PREFIX = "enc:"; //$NON-NLS-1$
+	
+	/**
+	 * Prefix of record length attribute of a stream definition description.
+	 */
+	static final String RECORD_LENGTH_PREFIX = "rec:"; //$NON-NLS-1$
 
 	/**
 	 * Streams opened by the program
@@ -155,15 +165,48 @@ implements NamedStreamsProvider {
 			String problem = "Unknown resource type " + attributes[2]; //$NON-NLS-1$
 			throw invalid(problem, name);
 		}
+
 		NamedStreamDefinition nsd = new NamedStreamDefinition();
 		nsd.setName(name);
 		nsd.setUri(attributes[0]);		
 		nsd.setType(type);
-		nsd.setResourceType(resourceType);		
-		String len = ArrayUtils.safeGet(attributes, 3);
-		len = Utils.notNull(len, StringConstants.ZERO); 
-		int iLen = NumberUtils.string2Int(len);
-		nsd.setRecordLength(iLen);
+		nsd.setResourceType(resourceType);
+		nsd.setRecordLength(0); //initialize with zero
+		
+		String optionalAttribute = ArrayUtils.safeGet(attributes, 3);
+		nsd = handleOptionalDefinitionElement(nsd, optionalAttribute);
+		optionalAttribute = ArrayUtils.safeGet(attributes, 4);
+		nsd = handleOptionalDefinitionElement(nsd, optionalAttribute);
+		
+		return nsd;
+	}
+	
+	/**
+	 * The first three definition attributes are mandatory. There are two more
+	 * optional attributes, recordLength and encoding. RecordLength is an integer
+	 * encoding is a Charset name starting with the prefix {@value #ENCODING_PREFIX}
+	 * <br/>
+	 * For example enc:UTF-8 signifies the UTF-8 encoding.
+	 * 
+	 *  @see Charset
+	 * 
+	 * @param nsd
+	 * @param attribute
+	 * @return NamedStreamDefinition instance for testability.
+	 */
+	NamedStreamDefinition handleOptionalDefinitionElement(NamedStreamDefinition nsd, String attribute) {
+		if(attribute==null) {
+			return nsd;
+		}
+		
+		if(attribute.trim().startsWith(ENCODING_PREFIX)) {
+			String charset = attribute.trim().replace(ENCODING_PREFIX, StringConstants.EMPTY);
+			nsd.setEncoding(Charset.forName(charset));
+		} else if(attribute.trim().startsWith(RECORD_LENGTH_PREFIX)) {
+			String recordLength = attribute.trim().replace(RECORD_LENGTH_PREFIX, StringConstants.EMPTY);
+			int iLen = NumberUtils.string2Int(recordLength);
+			nsd.setRecordLength(iLen);
+		}
 		return nsd;
 	}
 	
@@ -180,10 +223,10 @@ implements NamedStreamsProvider {
 	protected NamedPrintStream openSystemStream (NamedStreamDefinition def) 
 	throws InitializationException {		
 		if ("sysout".equalsIgnoreCase(def.getUri())) {
-			return sysout(def.getName());
+			return sysout(def.getName(), def.getEncoding());
 		}
 		if ("syserr".equalsIgnoreCase(def.getUri())) {
-			return syserr(def.getName());	
+			return syserr(def.getName(), def.getEncoding());	
 		}		
 		throw invalid("Invalid system stream ", def.getName());
 		
@@ -225,18 +268,26 @@ implements NamedStreamsProvider {
 	throws IOException {
 		File file = new File(def.getUri());		
 		StreamType type = def.getType();
+		
 		switch (type) {
+		
 		case BUFFEREDREADER:
-			return reader(file, def.getName());								
+			return reader(file, def.getName(), def.getEncoding());
+			
 		case INPUTSTREAM:
-			return input(file, def.getName(), def.getRecordLength());				
+			return input(file, def.getName(), def.getRecordLength(), def.getEncoding());
+			
 		case OUTPUTSTREAM:
-			return output(file, def.getName(), def.getRecordLength()); 					
+			return output(file, def.getName(), def.getRecordLength(), def.getEncoding());
+			
 		case PRINTSTREAM:			
-			return print(file, def.getName());
+			return print(file, def.getName(), def.getEncoding());
+			
 		default:
 			return null;
+			
 		}
+		
 	}
 	
 	/**
@@ -255,16 +306,17 @@ implements NamedStreamsProvider {
 			throw invalid("Classpath resource " + def.getUri(), def.getName()); //$NON-NLS-1$
 		}
 		StreamType type = def.getType();
+		
 		switch (type) {
 		case BUFFEREDREADER:
-			InputStreamReader isr = new InputStreamReader(in);
+			InputStreamReader isr = new InputStreamReader(in, def.getEncoding());
 			BufferedReader stream = new BufferedReader(isr);
-			NamedBufferedReader nbr = reader(stream, def.getName());
+			NamedBufferedReader nbr = reader(stream, def.getName(), def.getEncoding());
 			nbr.resourceType = StreamResource.CLASSPATH;
 			return nbr;
 						
 		case INPUTSTREAM:
-			NamedInputStream nis = input(in, def.getName(), def.getRecordLength());
+			NamedInputStream nis = input(in, def.getName(), def.getRecordLength(), def.getEncoding());
 			nis.resourceType = StreamResource.CLASSPATH;
 			return nis;
 			
@@ -286,9 +338,9 @@ implements NamedStreamsProvider {
 		StreamType type = def.getType();
 		switch (type) {
 		case OUTPUTSTREAM:
-			return output(def.getName(), def.getRecordLength()); 					
+			return output(def.getName(), def.getRecordLength(), def.getEncoding()); 					
 		case PRINTSTREAM:			
-			return print(def.getName());
+			return print(def.getName(), def.getEncoding());
 		default:
 			throw invalid("Invalid type", def.getName());  //$NON-NLS-1$
 		}

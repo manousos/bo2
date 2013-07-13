@@ -17,10 +17,12 @@ package gr.interamerican.bo2.impl.open.namedstreams;
 import gr.interamerican.bo2.arch.exceptions.DataException;
 import gr.interamerican.bo2.arch.exceptions.DataOperationNotSupportedException;
 import gr.interamerican.bo2.test.utils.UtilityForBo2Test;
+import gr.interamerican.bo2.utils.Bo2UtilsEnvironment;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.nio.charset.Charset;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -47,7 +49,7 @@ public class TestNamedBufferedReader {
 	public void before() throws FileNotFoundException {
 		String path = UtilityForBo2Test.getTestStreamPath("existingBR.txt");		
 		BufferedReader stream = new BufferedReader(new FileReader(path));
-		ns = new NamedBufferedReader (StreamResource.FILE, stream, "Nbuf", 0);
+		ns = new NamedBufferedReader (StreamResource.FILE, stream, "Nbuf", 0, Bo2UtilsEnvironment.getDefaultTextCharset());
 	}
 	
 	/**

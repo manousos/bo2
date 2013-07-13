@@ -51,7 +51,7 @@ public class TimeType extends AbstractType<Time> {
 		return rs.getTime(columnIndex);
 	}
 
-	public String sqlString(Time t) {
+	public synchronized String sqlString(Time t) {
 		if (t==null) {
 			return StringConstants.NULL;
 		}

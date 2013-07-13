@@ -15,6 +15,7 @@ package gr.interamerican.bo2.gui.handlers;
 import gr.interamerican.bo2.gui.frames.PopUpFrame;
 import gr.interamerican.bo2.utils.ExceptionUtils;
 import gr.interamerican.bo2.utils.handlers.ExceptionHandler;
+import gr.interamerican.bo2.utils.handlers.ThrowingExceptionHandler;
 
 /**
  * <p>{@link ExceptionHandler} that pops up a message box with the
@@ -25,6 +26,7 @@ import gr.interamerican.bo2.utils.handlers.ExceptionHandler;
  * RuntimeException. 
  */
 public class PopUpExceptionHandler 
+extends ThrowingExceptionHandler
 implements ExceptionHandler {
 	/**
 	 * Instance.
@@ -35,13 +37,7 @@ implements ExceptionHandler {
 	public void handle(Throwable t) {
 		String msg = ExceptionUtils.getThrowableStackTrace(t);
 		PopUpFrame.popUp(msg,"ERROR"); //$NON-NLS-1$
-		if (t instanceof Error) {
-			throw (Error) t;
-		} 
-		if (t instanceof RuntimeException) {
-			throw (RuntimeException) t;
-		}
-		throw new RuntimeException(t);
+		super.handle(t);
 	}
 
 }

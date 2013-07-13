@@ -25,38 +25,28 @@ import java.text.ParseException;
 public class NumberUtils {
 	
 	/**
-	 * DecimalFormat of default locale.
+	 * ThreadLocal for DecimalFormat thread safety.
 	 */
-	private static DecimalFormat df = new DecimalFormat();
+	private static final ThreadLocal<DecimalFormat> DF_TL = new ThreadLocal<DecimalFormat>();
 	
 	/**
-	 * default locale decimal separator
+	 * @return Returns the default DecimalFormat for the current thread.
 	 */
-	private static final char DECIMAL_SEPARATOR = 
-		df.getDecimalFormatSymbols().getDecimalSeparator();
-	
-	/**
-	 * default local grouping separator
-	 */
-	private static final char DIGITS_SEPARATOR = 
-		df.getDecimalFormatSymbols().getGroupingSeparator();
-	
-
-	/**
-	 * blank
-	 */
-	private static final char BLANK = ' ';
-	
-	/**
-	 * Decimal format symbols.
-	 */
-	private static DecimalFormatSymbols symbolsForBd = new DecimalFormatSymbols();
-	
-	static {
-		symbolsForBd.setDecimalSeparator('.');
+	private static DecimalFormat df() {
+		if(DF_TL.get()==null) {
+			DF_TL.set(getDefaultDecimalFormat());
+		}
+		return DF_TL.get();
 	}
-		
 	
+	/**
+	 * @return Returns the default DecimalFormat for the default Locale.
+	 *         No grouping is used on the integer part.
+	 */
+	private static DecimalFormat getDefaultDecimalFormat() {
+		DecimalFormat df = new DecimalFormat();
+		return df;
+	}
 	
 	/**
 	 * Converts a string to a double.
@@ -71,7 +61,7 @@ public class NumberUtils {
 	 */
 	public static double string2Double (String str) {
 		try {
-			return df.parse(str.trim()).doubleValue();
+			return df().parse(str.trim()).doubleValue();
 		} catch (ParseException e) {
 			return 0;
 		}
@@ -88,9 +78,9 @@ public class NumberUtils {
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);            
-            if (c==BLANK || c==DIGITS_SEPARATOR) {
+            if (c==' ' || c==df().getDecimalFormatSymbols().getGroupingSeparator()) {
             	//omit blank spaces and digit grouping separators
-            } else if (c==DECIMAL_SEPARATOR) {
+            } else if (c==df().getDecimalFormatSymbols().getDecimalSeparator()) {
             	sb.append('.'); //append comma
             } else {
             	sb.append(c); //append character
@@ -141,8 +131,6 @@ public class NumberUtils {
         return i;
     }
 
-
-    
     /**
      * Rounds a number.
      * 
@@ -236,7 +224,7 @@ public class NumberUtils {
      * @return Returns a formatted string for the parameter
      */
     public static String format(Number n) {
-    	return df.format(n.doubleValue());
+    	return df().format(n.doubleValue());
     }
     
     /**
@@ -280,7 +268,7 @@ public class NumberUtils {
      */
      public static boolean isNumeric(String str) {
     	 try {
- 			df.parse(str.trim());
+ 			df().parse(str.trim());
  			return true;
  		} catch (ParseException e) {
  			return false;
@@ -298,7 +286,7 @@ public class NumberUtils {
     	 if (str==null || str==StringConstants.NULL) {
     		 return null;
     	 }
-    	 return df.parse(str.trim()).doubleValue();
+    	 return df().parse(str.trim()).doubleValue();
      }
      
      /**
@@ -312,7 +300,7 @@ public class NumberUtils {
     	 if (str==null) {
     		 return null;
     	 }
-    	 return df.parse(str.trim()).floatValue();
+    	 return df().parse(str.trim()).floatValue();
      }
      
     /**
@@ -371,15 +359,19 @@ public class NumberUtils {
      * @return Returns the new BigDecimal.
      */
     public static BigDecimal newBigDecimal(double value, int scale) {
-    	DecimalFormat format = new DecimalFormat();
+    	DecimalFormat decimalFormat = new DecimalFormat();
     	if (scale==0) {
-    		format.setDecimalSeparatorAlwaysShown(false);
+    		decimalFormat.setDecimalSeparatorAlwaysShown(false);
     	}
-    	format.setGroupingUsed(false);
-    	format.setMinimumFractionDigits(scale);
-    	format.setMaximumFractionDigits(scale);
-    	format.setDecimalFormatSymbols(symbolsForBd);
-    	String string = format.format(value);
+    	decimalFormat.setGroupingUsed(false);
+    	decimalFormat.setMinimumFractionDigits(scale);
+    	decimalFormat.setMaximumFractionDigits(scale);
+    	
+    	DecimalFormatSymbols dfs = new DecimalFormatSymbols();
+    	dfs.setDecimalSeparator('.');
+    	decimalFormat.setDecimalFormatSymbols(dfs);
+    	
+    	String string = decimalFormat.format(value);
     	return new BigDecimal(string);
     }
     

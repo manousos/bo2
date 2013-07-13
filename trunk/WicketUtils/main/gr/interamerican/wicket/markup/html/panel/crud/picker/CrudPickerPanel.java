@@ -234,6 +234,10 @@ extends PickerPanel<B> {
 				}
 				B selection = radioGroup.getModelObject();
 				if(selection == null) { return; }
+				AjaxEnabledCondition<B> preEditValidator = getDefinition().getPreEditValidator();
+				if(preEditValidator !=null && !preEditValidator.check(selection, target)) {
+					return;
+				}
 				selection = copyBean(selection);
 				getDefinition().getBeanModel().setObject(selection);
 				if(getDefinition().getReadBeforeEdit()) {

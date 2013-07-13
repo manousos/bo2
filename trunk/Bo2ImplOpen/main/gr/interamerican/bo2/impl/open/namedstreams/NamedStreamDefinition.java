@@ -12,6 +12,10 @@
  ******************************************************************************/
 package gr.interamerican.bo2.impl.open.namedstreams;
 
+import gr.interamerican.bo2.utils.Bo2UtilsEnvironment;
+
+import java.nio.charset.Charset;
+
 /**
  * Definition properties for a NamedStream.
  */
@@ -37,6 +41,10 @@ public class NamedStreamDefinition {
 	 * record length.
 	 */
 	int recordLength;
+	/**
+	 * stream encoding. 
+	 */
+	Charset encoding = Bo2UtilsEnvironment.getDefaultTextCharset();
 	
 	/**
 	 * Gets the name.
@@ -117,6 +125,22 @@ public class NamedStreamDefinition {
 	 */
 	public void setResourceType(StreamResource resourceType) {
 		this.resourceType = resourceType;
+	}
+	/**
+	 * Gets the encoding.
+	 *
+	 * @return Returns the encoding
+	 */
+	public Charset getEncoding() {
+		return encoding;
+	}
+	/**
+	 * Assigns a new value to the encoding.
+	 *
+	 * @param encoding the encoding to set
+	 */
+	public void setEncoding(Charset encoding) {
+		this.encoding = encoding;
 	}
 
 }

@@ -44,7 +44,7 @@ public class TestSaveStreamOperation {
 				op.setManagerName("LOCALFS");
 				op.setFilename("TestSaveStreamOperation.txt");
 				String txt = "this is a message\nin two lines\n";
-				op.setBytes(txt.getBytes(Bo2UtilsEnvironment.getDefaultTextCharset()));				
+				op.setBytes(txt.getBytes());				
 				op.init(getProvider());
 				op.open();
 				op.execute();

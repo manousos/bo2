@@ -53,7 +53,7 @@ extends AbstractType<Date> {
 		return rs.getDate(columnIndex);
 	}	
 	
-	public String sqlString(Date t) {
+	public synchronized String sqlString(Date t) {
 		if (t==null) {
 			return StringConstants.NULL;
 		}

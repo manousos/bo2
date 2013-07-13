@@ -20,6 +20,8 @@ import java.util.Date;
 
 /**
  * Formatter for date objects.
+ * <br/>
+ * This class is thread safe.
  */
 public class DateFormatter implements Formatter<Date> {
 	/**
@@ -48,7 +50,7 @@ public class DateFormatter implements Formatter<Date> {
 		this(new SimpleDateFormat(dateFormat));
 	}
 
-	public String format(Date t) {
+	public synchronized String format(Date t) {
 		if(t==null) {
 			return StringConstants.NULL;
 		}

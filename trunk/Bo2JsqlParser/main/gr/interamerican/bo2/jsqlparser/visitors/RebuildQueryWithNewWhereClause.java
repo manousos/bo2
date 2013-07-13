@@ -38,35 +38,6 @@ public class RebuildQueryWithNewWhereClause
 extends EmptyVisitor {
 	
 	/**
-	 * Select.
-	 */
-	private static final String SELECT = "select"; //$NON-NLS-1$
-	/**
-	 * From.
-	 */
-	private static final String FROM = "from"; //$NON-NLS-1$
-	/**
-	 * Where.
-	 */
-	private static final String WHERE = "where"; //$NON-NLS-1$
-	/**
-	 * Group by.
-	 */
-	private static final String GROUP_BY = "group by"; //$NON-NLS-1$
-	/**
-	 * Union.
-	 */
-	private static final String UNION = "union"; //$NON-NLS-1$
-	/**
-	 * Having.
-	 */
-	private static final String HAVING = "having"; //$NON-NLS-1$
-	/**
-	 * Order by.
-	 */
-	private static final String ORDER_BY = "order by"; //$NON-NLS-1$
-	
-	/**
 	 * Ordered list of where clause replacements.
 	 */
 	private List<String> newWhereClauses;
@@ -146,6 +117,9 @@ extends EmptyVisitor {
 			ps.accept(this);
 			if(idx < plainSelects.size()-1) {
 				sb.append(SPACE+UNION);
+				if (union.isAll()) {
+					sb.append(SPACE + ALL);
+				}
 			}
 		}
 	}

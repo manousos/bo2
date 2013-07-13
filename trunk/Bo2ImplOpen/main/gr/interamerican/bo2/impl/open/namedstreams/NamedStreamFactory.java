@@ -12,8 +12,6 @@
  ******************************************************************************/
 package gr.interamerican.bo2.impl.open.namedstreams;
 
-import gr.interamerican.bo2.utils.Bo2UtilsEnvironment;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -26,6 +24,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 /**
  * Factory for NamedStreams.
@@ -43,14 +43,16 @@ public class NamedStreamFactory {
 	 *        Stream name.
 	 * @param recordLength 
 	 *        Record length.
+	 * @param encoding 
+	 *        Encoding (if applicable).
 	 * 
 	 * @return Returns the NamedInputStream.
 	 * @throws FileNotFoundException 
 	 */
-	public static NamedInputStream input(File file, String name, int recordLength) 
+	public static NamedInputStream input(File file, String name, int recordLength, Charset encoding) 
 	throws FileNotFoundException {
 		InputStream in = new FileInputStream(file);
-		return new NamedInputStream(StreamResource.FILE, in, name, recordLength, file);
+		return new NamedInputStream(StreamResource.FILE, in, name, recordLength, file, encoding);
 	}
 	
 	/**
@@ -64,11 +66,13 @@ public class NamedStreamFactory {
 	 *        Stream name.
 	 * @param recordLength 
 	 *        Record length.
+	 * @param encoding
+	 *        Encoding (if applicable).
 	 * 
 	 * @return Returns the NamedInputStream.
 	 */
-	public static NamedInputStream input(InputStream in, String name, int recordLength) {
-		return new NamedInputStream(StreamResource.OBJECT, in, name, recordLength, in);
+	public static NamedInputStream input(InputStream in, String name, int recordLength, Charset encoding) {
+		return new NamedInputStream(StreamResource.OBJECT, in, name, recordLength, in, encoding);
 	}
 	
 	/**
@@ -83,12 +87,14 @@ public class NamedStreamFactory {
 	 *        Stream name.
 	 * @param recordLength 
 	 *        Record length.
+	 * @param encoding
+	 *        Encoding (if applicable).
 	 * 
 	 * @return Returns the NamedInputStream.
 	 */
-	public static NamedInputStream input(byte[] buffer, String name, int recordLength) {
+	public static NamedInputStream input(byte[] buffer, String name, int recordLength, Charset encoding) {
 		ByteArrayInputStream in = new ByteArrayInputStream(buffer);
-		return new NamedInputStream(StreamResource.BYTES, in, name, recordLength, buffer);
+		return new NamedInputStream(StreamResource.BYTES, in, name, recordLength, buffer, encoding);
 	}
 	
 	/**
@@ -102,15 +108,17 @@ public class NamedStreamFactory {
 	 *        Stream name.
 	 * @param recordLength 
 	 *        Record length.
+	 * @param encoding
+	 *        Encoding (if applicable).
 	 * 
 	 * @return Returns the NamedOutputStream.
 	 * 
 	 * @throws FileNotFoundException 
 	 */
-	public static NamedOutputStream output(File file, String name, int recordLength) 
+	public static NamedOutputStream output(File file, String name, int recordLength, Charset encoding) 
 	throws FileNotFoundException {
 		OutputStream out = new FileOutputStream(file);
-		return new NamedOutputStream(StreamResource.FILE, out, name, recordLength, file);
+		return new NamedOutputStream(StreamResource.FILE, out, name, recordLength, file, encoding);
 	}
 	
 	/**
@@ -124,11 +132,13 @@ public class NamedStreamFactory {
 	 *        Stream name.
 	 * @param recordLength 
 	 *        Record length.
+	 * @param encoding 
+	 *        Encoding (if applicable).
 	 * 
 	 * @return Returns the NamedOutputStream.
 	 */
-	public static NamedOutputStream output(OutputStream out, String name, int recordLength) {		
-		return new NamedOutputStream(StreamResource.OBJECT, out, name, recordLength, out);
+	public static NamedOutputStream output(OutputStream out, String name, int recordLength, Charset encoding) {		
+		return new NamedOutputStream(StreamResource.OBJECT, out, name, recordLength, out, encoding);
 	}
 	
 	/**
@@ -141,12 +151,14 @@ public class NamedStreamFactory {
 	 *        Stream name.
 	 * @param recordLength 
 	 *        Record length.
+	 * @param encoding
+	 *        Encoding (if applicable).
 	 * 
 	 * @return Returns the NamedOutputStream.
 	 */
-	public static NamedOutputStream output(String name, int recordLength) {	
+	public static NamedOutputStream output(String name, int recordLength, Charset encoding) {	
 		OutputStream out = new ByteArrayOutputStream();
-		return new NamedOutputStream(StreamResource.BYTES, out, name, recordLength, out);
+		return new NamedOutputStream(StreamResource.BYTES, out, name, recordLength, out, encoding);
 	}	
 	
 	/**
@@ -154,22 +166,25 @@ public class NamedStreamFactory {
 	 * 
 	 * The specified file provides the underlying resource of the NamedStream.
 	 * 
+	 * The file is read using the user-defined encoding in the Bo2 configuration.
+	 * 
 	 * @param file
 	 *        File. 
 	 * @param name
 	 *        Stream name.
+	 * @param encoding
+	 *        Encoding (if applicable).
 	 * 
 	 * @return Returns the NamedBufferedReader.
 	 * 
 	 * @throws IOException 
 	 */
-	public static NamedBufferedReader reader(File file, String name) 
+	public static NamedBufferedReader reader(File file, String name, Charset encoding) 
 	throws IOException {
 		FileInputStream fis = new FileInputStream(file);
-		InputStreamReader insr = new InputStreamReader(fis, Bo2UtilsEnvironment.getDefaultTextCharset());
+		InputStreamReader insr = new InputStreamReader(fis, encoding);
 		BufferedReader br = new BufferedReader(insr);
-		
-		return new NamedBufferedReader(StreamResource.FILE, br, name, file);
+		return new NamedBufferedReader(StreamResource.FILE, br, name, file, encoding);
 	}
 	
 	/**
@@ -177,15 +192,19 @@ public class NamedStreamFactory {
 	 * 
 	 * The specified reader provides the underlying resource of the NamedStream.
 	 * 
+	 * It is the responsibility of the developer that uses this method to use 
+	 * the user-defined encoding from the Bo2 configuration.
+	 * 
 	 * @param br
 	 *        Stream. 
 	 * @param name
 	 *        Stream name.
+	 * @param encoding 
 	 * 
 	 * @return Returns the NamedBufferedReader.
 	 */
-	public static NamedBufferedReader reader(BufferedReader br, String name) {
-		return new NamedBufferedReader(StreamResource.OBJECT, br, name, br);
+	public static NamedBufferedReader reader(BufferedReader br, String name, Charset encoding) {
+		return new NamedBufferedReader(StreamResource.OBJECT, br, name, br, encoding);
 	}
 	
 	/**
@@ -198,14 +217,16 @@ public class NamedStreamFactory {
 	 *        Byte array providing data to the stream.
 	 * @param name
 	 *        Stream name.
+	 * @param encoding
+	 *        Encoding (if applicable).
 	 * 
 	 * @return Returns the NamedInputStream.
 	 */
-	public static NamedBufferedReader reader(byte[] buffer, String name) {
+	public static NamedBufferedReader reader(byte[] buffer, String name, Charset encoding) {
 		ByteArrayInputStream in = new ByteArrayInputStream(buffer);
-		InputStreamReader inr = new InputStreamReader(in);
+		InputStreamReader inr = new InputStreamReader(in, encoding);
 		BufferedReader br = new BufferedReader(inr);
-		return new NamedBufferedReader(StreamResource.BYTES, br, name, buffer);
+		return new NamedBufferedReader(StreamResource.BYTES, br, name, buffer, encoding);
 	}
 	
 	/**
@@ -217,16 +238,17 @@ public class NamedStreamFactory {
 	 *        File. 
 	 * @param name
 	 *        Stream name.
+	 * @param encoding
+	 *        Encoding (if applicable).
 	 * 
 	 * @return Returns the NamedOutputStream.
 	 * 
 	 * @throws IOException 
 	 */
-	public static NamedPrintStream print(File file, String name) 
+	public static NamedPrintStream print(File file, String name, Charset encoding) 
 	throws IOException {
-		FileOutputStream fos = new FileOutputStream(file);
-		PrintStream out = new PrintStream(fos, false, Bo2UtilsEnvironment.getDefaultTextCharset().name());
-		return new NamedPrintStream(StreamResource.FILE, out, name, file);
+		PrintStream out = new PrintStream(file, encoding.name());
+		return new NamedPrintStream(StreamResource.FILE, out, name, file, encoding);
 	}
 	
 	/**
@@ -238,11 +260,13 @@ public class NamedStreamFactory {
 	 *        out. 
 	 * @param name
 	 *        Stream name.
+	 * @param encoding
+	 *        Encoding (if applicable).
 	 * 
 	 * @return Returns the NamedPrintStream.
 	 */
-	public static NamedPrintStream print(PrintStream out, String name) {		
-		return new NamedPrintStream(StreamResource.OBJECT, out, name, out);
+	public static NamedPrintStream print(PrintStream out, String name, Charset encoding) {		
+		return new NamedPrintStream(StreamResource.OBJECT, out, name, out, encoding);
 	}
 	
 	/**
@@ -253,13 +277,18 @@ public class NamedStreamFactory {
 	 *
 	 * @param name
 	 *        Stream name.
+	 * @param encoding 
 	 * 
 	 * @return Returns the NamedPrintStream.
 	 */
-	public static NamedPrintStream print(String name) {	
+	public static NamedPrintStream print(String name, Charset encoding) {	
 		OutputStream out = new ByteArrayOutputStream();
-		PrintStream print = new PrintStream(out);
-		return new NamedPrintStream(StreamResource.BYTES, print, name, out);
+		try {
+			PrintStream print = new PrintStream(out, false, encoding.name());
+			return new NamedPrintStream(StreamResource.BYTES, print, name, out, encoding);
+		}catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
 	}	
 	
 	/**
@@ -269,11 +298,12 @@ public class NamedStreamFactory {
 	 *
 	 * @param name
 	 *        Stream name.
+	 * @param encoding 
 	 * 
 	 * @return Returns the NamedPrintStream.
 	 */
-	public static NamedPrintStream sysout(String name) {
-		return systemStream(name, System.out);
+	public static NamedPrintStream sysout(String name, Charset encoding) {
+		return systemStream(name, System.out, encoding);
 	}	
 	
 	/**
@@ -283,11 +313,12 @@ public class NamedStreamFactory {
 	 *
 	 * @param name
 	 *        Stream name.
+	 * @param encoding 
 	 * 
 	 * @return Returns the NamedPrintStream.
 	 */
-	public static NamedPrintStream syserr(String name) {
-		return systemStream(name, System.err);
+	public static NamedPrintStream syserr(String name, Charset encoding) {
+		return systemStream(name, System.err, encoding);
 	}	
 	
 	/**
@@ -299,15 +330,12 @@ public class NamedStreamFactory {
 	 *        Stream name.
 	 * @param stream 
 	 *        Stream
+	 * @param encoding 
 	 * 
 	 * @return Returns the NamedPrintStream.
 	 */
-	public static NamedPrintStream systemStream(String name, PrintStream stream) {
-		return new NamedPrintStream(StreamResource.SYSTEM, stream, name, stream);
+	public static NamedPrintStream systemStream(String name, PrintStream stream, Charset encoding) {
+		return new NamedPrintStream(StreamResource.SYSTEM, stream, name, stream, encoding);
 	}	
-	
-	
-	
-	
 
 }

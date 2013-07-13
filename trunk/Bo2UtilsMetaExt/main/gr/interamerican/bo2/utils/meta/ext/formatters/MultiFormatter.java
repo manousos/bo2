@@ -13,6 +13,8 @@
 package gr.interamerican.bo2.utils.meta.ext.formatters;
 
 import gr.interamerican.bo2.arch.Money;
+import gr.interamerican.bo2.arch.ext.TranslatableEntry;
+import gr.interamerican.bo2.arch.ext.TranslatableEntryOwner;
 import gr.interamerican.bo2.utils.Bo2UtilsEnvironment;
 import gr.interamerican.bo2.utils.beans.TypeBasedSelection;
 import gr.interamerican.bo2.utils.meta.formatters.DateFormatter;
@@ -22,6 +24,7 @@ import gr.interamerican.bo2.utils.meta.formatters.ObjectFormatter;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -48,8 +51,10 @@ implements Formatter<Object>{
 		formatters.registerSelection(Money.class, MoneyFormatter.INSTANCE);
 		formatters.registerSelection(Double.class, new DecimalFormatter<Double>(decimalDigits));
 		formatters.registerSelection(BigDecimal.class, new DecimalFormatter<BigDecimal>(decimalDigits));
-		DateFormat df = Bo2UtilsEnvironment.getShortDateFormat();
+		DateFormat df = new SimpleDateFormat(Bo2UtilsEnvironment.getShortDateFormatPattern());
 		formatters.registerSelection(Date.class, new DateFormatter(df));
+		formatters.registerSelection(TranslatableEntry.class, new TranslatableEntryFormatter<Object>());
+		formatters.registerSelection(TranslatableEntryOwner.class, new TranslatableEntryOwnerFormatter<Object>());
 		formatters.registerSelection(Object.class, new ObjectFormatter());
 	}
 	

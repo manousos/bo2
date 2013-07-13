@@ -15,12 +15,14 @@ package gr.interamerican.bo2.impl.open.namedstreams;
 import gr.interamerican.bo2.arch.exceptions.DataException;
 import gr.interamerican.bo2.arch.exceptions.DataOperationNotSupportedException;
 import gr.interamerican.bo2.test.utils.UtilityForBo2Test;
+import gr.interamerican.bo2.utils.Bo2UtilsEnvironment;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.charset.Charset;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -60,7 +62,7 @@ public class TestNamedPrintStream {
 	public void testReadRecord() throws FileNotFoundException, DataException {	
 		String path = UtilityForBo2Test.getTestStreamPath("TestNamedPrintStream.1.txt");		
 		PrintStream stream = new PrintStream(path);
-		ns = new NamedPrintStream (StreamResource.FILE, stream, "Nprin", 20);
+		ns = new NamedPrintStream (StreamResource.FILE, stream, "Nprin", 20, Bo2UtilsEnvironment.getDefaultTextCharset());
 		@SuppressWarnings("unused") byte[] rec1 = ns.readRecord();	
 	}
 	
@@ -73,7 +75,7 @@ public class TestNamedPrintStream {
 	public void testReadString() throws FileNotFoundException, DataException {
 		String path = UtilityForBo2Test.getTestStreamPath("TestNamedPrintStream.2.txt");		
 		PrintStream stream = new PrintStream(path);
-		ns = new NamedPrintStream (StreamResource.FILE, stream, "Nprin", 20);
+		ns = new NamedPrintStream (StreamResource.FILE, stream, "Nprin", 20, Bo2UtilsEnvironment.getDefaultTextCharset());
 		@SuppressWarnings("unused") String rec1 = ns.readString();	
 	}	
 	
@@ -86,7 +88,7 @@ public class TestNamedPrintStream {
 	public void testWriteString() throws DataException, IOException {
 		String path = UtilityForBo2Test.getTestStreamPath("TestNamedPrintStream.3.txt");		
 		PrintStream stream = new PrintStream(path);
-		ns = new NamedPrintStream (StreamResource.FILE, stream, "Nout", 20);
+		ns = new NamedPrintStream (StreamResource.FILE, stream, "Nout", 20, Bo2UtilsEnvironment.getDefaultTextCharset());
 		String string = "write this";
 		ns.writeString(string);
 		ns.close();
@@ -106,7 +108,7 @@ public class TestNamedPrintStream {
 	public void testWriteRecord() throws DataException, IOException {
 		String path = UtilityForBo2Test.getTestStreamPath("TestNamedPrintStream.4.txt");		
 		PrintStream stream = new PrintStream(path);
-		ns = new NamedPrintStream (StreamResource.FILE, stream, "Nout", 20);
+		ns = new NamedPrintStream (StreamResource.FILE, stream, "Nout", 20, Bo2UtilsEnvironment.getDefaultTextCharset());
 		String string = "write this";
 		ns.writeRecord(string.getBytes());
 		ns.close();
@@ -127,7 +129,7 @@ public class TestNamedPrintStream {
 	public void testFind() throws FileNotFoundException, DataException {
 		String path = UtilityForBo2Test.getTestStreamPath("TestNamedPrintStream.4.txt");		
 		PrintStream stream = new PrintStream(path);
-		ns = new NamedPrintStream (StreamResource.FILE, stream, "Nout", 20);
+		ns = new NamedPrintStream (StreamResource.FILE, stream, "Nout", 20, Bo2UtilsEnvironment.getDefaultTextCharset());
 		@SuppressWarnings("unused") String rec1 = ns.readString();
 		ns.find("123".getBytes());
 	}	

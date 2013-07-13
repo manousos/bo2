@@ -12,10 +12,13 @@
  ******************************************************************************/
 package gr.interamerican.bo2.impl.open.namedstreams;
 
+import java.nio.charset.Charset;
+
 import gr.interamerican.bo2.arch.Provider;
 import gr.interamerican.bo2.arch.exceptions.InitializationException;
 import gr.interamerican.bo2.impl.open.utils.Bo2;
 import gr.interamerican.bo2.test.utils.UtilityForBo2Test;
+import gr.interamerican.bo2.utils.Bo2UtilsEnvironment;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -38,7 +41,7 @@ public class TestNamedStreamUtils {
 	public void testRegisterStream() throws InitializationException {
 		byte[] bytes = new byte[10000];
 		String name = "TestNamedStreamUtils.sample_buffered_reader"; //$NON-NLS-1$
-		NamedStream<?> ns = NamedStreamFactory.reader(bytes, name);
+		NamedStream<?> ns = NamedStreamFactory.reader(bytes, name, Bo2UtilsEnvironment.getDefaultTextCharset());
 		Provider provider = Bo2.getDeployment(UtilityForBo2Test.BATCH_NO_TRAN).getProvider();		
 		NamedStreamUtils.registerStream(ns, provider, MANAGER);
 		NamedStreamsProvider nsp = provider.getResource(MANAGER, NamedStreamsProvider.class);

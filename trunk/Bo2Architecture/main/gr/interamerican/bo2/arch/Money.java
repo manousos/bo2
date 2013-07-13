@@ -28,9 +28,15 @@ public interface Money extends Serializable, Comparable<Money> {
 	public abstract String getCurrencyCode();
 
 	/**
-	 * Sets the currency code.
+	 * Sets the currency code. The currency code should correspond to a three
+	 * letter code acceptable by java.util.Currency#getInstance(String).
+	 * <br/>
+	 * Empty or null values will lead to the automatic selection of the default 
+	 * currency of the environment's default Locale.
 	 * 
 	 * @param currencyCode New currency code.
+	 * 
+	 * @throws IllegalArgumentException for malformed currency codes.
 	 */
 	public abstract void setCurrencyCode(String currencyCode);
 

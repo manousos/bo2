@@ -294,22 +294,21 @@ public class TestQueueProcessor {
 	public void testLoop_throwingException() 
 	throws TransactionManagerException {
 		TransactionManager mockTm = Mockito.mock(TransactionManager.class);
-		Mockito.doThrow(CouldNotCommitException.class).when(mockTm).commit();		
+		Mockito.doThrow(CouldNotCommitException.class).doNothing().when(mockTm).commit();
 		QueueProcessor<String> qp = sample();
-		
 		String input = "input";
 		qp.inputQueue.offer(input);
-		
 		qp.initialize();
-		qp.tm = mockTm; //So an exception will be thrown.
+		qp.eod = true;
+		qp.tm = mockTm; // So an exception will be thrown.
 		qp.loop();
-		Assert.assertTrue(qp.quit);
+		Assert.assertFalse(qp.quit);
 		Assert.assertTrue(qp.finished);
 		Assert.assertNotNull(qp.exceptionMessage);
 	}
 	
 	/**
-	 * test Process when the queue procesor is paused. 
+	 * test Process when the queue processor is paused.
 	 */
 	@SuppressWarnings({ "nls" })
 	@Test
@@ -328,7 +327,7 @@ public class TestQueueProcessor {
 	}
 	
 	/**
-	 * test Process when the queue procesor is paused. 
+	 * test Process when the queue processor is paused.
 	 */
 	@SuppressWarnings({ "nls" })
 	@Test
@@ -361,7 +360,7 @@ public class TestQueueProcessor {
 	}
 	
 	/**
-	 * test Process when the queue procesor is paused. 
+	 * test Process when the queue processor is paused.
 	 */
 	@SuppressWarnings({ "nls" })
 	@Test
@@ -628,6 +627,7 @@ public class TestQueueProcessor {
 		
 		String input = "input";
 		QueueProcessor<String> qp = sample();
+		qp = Mockito.spy(qp);
 		qp.tm = mockTm;
 		qp.failuresLog = nps;
 		qp.stacktracesLog = nps;
@@ -636,9 +636,6 @@ public class TestQueueProcessor {
 		qp.inputQueue.add(input);		
 		qp.pollAndProcess();
 		Assert.assertTrue(qp.inputQueue.contains(input));
+		Mockito.verify(qp, Mockito.times(1)).tidy();
 	}
-	
-	
-	
-
 }

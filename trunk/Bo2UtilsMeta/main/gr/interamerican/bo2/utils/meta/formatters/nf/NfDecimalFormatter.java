@@ -35,12 +35,10 @@ public class NfDecimalFormatter extends NullFilteringFormatter<Number> {
 	 * Creates a new NfDecimalFormatter object. 
 	 *
 	 * @param decimalDigits
-	 * @param decimalSep
-	 * @param groupSep
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public NfDecimalFormatter(int decimalDigits, Character decimalSep, Character groupSep) {
-		super(new DecimalFormatter(decimalDigits, decimalSep, groupSep));
+	public NfDecimalFormatter(int decimalDigits) {
+		super(new DecimalFormatter(decimalDigits));
 	}
 
 }

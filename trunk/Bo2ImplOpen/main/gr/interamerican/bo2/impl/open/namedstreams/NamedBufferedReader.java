@@ -18,12 +18,11 @@ import gr.interamerican.bo2.impl.open.utils.Exceptions;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 
 /**
  * Implementation of NamedStream for BufferedReader.
- * 
- *
  */
 public class NamedBufferedReader extends AbstractNamedStream<BufferedReader> {
 	
@@ -33,13 +32,15 @@ public class NamedBufferedReader extends AbstractNamedStream<BufferedReader> {
 	 * 
 	 * @param resourceType
 	 * @param stream
+	 *        BufferedReader using the user defined encoding.
 	 * @param name
 	 * @param resource 
+	 * @param encoding 
 	 */
 	NamedBufferedReader(
 			StreamResource resourceType, BufferedReader stream, 
-			String name, Object resource) {
-		super(StreamType.BUFFEREDREADER, resourceType, stream, name, 0, resource);
+			String name, Object resource, Charset encoding) {
+		super(StreamType.BUFFEREDREADER, resourceType, stream, name, 0, resource, encoding);
 	}
 
 	public boolean find(byte[] key) 
@@ -53,12 +54,19 @@ public class NamedBufferedReader extends AbstractNamedStream<BufferedReader> {
 		if (record==null) {
 			return null;
 		}
-		return record.getBytes();
+		/*
+		 * We have to specify the encoding here. The String#getBytes()
+		 * call uses the default platform charset.
+		 */
+		return record.getBytes(encoding);
 	}
 	
 	public String readString() 
 	throws DataException {
 		try {
+			/*
+			 * This BufferedReader should already have the user defined encoding.
+			 */
 			String record=stream.readLine();
 			return record;
 		} catch (IOException e) {

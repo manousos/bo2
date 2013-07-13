@@ -22,6 +22,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Set;
+
+import junit.framework.Assert;
 
 import org.junit.Test;
 
@@ -491,6 +494,103 @@ public class TestDateUtils {
 		Date expected = DateUtils.getDate(1900, Calendar.JANUARY, 1);
 		assertEquals(actual.compareTo(expected), 0);
 	}
-	
-	
+
+	/**
+	 * test method for {@link DateUtils#getDateAtMidnight(Date)}
+	 */
+	@SuppressWarnings("deprecation")
+	@Test
+	public void testGetNullTimeDate() {
+		Date d = new Date();
+		Date nullDate = DateUtils.getDateAtMidnight(d);
+		Assert.assertEquals(d.getDay(), nullDate.getDay());
+		Assert.assertEquals(d.getMonth(), nullDate.getMonth());
+		Assert.assertEquals(d.getYear(), nullDate.getYear());
+		Assert.assertEquals(0, nullDate.getHours());
+		Assert.assertEquals(0, nullDate.getMinutes());
+		Assert.assertEquals(0, nullDate.getSeconds());
+	}
+
+	/**
+	 * test method for {@link DateUtils#getOrthodoxEaster(int)}
+	 */
+	@Test
+	public void testGetOrthodoxEaster() {
+		Date d = DateUtils.getDate(2013, Calendar.MAY, 5);
+		d = DateUtils.getDateAtMidnight(d);
+		Assert.assertEquals(d, DateUtils.getOrthodoxEaster(2013));
+	}
+
+	/**
+	 * test method for {@link DateUtils#getOrthodoxEasterHolidays(int)}
+	 */
+	@Test
+	public void testGetOrthodoxEasterHolidays() {
+		Date d1 = DateUtils.getDate(2013, Calendar.MAY, 5);
+		Date d2 = DateUtils.getDate(2013, Calendar.MAY, 6);
+		Date d3 = DateUtils.getDate(2013, Calendar.MAY, 3);
+		Date d4 = DateUtils.getDate(2013, Calendar.JUNE, 24);
+		Date d5 = DateUtils.getDate(2013, Calendar.MARCH, 18);
+		Set<Date> dates = DateUtils.getOrthodoxEasterHolidays(2013);
+		Assert.assertEquals(5, dates.size());
+		Assert.assertTrue(dates.contains(d1));
+		Assert.assertTrue(dates.contains(d2));
+		Assert.assertTrue(dates.contains(d3));
+		Assert.assertTrue(dates.contains(d4));
+		Assert.assertTrue(dates.contains(d5));
+	}
+
+	/**
+	 * test method for {@link DateUtils#isWeekend(Date)}
+	 */
+	@Test
+	public void testIsWeekend() {
+		Date d1 = DateUtils.getDate(2013, Calendar.MAY, 5);
+		Date d2 = DateUtils.getDate(2013, Calendar.MAY, 4);
+		Date d3 = DateUtils.getDate(2013, Calendar.MAY, 3);
+		Assert.assertTrue(DateUtils.isWeekend(d1));
+		Assert.assertTrue(DateUtils.isWeekend(d2));
+		Assert.assertFalse(DateUtils.isWeekend(d3));
+	}
+
+	/**
+	 * mest method for {@link DateUtils#getYear(Date)}
+	 */
+	@Test
+	@SuppressWarnings("deprecation")
+	public void testGetyear() {
+		Assert.assertEquals((new Date()).getYear() + 1900, DateUtils.getYear(new Date()));
+	}
+
+	/**
+	 * test method for {@link DateUtils#equalDatesIgnoringTime(Date, Date)}
+	 */
+	@Test
+	public void testEqualDatesIgnoringTime() {
+		Date d1=DateUtils.today();
+		Date d2=new Date();
+		Assert.assertTrue(DateUtils.equalDatesIgnoringTime(d1, d2));
+	}
+
+	/**
+	 * test for the known Greek holidays.
+	 */
+	@Test
+	public void testGetKnownGreekHolidays() {
+		Set<Date> dates = DateUtils.getKnownGreekHolidays(2013);
+		Set<Date> easterDates = DateUtils.getOrthodoxEasterHolidays(2013);
+		Assert.assertTrue(dates.containsAll(easterDates));
+	}
+
+	/**
+	 * test method for
+	 */
+	@Test
+	public void TestIsStandardGreekHoliday() {
+		Date d3 = DateUtils.getDate(2013, Calendar.MAY, 10);
+		for (Date d : DateUtils.getKnownGreekHolidays(2013)) {
+			Assert.assertTrue(DateUtils.isStandardGreekHoliday(d));
+		}
+		Assert.assertFalse(DateUtils.isStandardGreekHoliday(d3));
+	}
 }

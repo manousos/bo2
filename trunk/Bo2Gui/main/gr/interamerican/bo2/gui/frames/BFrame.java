@@ -94,7 +94,10 @@ public class BFrame extends JFrame {
 		setPreferredSize(size);
 		setSize(size);
 		Container c = getContentPane();
-		JScrollPane scrollPane = new JScrollPane(panel);
+		JScrollPane scrollPane = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setPreferredSize(size);
+		scrollPane.setSize(size);
 		c.add(scrollPane);
 	}
 	

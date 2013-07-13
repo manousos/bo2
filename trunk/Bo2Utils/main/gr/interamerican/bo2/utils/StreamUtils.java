@@ -69,8 +69,7 @@ public class StreamUtils {
 		if(stream==null){
 			return null;
 		}
-		InputStreamReader insr = new InputStreamReader(
-			stream, Bo2UtilsEnvironment.SINGLETON.getTextCharset());
+		InputStreamReader insr = new InputStreamReader(stream);
 		BufferedReader reader = new BufferedReader(insr);
 		return StreamUtils.consumeBufferedReader(reader, excludeEmptyLines, excludeSharps);
 	}
@@ -108,7 +107,7 @@ public class StreamUtils {
 		try {
 			File file = new File(path);
 			InputStream stream = new FileInputStream(file);
-			InputStreamReader insr = new InputStreamReader(stream, Bo2UtilsEnvironment.SINGLETON.getTextCharset());
+			InputStreamReader insr = new InputStreamReader(stream);
 			BufferedReader reader = new BufferedReader(insr);
 			return StreamUtils.consumeBufferedReader(reader, excludeEmptyLines, excludeSharps);
 		} catch (FileNotFoundException fnfe) {
@@ -301,7 +300,7 @@ public class StreamUtils {
 	public static String readTextFile(String path) 
 	throws IOException {
 		InputStream is = getFileStream(path);
-		InputStreamReader isr = new InputStreamReader(is, Bo2UtilsEnvironment.SINGLETON.getTextCharset());
+		InputStreamReader isr = new InputStreamReader(is);
 		BufferedReader reader = new BufferedReader(isr);
 		String text=StringConstants.EMPTY;
 		String line;

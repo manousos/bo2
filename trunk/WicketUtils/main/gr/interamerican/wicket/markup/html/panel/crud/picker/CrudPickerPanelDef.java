@@ -202,6 +202,21 @@ extends PickerPanelDef<B> {
 	
 	/**
 	 * [OPTIONAL]
+	 * Sets the validator that is executed when selecting an existing B for update.
+	 * 
+	 * @param validator
+	 */
+	public void setPreEditValidator(AjaxEnabledCondition<B> validator);
+	
+	/**
+	 * Gets the validator that is executed when selecting an existing B for update.
+	 * 
+	 * @return validator.
+	 */
+	public AjaxEnabledCondition<B> getPreEditValidator();
+	
+	/**
+	 * [OPTIONAL]
 	 * Sets the validator that is executed when deleting an existing B.
 	 * 
 	 * @param validator

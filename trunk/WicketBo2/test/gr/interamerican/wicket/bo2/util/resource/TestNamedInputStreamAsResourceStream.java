@@ -19,6 +19,7 @@ import gr.interamerican.bo2.arch.exceptions.InitializationException;
 import gr.interamerican.bo2.impl.open.namedstreams.NamedInputStream;
 import gr.interamerican.bo2.impl.open.namedstreams.NamedStreamFactory;
 import gr.interamerican.bo2.impl.open.namedstreams.NamedStreamUtils;
+import gr.interamerican.bo2.utils.Bo2UtilsEnvironment;
 import gr.interamerican.wicket.bo2.protocol.http.Bo2WicketRequestCycle;
 import gr.interamerican.wicket.bo2.test.MockApplicationForWicketBo2;
 
@@ -54,7 +55,7 @@ public class TestNamedInputStreamAsResourceStream {
 		beginRequest(rc);
 		String name = "TestNamedInputStreamAsResourceStream_STREAMNAME";
 		String manager = "LOCALFS";		
-		NamedInputStream nis = NamedStreamFactory.input(new byte[1], name, 10);
+		NamedInputStream nis = NamedStreamFactory.input(new byte[1], name, 10, Bo2UtilsEnvironment.getDefaultTextCharset());
 		NamedStreamUtils.registerStream(nis, provider(), manager);
 		NamedInputStreamAsResourceStream resource = 
 			new NamedInputStreamAsResourceStream(manager, name);

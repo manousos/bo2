@@ -1215,17 +1215,4 @@ public class StringUtils {
 		return string;
 	}
 	
-	/**
-	 * Converts a String to a byte array with the default deployment charset.
-	 * 
-	 * @param s
-	 * @return byte array.
-	 */
-	public static byte[] getBytes(String s) {
-		if(s==null) {
-			return null;
-		}
-		return s.getBytes(Bo2UtilsEnvironment.SINGLETON.getTextCharset());
-	}
-	
 }

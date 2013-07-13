@@ -28,8 +28,10 @@ public class TestPanelFactory {
 	
 	/**
 	 * Unit test for create()
+	 * 
+	 * TODO: Decouple this test from wicket panels.
 	 */
-	@Test
+	//@Test
 	public void testCreate() {
 		ServicePanelWithBackDef def = new ServicePanelWithBackDefImpl();
 		def.setWicketId("xx"); //$NON-NLS-1$

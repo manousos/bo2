@@ -83,7 +83,7 @@ public class Mediator {
 	 * @param boPD {@link BoPropertyDescriptor}.
 	 * @return Returns the PropertyDescriptor.
 	 */
-	private PropertyDescriptor getPropertyDescriptor(BoPropertyDescriptor<?> boPD) {
+	private synchronized PropertyDescriptor getPropertyDescriptor(BoPropertyDescriptor<?> boPD) {
 		String name = boPD.getFullyQualifiedName();
 		
 		PropertyDescriptor pd = propertyDescriptors.get(name);
@@ -144,7 +144,7 @@ public class Mediator {
 	 *  
 	 * @param className
 	 */
-	void loadPropertiesOfClass(String className) {		
+	synchronized void loadPropertiesOfClass(String className) {		
 		Class<?> beanClass;
 		try {
 			beanClass = Class.forName(className);

@@ -15,7 +15,9 @@ package gr.interamerican.bo2.impl.open.namedstreams;
 import gr.interamerican.bo2.arch.exceptions.DataException;
 import gr.interamerican.bo2.samples.implopen.mocks.MockAbstractNamedStreamsManager;
 import gr.interamerican.bo2.samples.implopen.mocks.MockNamedStream;
+import gr.interamerican.bo2.utils.Bo2UtilsEnvironment;
 
+import java.nio.charset.Charset;
 import java.util.Properties;
 import java.util.Set;
 
@@ -48,7 +50,7 @@ public class TestSharedNamedStreamsRegistry {
 	public void testRegisterStream() {
 		String name = "streamName";
 		NamedStreamsProvider nsp = new MockAbstractNamedStreamsManager(new Properties());
-		NamedStream<?> stream = new MockNamedStream(StreamType.INPUTSTREAM, StreamResource.FILE, null, name, 5);
+		NamedStream<?> stream = new MockNamedStream(StreamType.INPUTSTREAM, StreamResource.FILE, null, name, 5, Bo2UtilsEnvironment.getDefaultTextCharset());
 		SharedNamedStreamsRegistry.register(name, stream, nsp);
 		Assert.assertEquals(stream, SharedNamedStreamsRegistry.name2stream.get(name));
 		Assert.assertEquals(name, SharedNamedStreamsRegistry.stream2name.get(stream));
@@ -65,7 +67,7 @@ public class TestSharedNamedStreamsRegistry {
 	public void testGetStream() {
 		String name = "streamName";
 		NamedStreamsProvider nsp = new MockAbstractNamedStreamsManager(new Properties());
-		NamedStream<?> stream = new MockNamedStream(StreamType.INPUTSTREAM, StreamResource.FILE, null, name, 5);
+		NamedStream<?> stream = new MockNamedStream(StreamType.INPUTSTREAM, StreamResource.FILE, null, name, 5, Bo2UtilsEnvironment.getDefaultTextCharset());
 		SharedNamedStreamsRegistry.register(name, stream, nsp);
 		NamedStreamsProvider nsp1 = new MockAbstractNamedStreamsManager(new Properties());
 		Assert.assertEquals(stream, SharedNamedStreamsRegistry.getStream(name, nsp1));
@@ -81,7 +83,7 @@ public class TestSharedNamedStreamsRegistry {
 	public void testReleaseSharedStreams() throws DataException {
 		String name = "streamName";
 		NamedStreamsProvider nsp = new MockAbstractNamedStreamsManager(new Properties());
-		NamedStream<?> stream = new MockNamedStream(StreamType.INPUTSTREAM, StreamResource.FILE, null, name, 5);
+		NamedStream<?> stream = new MockNamedStream(StreamType.INPUTSTREAM, StreamResource.FILE, null, name, 5, Bo2UtilsEnvironment.getDefaultTextCharset());
 		SharedNamedStreamsRegistry.register(name, stream, nsp);
 		NamedStreamsProvider nsp1 = new MockAbstractNamedStreamsManager(new Properties());
 		Assert.assertEquals(stream, SharedNamedStreamsRegistry.getStream(name, nsp1));

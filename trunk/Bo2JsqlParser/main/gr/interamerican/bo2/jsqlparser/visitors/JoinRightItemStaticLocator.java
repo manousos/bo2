@@ -66,7 +66,9 @@ public class JoinRightItemStaticLocator implements FromItemVisitor, SelectVisito
 			i.accept(this);
 		}
 		TableNamesFinderInExpression finder = new TableNamesFinderInExpression();
-		plainSelect.getWhere().accept(finder);
+		if (plainSelect.getWhere() != null) {
+			plainSelect.getWhere().accept(finder);
+		}
 		staticValue = staticValue || finder.getStaticValue();
 	}
 

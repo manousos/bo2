@@ -38,7 +38,7 @@ public class TestNrDecimalFormatter {
 	@SuppressWarnings("rawtypes")
 	@Test
 	public void testConstructor_2() {
-		NrDecimalFormatter f = new NrDecimalFormatter(2,',','.'); 
+		NrDecimalFormatter f = new NrDecimalFormatter(2); 
 		Assert.assertNotNull(f.formatter);
 	}
 

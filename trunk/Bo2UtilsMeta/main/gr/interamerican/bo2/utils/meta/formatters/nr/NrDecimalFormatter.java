@@ -41,15 +41,4 @@ public class NrDecimalFormatter<T extends Number> extends NullReturningFormatter
 		super(new DecimalFormatter<T>(decimalDigits));
 	}
 
-	/**
-	 * Creates a new NfDecimalFormatter object. 
-	 *
-	 * @param decimalDigits
-	 * @param decimalSep
-	 * @param groupSep
-	 */
-	public NrDecimalFormatter(int decimalDigits, Character decimalSep, Character groupSep) {
-		super(new DecimalFormatter<T>(decimalDigits, decimalSep, groupSep));
-	}
-
 }

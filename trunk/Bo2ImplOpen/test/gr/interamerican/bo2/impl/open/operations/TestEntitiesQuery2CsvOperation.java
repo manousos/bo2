@@ -43,7 +43,7 @@ public class TestEntitiesQuery2CsvOperation {
 	 */
 	@SuppressWarnings("rawtypes")
 	static Formatter[] formatters = {
-		new NfDecimalFormatter(2, ',' , null),
+		new NfDecimalFormatter(2),
 		new NfObjectFormatter()		
 	};
 	

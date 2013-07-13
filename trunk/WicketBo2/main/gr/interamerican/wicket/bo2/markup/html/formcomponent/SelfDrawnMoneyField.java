@@ -96,6 +96,9 @@ public class SelfDrawnMoneyField extends FormComponentPanel<Money>{
 	 */
 	private void createAmountField(String id, MoneyBoPropertyDescriptor descriptor, IModel<Money> model) {
 		BigDecimalBoPropertyDescriptor amountDescriptor = createAmountDescriptor(descriptor);
+		if(model.getObject()==null) {
+			model.setObject(new MoneyImpl());
+		}
 		PropertyModel<BigDecimal> amountModel = new PropertyModel<BigDecimal>(model.getObject(), "amount"); //$NON-NLS-1$
 		amountTextField = (SelfDrawnBigDecimalTextField) BD_COMPONENT_FACTORY.drawMain(id,amountModel,amountDescriptor);
 		this.add(amountTextField);
