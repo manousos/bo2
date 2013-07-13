@@ -71,7 +71,7 @@ public class TestToBuffer {
 	@Test
 	public void testExecute_withFormatters() {
 		Formatter<Date> dotsDateFormatter = new NfDateFormatter("dd.MM.yyyy");
-		Formatter<Number> amountFormatter = new NfDecimalFormatter(2,',',null);
+		Formatter<Number> amountFormatter = new NfDecimalFormatter(2);
 		Map<String, Formatter<?>> alternate = new HashMap<String, Formatter<?>>();
 		alternate.put("renewalDate", dotsDateFormatter);
 		alternate.put("amount", amountFormatter);

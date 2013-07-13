@@ -14,8 +14,10 @@ package gr.interamerican.bo2.impl.open.namedstreams;
 
 import gr.interamerican.bo2.arch.exceptions.DataException;
 import gr.interamerican.bo2.arch.exceptions.DataOperationNotSupportedException;
+import gr.interamerican.bo2.utils.Bo2UtilsEnvironment;
 
 import java.io.PrintStream;
+import java.nio.charset.Charset;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -34,7 +36,7 @@ public class TestAbstractNamedStream {
 		PrintStream stream = System.out;
 		AbstractNamedStream<PrintStream> mo = 
 			new AbstractNamedStream<PrintStream>
-			(StreamType.PRINTSTREAM,StreamResource.SYSTEM,stream,"Mock",10, stream) {
+			(StreamType.PRINTSTREAM,StreamResource.SYSTEM,stream,"Mock",10, stream, Bo2UtilsEnvironment.getDefaultTextCharset()) {
 				public byte[] readRecord() 
 				throws DataException, DataOperationNotSupportedException {
 					return null;
@@ -58,7 +60,7 @@ public class TestAbstractNamedStream {
 				public void close() 
 				throws DataException, DataOperationNotSupportedException {
 					/* empty */					
-				}			
+				}
 		};
 		return mo;
 	}

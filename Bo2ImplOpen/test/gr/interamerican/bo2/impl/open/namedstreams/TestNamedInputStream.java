@@ -15,10 +15,12 @@ package gr.interamerican.bo2.impl.open.namedstreams;
 import gr.interamerican.bo2.arch.exceptions.DataException;
 import gr.interamerican.bo2.arch.exceptions.DataOperationNotSupportedException;
 import gr.interamerican.bo2.test.utils.UtilityForBo2Test;
+import gr.interamerican.bo2.utils.Bo2UtilsEnvironment;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.nio.charset.Charset;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -45,7 +47,7 @@ public class TestNamedInputStream {
 		String path = UtilityForBo2Test.getTestStreamPath("existingIS.txt");		
 		File file = new File(path);
 		FileInputStream fis = new FileInputStream(file);		
-		ns = new NamedInputStream(StreamResource.FILE, fis, "nis", 20, file);
+		ns = new NamedInputStream(StreamResource.FILE, fis, "nis", 20, file, Bo2UtilsEnvironment.getDefaultTextCharset());
 	}
 	
 	/**

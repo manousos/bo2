@@ -13,7 +13,6 @@
 package gr.interamerican.bo2.utils;
 
 import java.nio.charset.Charset;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 /**
@@ -28,6 +27,8 @@ public class Bo2UtilsEnvironment {
 	
 	/**
 	 * Sets the environment parameters.
+	 * <br/>
+	 * This is not part of the public API, do not use it.
 	 * 
 	 * @param shortDf 
 	 * @param isoDf 
@@ -35,9 +36,9 @@ public class Bo2UtilsEnvironment {
 	 * @param charset 	   
 	 */
 	public static void setEnvironment(String shortDf, String isoDf, String longDf, String charset) {
-		SINGLETON.dfShort = new SimpleDateFormat(shortDf);
-		SINGLETON.dfIso = new SimpleDateFormat(isoDf);
-		SINGLETON.dfLong = new SimpleDateFormat(longDf);
+		SINGLETON.dfShortPattern = shortDf;
+		SINGLETON.dfIsoPattern = isoDf;
+		SINGLETON.dfLongPattern = longDf;
 		SINGLETON.textCharset = Charset.forName(charset);
 	}
 	
@@ -51,30 +52,12 @@ public class Bo2UtilsEnvironment {
 	}
 	
 	/**
-	 * Gets the short date format.
-	 * 
-	 * @return Returns the short date format.
-	 */
-	public static DateFormat getShortDateFormat() {
-		return SINGLETON.dfShort;
-	}
-	
-	/**
 	 * Gets the short date format pattern.
 	 * 
 	 * @return Returns the short date format pattern.
 	 */
 	public static String getShortDateFormatPattern() {		
-		return  SINGLETON.dfShort.toPattern();
-	}
-	
-	/**
-	 * Gets the iso date format.
-	 * 
-	 * @return Returns the iso date format.
-	 */
-	public static DateFormat getIsoDateFormat() {
-		return SINGLETON.dfIso;
+		return  SINGLETON.dfShortPattern;
 	}
 	
 	/**
@@ -83,16 +66,7 @@ public class Bo2UtilsEnvironment {
 	 * @return Returns the iso date format pattern.
 	 */
 	public static String getIsoDateFormatPattern() {		
-		return  SINGLETON.dfIso.toPattern();
-	}
-	
-	/**
-	 * Gets the long date format.
-	 * 
-	 * @return Returns the long date format.
-	 */
-	public static DateFormat getLongDateFormat() {
-		return SINGLETON.dfLong;
+		return  SINGLETON.dfIsoPattern;
 	}
 	
 	/**
@@ -101,29 +75,28 @@ public class Bo2UtilsEnvironment {
 	 * @return Returns the long date format pattern.
 	 */
 	public static String getLongDateFormatPattern() {		
-		return  SINGLETON.dfLong.toPattern();
+		return  SINGLETON.dfLongPattern;
 	}
 	
 	/**
 	 * Default date format (short format).
 	 */
-	private SimpleDateFormat dfShort = new SimpleDateFormat("dd/MM/yyyy");  //$NON-NLS-1$
+	private String dfShortPattern = "dd/MM/yyyy";  //$NON-NLS-1$
 
 	/**
 	 * ISO date format (ISO format).
 	 * 
 	 */
-	private SimpleDateFormat dfIso = new SimpleDateFormat("yyyy-MM-dd"); //$NON-NLS-1$
+	private String dfIsoPattern = "yyyy-MM-dd"; //$NON-NLS-1$
 	
 	 /**
 	 * long date format for calendar objets with time
 	 */
-	private SimpleDateFormat dfLong = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss.SSS"); //$NON-NLS-1$
+	private String dfLongPattern = "yyyy-MM-dd-HH:mm:ss.SSS"; //$NON-NLS-1$
 	
 	/**
 	 * Default text charset. This is the charset that should be used when reading or writing
-	 * text files. In any other case (in-memory conversions) it is recommended to use the 
-	 * default platform charset. 
+	 * text files. Initialized with the default platform Charset.
 	 */
 	private Charset textCharset = Charset.defaultCharset();
 	
@@ -143,7 +116,7 @@ public class Bo2UtilsEnvironment {
 	 * @return Returns the dfShort
 	 */
 	SimpleDateFormat getDfShort() {
-		return dfShort;
+		return new SimpleDateFormat(dfShortPattern);
 	}
 
 	/**
@@ -152,7 +125,7 @@ public class Bo2UtilsEnvironment {
 	 * @return Returns the dfIso
 	 */
 	SimpleDateFormat getDfIso() {
-		return dfIso;
+		return new SimpleDateFormat(dfIsoPattern);
 	}
 
 	/**
@@ -161,7 +134,7 @@ public class Bo2UtilsEnvironment {
 	 * @return Returns the dfLong
 	 */
 	SimpleDateFormat getDfLong() {
-		return dfLong;
+		return new SimpleDateFormat(dfLongPattern);
 	}
 	
 	/**

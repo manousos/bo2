@@ -58,6 +58,11 @@ extends ListTablePanel<B> {
 	/**
 	 * wicket id.
 	 */
+	protected static final String SECOND_SELECT_BUTTON_ID = "secondSelectButton"; //$NON-NLS-1$
+	
+	/**
+	 * wicket id.
+	 */
 	protected static final String CHECKGROUP_ID = "checkGroup"; //$NON-NLS-1$
 	
 	/**
@@ -76,9 +81,14 @@ extends ListTablePanel<B> {
 	protected static final String CHECKGROUP_SELECTOR_LABEL_ID = "checkGroupSelectorLabel"; //$NON-NLS-1$
 	
 	/**
-	 * Select row {@link AjaxButton}
+	 * Select checked rows {@link AjaxButton}
 	 */	
-	protected CallbackAjaxButton selectButton;  
+	protected CallbackAjaxButton selectButton;
+	
+	/**
+	 * 2nd select checked rows {@link AjaxButton}
+	 */	
+	protected CallbackAjaxButton secondSelectButton;  
 	
 	/**
 	 * CheckGroup of select column.
@@ -117,6 +127,8 @@ extends ListTablePanel<B> {
 		
 		IModel<String> selectLabel = StringResourceUtils.getResourceModel(
 				WellKnownResourceIds.MSP_SELECT_BTN_LABEL, this, getDefinition().getSelectLabelModel(), "Select");
+		IModel<String> secondSelectLabel = StringResourceUtils.getResourceModel(
+				WellKnownResourceIds.MSP_2ND_SELECT_BTN_LABEL, this, getDefinition().getSecondSelectLabelModel(), "2nd select");
 		IModel<String> checkGroupSelectorLabelModel = StringResourceUtils.getResourceModel(
 				WellKnownResourceIds.MSP_CHECKGROUP_SELECTOR_LABEL, this, getDefinition().getCheckGroupSelectorLabelModel(), "Select all");
 		
@@ -124,6 +136,11 @@ extends ListTablePanel<B> {
 		if(itemsSelectedAction!=null) {
 			itemsSelectedAction.setCaller(this);
 		}
+		CallbackAction secondItemsSelectedAction = getDefinition().getSecondItemsSelectedAction();
+		if(secondItemsSelectedAction!=null) {
+			secondItemsSelectedAction.setCaller(this);
+		}
+		
 		
 		selectButton = new CallbackAjaxButton(SELECT_BUTTON_ID, selectLabel, itemsSelectedAction, getFeedBackPanel()) {		
 			@Override
@@ -131,6 +148,21 @@ extends ListTablePanel<B> {
 				if(!ServicePanelUtils.authorizedByFlag(getDefinition().getItemsSelectedActionFlag())) {
 					target.addComponent(feedBackPanel);
 					MultipleSelectionsPanel.this.error(getDefinition().getItemsSelectedActionFlag().getDownMessage());
+					return;
+				}
+				if(CollectionUtils.isNullOrEmpty(getDefinition().getSelectionsModel().getObject())) {
+					return; 
+				}
+				super.onSubmit(target, form);
+			}
+		};
+		
+		secondSelectButton = new CallbackAjaxButton(SECOND_SELECT_BUTTON_ID, secondSelectLabel, secondItemsSelectedAction, getFeedBackPanel()) {
+			@Override
+			public void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				if(!ServicePanelUtils.authorizedByFlag(getDefinition().getSecondItemsSelectedActionFlag())) {
+					target.addComponent(feedBackPanel);
+					MultipleSelectionsPanel.this.error(getDefinition().getSecondItemsSelectedActionFlag().getDownMessage());
 					return;
 				}
 				if(CollectionUtils.isNullOrEmpty(getDefinition().getSelectionsModel().getObject())) {
@@ -155,9 +187,14 @@ extends ListTablePanel<B> {
 		checkGroup.add(checkGroupSelectorLabel);
 		tableForm.add(checkGroup);
 		tableForm.add(selectButton);
+		tableForm.add(secondSelectButton);
 		tableForm.add(backButton);
 		add(tableForm);		
 		add(feedBackPanel);
+		
+		if(getDefinition().getSecondItemsSelectedAction()==null) {
+			secondSelectButton.setVisible(false);
+		}
 	}
 	
 	@Override

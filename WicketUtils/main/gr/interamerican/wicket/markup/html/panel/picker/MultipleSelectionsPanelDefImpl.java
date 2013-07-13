@@ -44,6 +44,16 @@ implements MultipleSelectionsPanelDef<B> {
 	private Flag itemsSelectedActionFlag;
 	
 	/**
+	 * second items selected {@link CallbackAction}
+	 */
+	private CallbackAction secondItemsSelectedAction;
+	
+	/**
+	 * secondItemsSelectedAction authorization flag.
+	 */
+	private Flag secondItemsSelectedActionFlag;
+	
+	/**
 	 * Model.
 	 */
 	private IModel<ArrayList<B>> selectionsModel;
@@ -52,6 +62,11 @@ implements MultipleSelectionsPanelDef<B> {
 	 * Select button label.
 	 */
 	private IModel<String> selectLabelModel;
+	
+	/**
+	 * 2nd select button label.
+	 */
+	private IModel<String> secondSelectLabelModel;
 	
 	/**
 	 * Select/Deselect all checkbox label
@@ -82,6 +97,22 @@ implements MultipleSelectionsPanelDef<B> {
 		this.itemsSelectedActionFlag = itemsSelectedActionFlag;
 	}
 
+	public CallbackAction getSecondItemsSelectedAction() {
+		return secondItemsSelectedAction;
+	}
+
+	public void setSecondItemsSelectedAction(CallbackAction secondItemsSelectedAction) {
+		this.secondItemsSelectedAction = secondItemsSelectedAction;
+	}
+
+	public Flag getSecondItemsSelectedActionFlag() {
+		return secondItemsSelectedActionFlag;
+	}
+
+	public void setSecondItemsSelectedActionFlag(Flag secondItemsSelectedActionFlag) {
+		this.secondItemsSelectedActionFlag = secondItemsSelectedActionFlag;
+	}
+
 	public IModel<ArrayList<B>> getSelectionsModel() {
 		return selectionsModel;
 	}
@@ -96,6 +127,14 @@ implements MultipleSelectionsPanelDef<B> {
 
 	public void setCheckGroupSelectorLabelModel(IModel<String> label) {
 		this.checkGroupSelectorLabelModel = label;
+	}
+
+	public IModel<String> getSecondSelectLabelModel() {
+		return secondSelectLabelModel;
+	}
+
+	public void setSecondSelectLabelModel(IModel<String> secondSelectLabelModel) {
+		this.secondSelectLabelModel = secondSelectLabelModel;
 	}
 
 }

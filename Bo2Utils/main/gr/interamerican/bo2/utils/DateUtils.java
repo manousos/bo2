@@ -18,6 +18,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Utilities for dates
@@ -92,14 +94,17 @@ public class DateUtils {
     }
     
     /**
-     * Gets a date.
-     * 
-     * @param year year
-     * @param month month. Use {@link Calendar} constants for months.
-     * @param day day
-     *       
-     * @return Returns the first day of month.
-     */
+	 * Gets a date at midnight (time is zero)
+	 * 
+	 * @param year
+	 *            year
+	 * @param month
+	 *            month. Use {@link Calendar} constants for months.
+	 * @param day
+	 *            day
+	 * 
+	 * @return Returns the first day of month.
+	 */
     public static Date getDate(int year, int month, int day) {
     	Calendar cal=new GregorianCalendar();
     	cal.set(Calendar.YEAR, year);
@@ -537,7 +542,7 @@ public class DateUtils {
      *        
      * @return Returns a calendar with the same value as the specified date.
      */
-    public static String formatYYYYMMDD(Date dt) {
+    public static synchronized String formatYYYYMMDD(Date dt) {
     	return dfYYYYMMDD.format(dt);
     }
     
@@ -570,4 +575,133 @@ public class DateUtils {
 		}
     }
     
+	/**
+	 * returns the date on the orthodox easter on the given year.
+	 * 
+	 * @param myear
+	 *            the year to get the easter date.
+	 * @return the date of the orthodox easter.
+	 */
+	static Date getOrthodoxEaster(int myear) {
+		Calendar dof = Calendar.getInstance();
+		int r1 = myear % 4;
+		int r2 = myear % 7;
+		int r3 = myear % 19;
+		int r4 = ((19 * r3) + 15) % 30;
+		int r5 = ((2 * r1) + (4 * r2) + (6 * r4) + 6) % 7;
+		int mdays = r5 + r4 + 13;
+		if (mdays > 39) {
+			mdays = mdays - 39;
+			dof.set(myear, 4, mdays);
+		} else if (mdays > 9) {
+			mdays = mdays - 9;
+			dof.set(myear, 3, mdays);
+		} else {
+			mdays = mdays + 22;
+			dof.set(myear, 2, mdays);
+		}
+		// return dof;
+		return getDateAtMidnight(dof.getTime());
+	}
+
+	/**
+	 * returns the date with the time part cleared.
+	 * 
+	 * @param d
+	 * @return date.
+	 */
+	public static Date getDateAtMidnight(Date d) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(d);
+		removeTime(cal);
+		return cal.getTime();
+	}
+
+	/**
+	 * returns all the holidays associated with the easter.
+	 * 
+	 * @param year
+	 * @return
+	 */
+	static Set<Date> getOrthodoxEasterHolidays(int year) {
+		Set<Date> dates = new HashSet<Date>();
+		Date easter = getOrthodoxEaster(year);
+		dates.add(easter);
+		dates.add(addDays(easter, 1));// Monday.
+		dates.add(addDays(easter, -2));// Friday.
+		dates.add(addDays(easter, -48));// ash Monday.
+		dates.add(addDays(easter, 50));// holy spirit.
+		return dates;
+	}
+
+	/**
+	 * returns if the given date is saturday or sunday.
+	 * 
+	 * @param d
+	 * @return
+	 */
+	public static boolean isWeekend(Date d) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(d);
+		if ((c.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) || (c.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * @param d
+	 * @return this (current) year.
+	 */
+	public static int getYear(Date d) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(d);
+		return c.get(Calendar.YEAR);
+	}
+	
+	/**
+	 * compare two dates ignoring the time.
+	 * 
+	 * @param d1
+	 * @param d2
+	 * @return
+	 */
+	public static boolean equalDatesIgnoringTime(Date d1, Date d2) {
+		return getDateAtMidnight(d1).equals(getDateAtMidnight(d2));
+	}
+
+	/**
+	 * return known holidays for the given year.
+	 * 
+	 * @param year
+	 * @return a set of dates that are known holidays.
+	 */
+	public static Set<Date> getKnownGreekHolidays(int year) {
+		Set<Date> dates = new HashSet<Date>();
+		dates.add(getDate(year, Calendar.JANUARY, 1));
+		dates.add(getDate(year, Calendar.JANUARY, 6));
+		dates.add(getDate(year, Calendar.DECEMBER, 25));
+		dates.add(getDate(year, Calendar.DECEMBER, 26));
+		dates.add(getDate(year, Calendar.AUGUST, 15));
+		dates.add(getDate(year, Calendar.MARCH, 25));
+		dates.add(getDate(year, Calendar.OCTOBER, 28));
+		dates.add(getDate(year, Calendar.MAY, 1));
+		dates.addAll(getOrthodoxEasterHolidays(year));
+		return dates;
+	}
+
+	/**
+	 * method that identifies whether the given date is a holiday or weekend day in Greece.
+	 * 
+	 * @param d
+	 * @return
+	 */
+	public static boolean isStandardGreekHoliday(Date d) {
+		Date date = getDateAtMidnight(d);
+		boolean isWeekend = isWeekend(date);
+		int year=getYear(date);
+		Set<Date> dates = getKnownGreekHolidays(year);
+		boolean isHoliday = dates.contains(date);
+		return isWeekend || isHoliday;
+	}
 }

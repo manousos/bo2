@@ -16,6 +16,7 @@ package gr.interamerican.bo2.impl.open.namedstreams;
 import gr.interamerican.bo2.arch.exceptions.DataException;
 import gr.interamerican.bo2.arch.exceptions.DataOperationNotSupportedException;
 import gr.interamerican.bo2.test.utils.UtilityForBo2Test;
+import gr.interamerican.bo2.utils.Bo2UtilsEnvironment;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -23,6 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -64,7 +66,7 @@ public class TestNamedOutputStream {
 		String path = UtilityForBo2Test.getTestStreamPath("TestNamedOutputStream.1.txt");		
 		File file = new File(path);
 		FileOutputStream stream = new FileOutputStream(file);
-		ns = new NamedOutputStream (StreamResource.FILE, stream, "Nout", 20, file);
+		ns = new NamedOutputStream (StreamResource.FILE, stream, "Nout", 20, file, Bo2UtilsEnvironment.getDefaultTextCharset());
 		@SuppressWarnings("unused") byte[] rec1 = ns.readRecord();	
 	}
 	
@@ -78,7 +80,7 @@ public class TestNamedOutputStream {
 		String path = UtilityForBo2Test.getTestStreamPath("TestNamedOutputStream.2.txt");		
 		File file = new File(path);
 		FileOutputStream stream = new FileOutputStream(file);
-		ns = new NamedOutputStream (StreamResource.FILE, stream, "Nout", 20, file);
+		ns = new NamedOutputStream (StreamResource.FILE, stream, "Nout", 20, file, Bo2UtilsEnvironment.getDefaultTextCharset());
 		@SuppressWarnings("unused") String rec1 = ns.readString();	
 	}	
 	
@@ -92,7 +94,7 @@ public class TestNamedOutputStream {
 		String path = UtilityForBo2Test.getTestStreamPath("TestNamedOutputStream.3.txt");		
 		File file = new File(path);
 		FileOutputStream stream = new FileOutputStream(file);
-		ns = new NamedOutputStream (StreamResource.FILE, stream, "Nout", 20, file);
+		ns = new NamedOutputStream (StreamResource.FILE, stream, "Nout", 20, file, Bo2UtilsEnvironment.getDefaultTextCharset());
 		String string = "write this";
 		ns.writeString(string);
 		ns.close();
@@ -113,7 +115,7 @@ public class TestNamedOutputStream {
 		String path = UtilityForBo2Test.getTestStreamPath("TestNamedOutputStream.4.txt");		
 		File file = new File(path);
 		FileOutputStream stream = new FileOutputStream(file);
-		ns = new NamedOutputStream (StreamResource.FILE, stream, "Nout", 20, file);
+		ns = new NamedOutputStream (StreamResource.FILE, stream, "Nout", 20, file, Bo2UtilsEnvironment.getDefaultTextCharset());
 		String string = "write this";
 		ns.writeRecord(string.getBytes());
 		ns.close();
@@ -135,7 +137,7 @@ public class TestNamedOutputStream {
 		String path = UtilityForBo2Test.getTestStreamPath("TestNamedOutputStream.5.txt");		
 		File file = new File(path);
 		FileOutputStream stream = new FileOutputStream(file);
-		ns = new NamedOutputStream (StreamResource.FILE, stream, "Nout", 20, file);
+		ns = new NamedOutputStream (StreamResource.FILE, stream, "Nout", 20, file, Bo2UtilsEnvironment.getDefaultTextCharset());
 		@SuppressWarnings("unused") String rec1 = ns.readString();
 		ns.find("123".getBytes());
 	}	

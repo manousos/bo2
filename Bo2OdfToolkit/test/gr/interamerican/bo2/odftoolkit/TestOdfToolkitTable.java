@@ -279,8 +279,6 @@ public class TestOdfToolkitTable {
 	 * Unit test for setCell(int,int,BusinessDocument)
 	 * 
 	 * @throws DocumentEngineException
-	 * 
-	 * TODO: fix this test
 	 */
 //	@Test
 	public void testSetCell_BusinessDocument_onHeader() throws DocumentEngineException {

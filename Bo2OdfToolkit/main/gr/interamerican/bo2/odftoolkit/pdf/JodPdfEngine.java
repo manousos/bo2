@@ -50,21 +50,25 @@ implements PdfEngine {
 
 	@Override
 	public byte[] toPdf(byte[] odf) throws PdfEngineException {
+		OpenOfficeConnection connection = null;
 		try {			
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			ByteArrayInputStream in = new ByteArrayInputStream(odf);			
-			OpenOfficeConnection connection = new SocketOpenOfficeConnection(host, NumberUtils.string2Int(port));
+			connection = new SocketOpenOfficeConnection(host, NumberUtils.string2Int(port));
 			connection.connect();
 			DefaultDocumentFormatRegistry registry = new DefaultDocumentFormatRegistry();
 			DocumentFormat inFormat = registry.getFormatByFileExtension("odt"); //$NON-NLS-1$
 			DocumentFormat outFormat = registry.getFormatByFileExtension("pdf"); //$NON-NLS-1$			
 			DocumentConverter converter = new OpenOfficeDocumentConverter(connection);			
 			converter.convert(in, inFormat, out, outFormat);
-			connection.disconnect();
 			byte[] pdf = out.toByteArray();
 			return pdf;
 		} catch (ConnectException e) {
 			throw new PdfEngineException(e);
+		} finally {
+			if(connection!=null && connection.isConnected()) {
+				connection.disconnect();
+			}
 		}
 	}
 

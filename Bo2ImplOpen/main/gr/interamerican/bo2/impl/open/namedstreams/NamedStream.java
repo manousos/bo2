@@ -15,6 +15,8 @@ package gr.interamerican.bo2.impl.open.namedstreams;
 import gr.interamerican.bo2.arch.exceptions.DataException;
 import gr.interamerican.bo2.arch.exceptions.DataOperationNotSupportedException;
 
+import java.nio.charset.Charset;
+
 
 
 /**
@@ -168,5 +170,12 @@ public interface NamedStream<T> {
 	 * @return Returns the resource backing this stream.
 	 */
 	public Object getResource();
+	
+	/**
+	 * Gets the encoding used by this stream. There is no setter for this property! 
+	 * 
+	 * @return Encoding used by the stream.
+	 */
+	public Charset getEncoding();
 
 }

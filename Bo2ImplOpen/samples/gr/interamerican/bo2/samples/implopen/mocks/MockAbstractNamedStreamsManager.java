@@ -19,7 +19,9 @@ import gr.interamerican.bo2.impl.open.namedstreams.NamedStream;
 import gr.interamerican.bo2.impl.open.namedstreams.NamedStreamDefinition;
 import gr.interamerican.bo2.impl.open.namedstreams.StreamResource;
 import gr.interamerican.bo2.impl.open.namedstreams.StreamType;
+import gr.interamerican.bo2.utils.Bo2UtilsEnvironment;
 
+import java.nio.charset.Charset;
 import java.util.Properties;
 
 /**
@@ -48,14 +50,14 @@ extends AbstractNamedStreamsManager {
 	@Override
 	protected NamedStream<?> open(NamedStreamDefinition def) 
 	throws InitializationException {		 
-		return new MockNamedStream(def.getType(), def.getResourceType(), null, def.getName(), def.getRecordLength());
+		return new MockNamedStream(def.getType(), def.getResourceType(), null, def.getName(), def.getRecordLength(), Bo2UtilsEnvironment.getDefaultTextCharset());
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public NamedStream<?> convert
 	(String nameOfStreamToConvert, StreamType typeOfNewStream, String nameOfNewStream)
 	throws DataException {	
-		return new MockNamedStream(typeOfNewStream, StreamResource.OBJECT, null, nameOfNewStream, 0);
+		return new MockNamedStream(typeOfNewStream, StreamResource.OBJECT, null, nameOfNewStream, 0, Bo2UtilsEnvironment.getDefaultTextCharset());
 	}
 	
 	

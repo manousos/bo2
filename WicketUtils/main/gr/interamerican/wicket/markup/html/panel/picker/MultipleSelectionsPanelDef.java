@@ -67,6 +67,43 @@ extends ListTablePanelDef<B> {
 	 */
 	void setItemsSelectedActionFlag(Flag itemsSelectedActionFlag);
 	
+	//******
+	
+	/**
+	 * Gets the secondItemsSelectedAction.
+	 *
+	 * @return Returns the secondItemsSelectedAction
+	 */
+	CallbackAction getSecondItemsSelectedAction();
+
+	/**
+	 * [OPTIONAL]
+	 * Assigns a new value to the secondItemsSelectedAction. This action is executed
+	 * when the user presses the 2nd select button. One of the things this action
+	 * does, is to retrieve the <code>selections</code> property from this
+	 * definition. The selected items will be there.
+	 * 
+	 * if this property is null, the second select button won't be available.
+	 *
+	 * @param secondItemsSelectedAction the itemsSelectedAction to set
+	 */
+	void setSecondItemsSelectedAction(CallbackAction secondItemsSelectedAction);
+	
+	/**
+	 * Gets the secondItemsSelectedActionFlag.
+	 * 
+	 * @return Returns the secondItemsSelectedActionFlag.
+	 */
+	Flag getSecondItemsSelectedActionFlag();
+	
+	/**
+	 * [OPTIONAL]
+	 * Sets the secondItemsSelectedActionFlag.
+	 * 
+	 * @param secondItemsSelectedActionFlag
+	 */
+	void setSecondItemsSelectedActionFlag(Flag secondItemsSelectedActionFlag);
+	
 	/**
 	 * [MANDATORY]
 	 * Gets the selections model. If the model collection is
@@ -99,6 +136,20 @@ extends ListTablePanelDef<B> {
 	 * @param label
 	 */
 	void setSelectLabelModel(IModel<String> label);
+	
+	/**
+	 * Gets the secondSelectLabel.
+	 * 
+	 * @return selectLabel
+	 */
+	IModel<String> getSecondSelectLabelModel();
+	
+	/**
+	 * [OPTIONAL] Sets a custom label for the 2nd select button.
+	 * 
+	 * @param label
+	 */
+	void setSecondSelectLabelModel(IModel<String> label);
 	
 	/**
 	 * Gets the checkGroupSelectorLabel

@@ -44,10 +44,10 @@ public class TestDecimalFormatter {
 	 */
 	@Test
 	@SuppressWarnings({ "nls", "rawtypes", "unchecked" })
-	public void testFormat_createdWithSymbols() {		
-		DecimalFormatter formatter = new DecimalFormatter(3, ',', null);
+	public void testFormat_createdWithDecimalDigits() {		
+		DecimalFormatter formatter = new DecimalFormatter(3);
 		String actual = formatter.format(d);
-		String expected = "1897,300";
+		String expected = "1.897,300";
 		Assert.assertEquals(expected, actual);
 	}
 

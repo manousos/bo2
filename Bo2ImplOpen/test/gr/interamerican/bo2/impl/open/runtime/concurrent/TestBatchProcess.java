@@ -573,7 +573,7 @@ public class TestBatchProcess {
 	/**
 	 * Test for isFinished().
 	 * 
-	 * TODO: fix this
+	 * TODO: This tests some times fails. Investigate.
 	 */
 //	@Test
 	public void testIsFinishedAbnormally_NotEmptyQueue() {

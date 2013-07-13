@@ -241,6 +241,39 @@ extends ServicePanelWithBackDef, BeanPanelDef<B> {
 	void setPickActionFlag(Flag pickActionFlag);
 	
 	/**
+	 * Gets the secondPickAction.
+	 * 
+	 * @see #setSecondPickAction(CallbackAction)
+	 *
+	 * @return Returns the secondPickAction
+	 */
+	CallbackAction getSecondPickAction();
+
+	/**
+	 * Sets the secondPickAction. <br/>
+	 * 
+	 * This action is necessary only if two kinds of picker functionality are wanted. 
+	 *
+	 * @param secondPickAction the secondPickAction to set
+	 */
+	void setSecondPickAction(CallbackAction secondPickAction);
+	
+	/**
+	 * Gets the secondPickActionFlag.
+	 * 
+	 * @return Returns the secondPickActionFlag.
+	 */
+	Flag getSecondPickActionFlag();
+	
+	/**
+	 * [OPTIONAL]
+	 * Sets the secondPickActionFlag.
+	 * 
+	 * @param secondPickActionFlag
+	 */
+	void setSecondPickActionFlag(Flag secondPickActionFlag);
+	
+	/**
 	 * Gets the refreshListAfterPickAction.
 	 * 
 	 * @see #setRefreshListAfterPickAction(Boolean)
@@ -440,6 +473,25 @@ extends ServicePanelWithBackDef, BeanPanelDef<B> {
 	/*
 	 * Options
 	 */
+	
+	/**
+	 * Gets whether the single bean panel form of the CrudPickerPanel results 
+	 * panel includes a file upload item. 
+	 * 
+	 * @return whether the single bean panel form includes a file upload item.
+	 */
+	Boolean getSingleBeanFormContainsFileUpload();
+	
+	/**
+	 * [OPTIONAL]
+	 * Sets whether the single bean panel form of the CrudPickerPanel results 
+	 * panel includes a file upload item.
+	 * If this is set to true, the single bean panel form is set as 
+	 * <code>setMultipart(true)</code>. Defaults to false.
+	 * 
+	 * @param singleBeanFormContainsFileUpload
+	 */
+	void setSingleBeanFormContainsFileUpload(Boolean singleBeanFormContainsFileUpload);
 	
 	/**
 	 * Gets whether pressing the delete will open a pop-up confirmation dialog.

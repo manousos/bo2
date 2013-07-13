@@ -18,6 +18,7 @@ import gr.interamerican.bo2.impl.open.utils.Exceptions;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 
 /**
  * Implementation of NamedStream for InputStream.
@@ -27,18 +28,19 @@ import java.io.InputStream;
 public class NamedInputStream extends AbstractNamedStream<InputStream> {
 	
 	/**
-	 * Creates a new NamedBufferedReader object.
+	 * Creates a new NamedInputStream object.
 	 * 
 	 * @param resourceType
 	 * @param stream
 	 * @param name
 	 * @param recordLength
 	 * @param resource 
+	 * @param encoding 
 	 */
 	NamedInputStream(
 			StreamResource resourceType, InputStream stream, 
-			String name, int recordLength, Object resource) {
-		super(StreamType.INPUTSTREAM, resourceType, stream, name, recordLength, resource);
+			String name, int recordLength, Object resource, Charset encoding) {
+		super(StreamType.INPUTSTREAM, resourceType, stream, name, recordLength, resource, encoding);
 	}
 	
 
@@ -66,7 +68,10 @@ public class NamedInputStream extends AbstractNamedStream<InputStream> {
 	throws DataException {
 		byte[] rec=readRecord();
 		if (rec==null) return null;
-		return new String(rec);
+		/*
+		 * Use the user defined encoding to convert the bytes to a String.
+		 */
+		return new String(rec, encoding);
 	}
 	
 	public void writeRecord(byte[] record) 
@@ -86,4 +91,5 @@ public class NamedInputStream extends AbstractNamedStream<InputStream> {
 			throw new DataException(e);
 		}
 	}
+	
 }

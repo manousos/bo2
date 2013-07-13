@@ -209,7 +209,7 @@ extends PropertiesInitializedBean {
 	}
 
 	/**
-	 * Gets the streamsManagerName.
+	 * Gets the name of the default streamsManager.
 	 *
 	 * @return Returns the streamsManagerName
 	 */

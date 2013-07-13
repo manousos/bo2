@@ -57,7 +57,7 @@ public class TokenUtils {
 	 * @param separator
 	 *        String delimiter.
 	 * @param includeEmptyTokens
-	 *        Empty tokens are included in the result. 
+	 *        Indicates if empty tokens are included in the result. 
 	 *        
 	 * @return An array of all tokens produced.
 	 */
@@ -257,5 +257,8 @@ public class TokenUtils {
 		}
 		return TokenUtils.splitTrim(annovalue[0], ',');
 	}
+	
+	
+    
     
 }

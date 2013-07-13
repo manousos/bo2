@@ -13,6 +13,7 @@
 package gr.interamerican.bo2.impl.open.runtime.concurrent;
 
 import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmNames.BATCH_PROCESS_NAME;
+import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmNames.ENTITY_HEADER;
 import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmNames.FIELDS_SET;
 import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmNames.FORMATTER_CLASS;
 import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmNames.INPUT_PROPERTY;
@@ -23,18 +24,20 @@ import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParm
 import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmNames.PRE_PROCESSING_CLASS;
 import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmNames.PROCESSORS_COUNT;
 import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmNames.QUERY_CLASS;
-import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmNames.UI_CAN_ADD_THREADS;
-import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmNames.UI_REFRESH_INTERVAL;
+import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmNames.SHARED_STREAM_NAMES;
 import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmNames.TIDY_INTERVAL;
-import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmNames.ENTITY_HEADER;
+import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmNames.UI_CAN_ADD_THREADS;
 import static gr.interamerican.bo2.utils.CollectionUtils.getMandatoryProperty;
+import static gr.interamerican.bo2.utils.StringConstants.COMMA;
 import static gr.interamerican.bo2.utils.StringUtils.isNullOrBlank;
 import gr.interamerican.bo2.arch.EntitiesQuery;
 import gr.interamerican.bo2.arch.Operation;
 import gr.interamerican.bo2.impl.open.creation.Factory;
 import gr.interamerican.bo2.utils.ExceptionUtils;
 import gr.interamerican.bo2.utils.NumberUtils;
+import gr.interamerican.bo2.utils.StringConstants;
 import gr.interamerican.bo2.utils.StringUtils;
+import gr.interamerican.bo2.utils.TokenUtils;
 import gr.interamerican.bo2.utils.Utils;
 import gr.interamerican.bo2.utils.adapters.CopyFromBeans;
 import gr.interamerican.bo2.utils.adapters.CopyFromProperties;
@@ -113,6 +116,10 @@ implements BatchProcessParmsFactory {
 		int tidyInterval = NumberUtils.string2Int(strTidyInterval);
 		input.setTidyInterval(tidyInterval);
 		
+		String strNamedStreams = Utils.notNull(properties.getProperty(SHARED_STREAM_NAMES), StringConstants.EMPTY);
+		String[] sharedStreams = TokenUtils.splitTrim(strNamedStreams, COMMA, false);
+		input.setSharedStreamNames(sharedStreams);
+		
 		return input;
 		
 	}
@@ -175,8 +182,11 @@ implements BatchProcessParmsFactory {
 	}
 	
 	@Override
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public BatchProcessParm<?> createParameter(BatchProcessInput input, Object criteria, Map<String, String> inputFileDefinitions) {
+		/*
+		 * TODO: Remove this method.
+		 */
 		BatchProcessParm output = Factory.create(BatchProcessParm.class);
 		
 		output.setName(ExceptionUtils.notNull(input.getName()));

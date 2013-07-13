@@ -296,12 +296,17 @@ public interface BatchProcessParm<T> {
 	 * This may be null indicating that there are no input
 	 * files to setup.
 	 * 
+	 * TODO: This property exists for the support of submitted jobs running in parallel. It will be refactored.  
+	 *       
+	 * 
 	 * @return Returns input files for this batch process.
 	 */
 	Map<String, String> getNamedInputFiles();
 	
 	/**
 	 * Sets the input files for this batch process.
+	 * 
+	 * TODO: This property exists for the support of submitted jobs running in parallel. It will be refactored.
 	 * 
 	 * @param namedInputFiles
 	 */
@@ -336,6 +341,20 @@ public interface BatchProcessParm<T> {
 	 * @param entityHeader
 	 */
 	void setEntityHeader(String entityHeader);
+	
+	/**
+	 * Gets the names of shared streams.
+	 * 
+	 * @return returns the names of shared streams.
+	 */
+	String[] getSharedStreamNames();
+	
+	/**
+	 * Sets the sharedStreamNames.
+	 * 
+	 * @param sharedStreamNames
+	 */
+	void setSharedStreamNames(String[] sharedStreamNames);
 	
 	
 	

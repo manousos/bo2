@@ -15,10 +15,11 @@ package gr.interamerican.bo2.utils.meta.formatters;
 import gr.interamerican.bo2.utils.StringConstants;
 
 import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 
 /**
  * Formatter for numbers objects.
+ * <br/>
+ * This class is thread safe.
  * 
  * @param <T>
  *        Type of Number.
@@ -29,7 +30,7 @@ implements Formatter<T> {
 	/**
 	 * Decimal format.
 	 */
-	DecimalFormat df;
+	final DecimalFormat df;
 	
 	/**
 	 * Creates a new DateFormatter object. 
@@ -48,41 +49,13 @@ implements Formatter<T> {
 	public DecimalFormatter(int decimalDigits) {
 		this.df = new DecimalFormat();
 		if (decimalDigits==0) {
-			df.setGroupingUsed(false);
+			df.setDecimalSeparatorAlwaysShown(false);
 		}
 		df.setMaximumFractionDigits(decimalDigits);
 		df.setMinimumFractionDigits(decimalDigits);
-	}
-	
-	/**
-	 * Creates a new DecimalFormatter object. 
-	 * 
-	 * TODO: remove this and have the system locale handle the DecimalFormatSymbols?
-	 *
-	 * @param decimalDigits
-	 * @param decimalSep
-	 * @param groupSep
-	 */
-	public DecimalFormatter(int decimalDigits, Character decimalSep, Character groupSep) {
-		super();
-		this.df = new DecimalFormat();
-		DecimalFormatSymbols dfs = new DecimalFormatSymbols();
-		dfs.setDecimalSeparator(decimalSep);
-		if (groupSep==null) {
-			df.setGroupingUsed(false);
-		} else {
-			dfs.setGroupingSeparator(groupSep);
-			df.setGroupingUsed(true);
-		}
-		if (decimalDigits==0) {
-			df.setGroupingUsed(false);
-		}
-		df.setMaximumFractionDigits(decimalDigits);
-		df.setMinimumFractionDigits(decimalDigits);
-		df.setDecimalFormatSymbols(dfs);
 	}
 
-	public String format(T t) {
+	public synchronized String format(T t) {
 		if(t==null) {
 			return StringConstants.NULL;
 		}

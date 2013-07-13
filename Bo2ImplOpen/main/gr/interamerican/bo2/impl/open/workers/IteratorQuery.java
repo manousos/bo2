@@ -108,7 +108,6 @@ implements EntitiesQuery<T> {
 	 * 
 	 * @throws DataException 
 	 */
-	@SuppressWarnings("unused")
 	protected Iterator<T> createIterator() 
 	throws DataException {
 		return iterator;		

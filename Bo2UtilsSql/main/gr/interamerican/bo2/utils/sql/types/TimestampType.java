@@ -51,7 +51,7 @@ extends AbstractType<Timestamp> {
 		return rs.getTimestamp(columnIndex);
 	}	
 	
-	public String sqlString(Timestamp t) {
+	public synchronized String sqlString(Timestamp t) {
 		if (t==null) {
 			return StringConstants.NULL;
 		}

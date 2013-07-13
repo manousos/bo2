@@ -38,7 +38,7 @@ public class TestFieldUtils {
 	 * 
 	 * @throws Exception
 	 */
-	@Test
+	//@Test
 	public void testGetUserFieldGetElements() throws Exception {
 		String inPath = ResourceUtils.inputPath("TemplateWithUserFields.odt");
 		TextDocument template = TextDocument.loadDocument(inPath);
@@ -50,7 +50,7 @@ public class TestFieldUtils {
 	 * Unit test for replaceField().
 	 * @throws Exception
 	 */
-	@Test
+	//@Test
 	public void testReplaceField() throws Exception {
 		String inPath = ResourceUtils.inputPath("TemplateWithUserFields.odt");
 		String outPath = ResourceUtils.outputPath("FieldUtils_ReplaceField.odt");
@@ -68,11 +68,11 @@ public class TestFieldUtils {
 	 * Unit test 
 	 * @throws Exception 
 	 */	
-	@Test
-	public void testSetUserFields() throws Exception {
+	//@Test
+	public void testSetFields() throws Exception {
  		Map<String, String> map = new HashMap<String, String>();
-		map.put("field1", "           The         value   of  field1  with spaces    ");
-		map.put("field2", " The value of field2");
+		map.put("field1", "           The         value   of  field1  with spaces    ");		
+		map.put("field2", " The value of \n(newLine) field2");
 		
 		String inpath = ResourceUtils.inputPath("TemplateWithUserFields.odt");
 		String outpath = ResourceUtils.outputPath("FieldUtils_SetFields.odt");
@@ -80,18 +80,19 @@ public class TestFieldUtils {
 		TextDocument template = TextDocument.loadDocument(inpath);
 		FieldUtils.setFields(template, map);
 		template.save(outpath);
-		
 		List<TextUserFieldGetElement> fields = FieldUtils.getUserFieldGetElements(template.getContentDom());
 		Assert.assertEquals(0, fields.size());
 		
 	}
 	
 	/**
-	 * Unit test 
+	 * Unit test for setFields.
+	 * 
+	 * Sets user fields in header and footer.
 	 * @throws Exception 
 	 */	
-	@Test
-	public void testSetUserFields_inHeaderAndFooter() throws Exception {
+	//@Test
+	public void testSetFields_inHeaderAndFooter() throws Exception {
  		Map<String, String> map = new HashMap<String, String>();
 		map.put("field1", "           The         value   of  field1  with spaces    ");
 		map.put("field2", " The value of field2");
@@ -112,10 +113,13 @@ public class TestFieldUtils {
 	}
 	
 	/**
-	 * Unit test 
+	 * Unit test for setFields.
+	 * 
+	 * Sets fields in a letter. A field value contains line breaks.
+	 * 
 	 * @throws Exception 
 	 */	
-	//@Test
+	@Test
 	public void testSetUserFields_Letter() throws Exception {
 		String inpath = ResourceUtils.inputPath("TemplateForLetter.odt");
 		String outpath = ResourceUtils.outputPath("FieldUtils_SetFields_Letter.odt");
@@ -126,7 +130,7 @@ public class TestFieldUtils {
 		Range<Date> period = new Range<Date>(from, to);
 		info.setPeriod(period);
 		info.setFamily(Samples.theAstaireFamily());
-		info.setDestination("Monaco");
+		info.setDestination("\n\n\n\n * Monaco\n\n * France\n * Europe\n");
 		
 		TextDocument template = TextDocument.loadDocument(inpath);			
 		FieldUtils.setFields(template, info);

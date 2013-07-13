@@ -36,7 +36,7 @@ public class TestNfDecimalFormatter {
 	 */
 	@Test
 	public void testConstructor_2() {
-		NfDecimalFormatter f = new NfDecimalFormatter(2,',','.'); 
+		NfDecimalFormatter f = new NfDecimalFormatter(2); 
 		Assert.assertNotNull(f.formatter);
 	}
 

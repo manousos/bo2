@@ -14,11 +14,13 @@ package gr.interamerican.bo2.odftoolkit.utils;
 
 import gr.interamerican.bo2.odftoolkit.span.TextSpanFragment;
 import gr.interamerican.bo2.utils.IllegalCharacterFilter;
+import gr.interamerican.bo2.utils.StringConstants;
 import gr.interamerican.bo2.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.odftoolkit.odfdom.dom.element.text.TextLineBreakElement;
 import org.odftoolkit.odfdom.dom.element.text.TextSpanElement;
 import org.odftoolkit.odfdom.dom.element.text.TextUserFieldGetElement;
 import org.odftoolkit.odfdom.pkg.OdfFileDom;
@@ -34,7 +36,7 @@ public class FieldUtils {
 	 * Hidden constructor.
 	 */
 	private FieldUtils() {/*empty*/}
-
+	
 	/**
 	 * Replaces a user field with a specified text.
 	 * 
@@ -47,11 +49,20 @@ public class FieldUtils {
 	 */
 	public static void replaceField(OdfFileDom dom, TextUserFieldGetElement field, String value){
 		TextSpanElement newTextSpan = new TextSpanElement(dom);
-		String txt = StringUtils.trim(value);
-		TextSpanFragment fragment = new TextSpanFragment(txt);
-		fragment.appendTo(newTextSpan);
+		String txt = StringUtils.trim(value);		
+		String[] texts = txt.split(StringConstants.NEWLINE);		
+		for (int i = 0; i < texts.length; i++) {
+			String token = texts[i];			
+			TextSpanFragment fragment = new TextSpanFragment(token);			
+			fragment.appendTo(newTextSpan);				
+			if (i!=texts.length-1) {
+				TextLineBreakElement nl = new TextLineBreakElement(dom);
+				newTextSpan.appendChild(nl);				
+			}
+		}
 		OdfUtils.replace(newTextSpan, field);
 	}
+	
 	
 	/**
 	 * Gets all TextUserFieldGetElement nodes of the specified dom.

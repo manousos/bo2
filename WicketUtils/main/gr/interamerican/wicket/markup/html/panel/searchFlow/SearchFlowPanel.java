@@ -223,6 +223,9 @@ extends ServicePanelWithBack {
 		if(getDefinition().getCustomSingleBeanPanelDisabling()==null) {
 			getDefinition().setCustomSingleBeanPanelDisabling(false);
 		}
+		if(getDefinition().getSingleBeanFormContainsFileUpload()==null) {
+			getDefinition().setSingleBeanFormContainsFileUpload(false);
+		}
 		if(getDefinition().getAllowMultipleSelections() && getDefinition().getSelectionsModel()==null) {
 			String msg = "Cannot instantiate a MultipleSelectionsPanel with a null selections model.";
 			throw new RuntimeException(msg);
@@ -314,6 +317,8 @@ extends ServicePanelWithBack {
 			ppDef.setList(getDefinition().getResults());
 			ppDef.setItemSelectedAction(getDefinition().getPickAction());
 			ppDef.setItemSelectedActionFlag(getDefinition().getPickActionFlag());
+			ppDef.setSecondItemSelectedAction(getDefinition().getSecondPickAction());
+			ppDef.setSecondItemSelectedActionFlag(getDefinition().getSecondPickActionFlag());
 			ppDef.setRefreshListAfterPickAction(getDefinition().getRefreshListAfterPickAction());
 			ppDef.setBeanModel(getDefinition().getBeanModel());
 			ppDef.setListLabelModel(resultsLabel);
@@ -334,8 +339,11 @@ extends ServicePanelWithBack {
 			mspDef.setSelectionsModel(getDefinition().getSelectionsModel());
 			mspDef.setItemsSelectedAction(getDefinition().getPickAction());
 			mspDef.setItemsSelectedActionFlag(getDefinition().getPickActionFlag());
+			mspDef.setSecondItemsSelectedAction(getDefinition().getSecondPickAction());
+			mspDef.setSecondItemsSelectedActionFlag(getDefinition().getSecondPickActionFlag());
 			mspDef.setListLabelModel(resultsLabel);
 			mspDef.setSelectLabelModel(selectLabel);
+			mspDef.setSecondSelectLabelModel(secondSelectLabel);
 			mspDef.setCheckGroupSelectorLabelModel(checkGroupSelectorLabel);
 			mspDef.setBackLabelModel(backToCriteriaLabel);
 			return mspDef;
@@ -396,6 +404,7 @@ extends ServicePanelWithBack {
 			cppDef.setUpdateValidator(getDefinition().getUpdateValidator());
 			cppDef.setDeleteValidator(getDefinition().getDeleteValidator());
 			cppDef.setCustomSingleBeanPanelDisabling(getDefinition().getCustomSingleBeanPanelDisabling());
+			cppDef.setSingleBeanFormContainsFileUpload(getDefinition().getSingleBeanFormContainsFileUpload());
 			if(getDefinition().getRefreshAfterDataOp()) {
 				cppDef.setRefreshAfterDataOpAction(new QueryWrapperAction(getDefinition().getQueryAction()));
 			}
@@ -526,7 +535,7 @@ extends ServicePanelWithBack {
 	 * 
 	 * @param target
 	 */
-	protected void backToCriteria(AjaxRequestTarget target) { /* empty hook */ }
+	protected void backToCriteria(@SuppressWarnings("unused") AjaxRequestTarget target) { /* empty hook */ }
 	
 	/**
 	 * This action will hide the resultsPanel and show the criteriaPanel.

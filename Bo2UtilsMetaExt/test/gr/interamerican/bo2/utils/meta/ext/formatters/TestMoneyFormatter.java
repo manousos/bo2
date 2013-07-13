@@ -40,7 +40,7 @@ public class TestMoneyFormatter {
 		Money money = new MoneyImpl();
 		money.setAmount(new BigDecimal("15000"));
 		String actual = formatter.format(money);
-		assertEquals("15000,00", actual);
+		assertEquals("15.000,00", actual);
 	}
 	
 }

@@ -13,11 +13,13 @@
 package gr.interamerican.bo2.arch.utils.beans;
 
 import gr.interamerican.bo2.arch.Money;
+import gr.interamerican.bo2.utils.StringUtils;
 import gr.interamerican.bo2.utils.Utils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Currency;
+import java.util.Locale;
 
 /**
  * Money.
@@ -38,14 +40,17 @@ public class MoneyImpl implements Money {
 
 
 	/**
-	 * Currency.
+	 * Currency. For now euro. 
+	 * 
+	 * TODO: Default value based on default environment Locale.
 	 */
-	private Currency currency=Currency.getInstance("EUR"); //$NON-NLS-1$
+	private Currency currency=Currency.getInstance("EUR");
 	
 	/**
 	 * Creates a new MoneyImpl object. 
 	 */
 	public MoneyImpl() {
+		super();
 		/* empty */
 	}
 	
@@ -90,7 +95,11 @@ public class MoneyImpl implements Money {
 	}
 	
 	public void setCurrencyCode(String currencyCode) {
-		currency = Currency.getInstance(currencyCode);
+		if(!StringUtils.isNullOrBlank(currencyCode)) {
+			currency = Currency.getInstance(currencyCode);
+		} else {
+			currency = Currency.getInstance(Locale.getDefault());
+		}
 	}
 	
 	public BigDecimal getAmount() {

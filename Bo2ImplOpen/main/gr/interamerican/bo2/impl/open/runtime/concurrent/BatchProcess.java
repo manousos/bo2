@@ -35,6 +35,8 @@ import gr.interamerican.bo2.impl.open.namedstreams.NamedStreamFactory;
 import gr.interamerican.bo2.impl.open.namedstreams.NamedStreamsProvider;
 import gr.interamerican.bo2.impl.open.runtime.RuntimeCommand;
 import gr.interamerican.bo2.impl.open.utils.Bo2;
+import gr.interamerican.bo2.utils.ArrayUtils;
+import gr.interamerican.bo2.utils.Bo2UtilsEnvironment;
 import gr.interamerican.bo2.utils.CollectionUtils;
 import gr.interamerican.bo2.utils.ExceptionUtils;
 import gr.interamerican.bo2.utils.SelectionUtils;
@@ -372,8 +374,25 @@ implements Runnable, MultiThreadedLongProcess {
 		if (stackTraces!=null) {
 			String stackHead = ">>>Stack traces of batch process:" + this.getName(); //$NON-NLS-1$
 			stackTraces.writeString(stackHead); 			
+		}	
+	}
+	
+	/**
+	 * Opens shared streams used by QueueProcessor operations.
+	 * 
+	 * @throws InitializationException 
+	 * 
+	 */
+	void openSharedStreams() throws InitializationException {
+		if(ArrayUtils.isNullOrEmpty(parameters.getSharedStreamNames())) {
+			return;
 		}
-		
+		String defaultStreamsProvider = 
+			Bo2.getDefaultDeployment().getDeploymentBean().getStreamsManagerName();
+		NamedStreamsProvider nsp = provider.getResource(defaultStreamsProvider, NamedStreamsProvider.class);		
+		for (String streamName : parameters.getSharedStreamNames()) {
+			nsp.getSharedStream(streamName);			
+		}	
 	}
 	
 	/**
@@ -388,6 +407,7 @@ implements Runnable, MultiThreadedLongProcess {
 		Bo2Session.setProvider(provider);
 		provider.getTransactionManager().begin();
 		pritHeaders();
+		openSharedStreams();
 		Query query = parameters.getQuery();
 		Modification<Object> setCriteria = parameters.getQueryParametersSetter();
 		if (setCriteria!=null) {
@@ -410,6 +430,10 @@ implements Runnable, MultiThreadedLongProcess {
 	 * The manager for the streams is the default streams manager of the Bo2
 	 * deployment.
 	 * 
+	 * TODO: This is not executed. It will be refactored.
+	 * TODO: The input streams use default platform Charset. Do we want to include
+	 *       this in the BatchProcess metadata?
+	 * 
 	 * @throws InitializationException
 	 * @throws DataException
 	 */
@@ -422,14 +446,15 @@ implements Runnable, MultiThreadedLongProcess {
 		
 		for(Map.Entry<String, String> entry : parameters.getNamedInputFiles().entrySet()) {
 			try {
-				NamedStream<?> ns = NamedStreamFactory.input(new File(entry.getValue()), entry.getKey(), 30);
+				NamedStream<?> ns = NamedStreamFactory.input(new File(entry.getValue()), entry.getKey(), 30, Bo2UtilsEnvironment.getDefaultTextCharset());
 				nsp.registerSharedStream(ns);
 			}catch (FileNotFoundException fnfe) {
 				throw new DataException(fnfe);
 			}
 		}
-		
 	}
+	
+	
 	
 	/**
 	 * Creates the initial QueueProcessors.
@@ -569,7 +594,7 @@ implements Runnable, MultiThreadedLongProcess {
 			endTime = new Date();
 			e.printStackTrace();
 			String msg = ExceptionUtils.getThrowableStackTrace(e);			
-			exceptionMessage = msg;			
+			exceptionMessage = msg;	
 		} 
 	}
 	
@@ -618,7 +643,14 @@ implements Runnable, MultiThreadedLongProcess {
 	public boolean isFinished() {
 		List<LongProcess> subProcesses = getSubProcesses(); 
 		if (subProcesses==null || subProcesses.isEmpty()) {
-			return false;
+			/*
+			 * If we have no queues, then 
+			 *    a. if we have an exception message, it means ex exception occured
+			 *       during initialization, or pre-process, so finished = true.
+			 *    b. if we don't have an exception message, then processing didn't
+			 *       start yet, so finished=false.
+			 */
+			return (exceptionMessage!=null);
 		}		
 		for (LongProcess thread: subProcesses) {
 			if (!thread.isFinished()) {

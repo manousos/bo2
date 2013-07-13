@@ -31,7 +31,7 @@ public class MoneyFormatter implements Formatter<Money> {
 	/**
 	 * formatter for the amount.
 	 */
-	private static final DecimalFormatter<BigDecimal> df = new DecimalFormatter<BigDecimal>(2, ',', null);
+	private static final DecimalFormatter<BigDecimal> df = new DecimalFormatter<BigDecimal>(2);
 	
 	public String format(Money t) {		
 		return df.format(t.getAmount());

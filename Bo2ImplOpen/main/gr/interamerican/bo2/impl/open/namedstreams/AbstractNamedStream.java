@@ -12,6 +12,12 @@
  ******************************************************************************/
 package gr.interamerican.bo2.impl.open.namedstreams;
 
+import gr.interamerican.bo2.utils.Bo2UtilsEnvironment;
+import gr.interamerican.bo2.utils.Utils;
+
+import java.nio.charset.Charset;
+
+
 
 
 /**
@@ -45,17 +51,18 @@ implements NamedStream<T> {
 	/**
      * Type of stream resource. 
      */
-     StreamResource resourceType;
+    StreamResource resourceType;
      
-     /**
-      * Resource under the stream. 
-      */
-      Object resource;
-     
-     
-     
-     
-    
+	/**
+	 * Resource under the stream. 
+	 */
+    Object resource;
+
+    /**
+     * Encoding used by this stream.
+     */
+    Charset encoding;
+
     /**
  	 * Creates a new AbstractNamedStream object. 
  	 *
@@ -65,10 +72,11 @@ implements NamedStream<T> {
      * @param name 
      * @param recordLength 
      * @param resource 
+     * @param encoding 
  	 */
  	public AbstractNamedStream (
  			StreamType streamType, StreamResource resourceType, 
- 			T stream, String name, int recordLength, Object resource) {
+ 			T stream, String name, int recordLength, Object resource, Charset encoding) {
  		super();
  		this.name = name;
  		this.recordLength = recordLength;
@@ -76,6 +84,7 @@ implements NamedStream<T> {
  		this.resourceType = resourceType; 		
  		this.stream = stream;
  		this.resource = resource;
+ 		this.encoding = Utils.notNull(encoding, Bo2UtilsEnvironment.getDefaultTextCharset());
  		validate();
  	}
  	
@@ -112,4 +121,9 @@ implements NamedStream<T> {
 	public Object getResource() {
 		return resource;
 	}
+	
+	public Charset getEncoding() {
+		return encoding;
+	}
+	
 }

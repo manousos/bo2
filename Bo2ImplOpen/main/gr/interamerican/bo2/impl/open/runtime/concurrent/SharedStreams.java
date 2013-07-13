@@ -3,6 +3,7 @@ package gr.interamerican.bo2.impl.open.runtime.concurrent;
 import gr.interamerican.bo2.arch.Provider;
 import gr.interamerican.bo2.arch.exceptions.InitializationException;
 import gr.interamerican.bo2.impl.open.namedstreams.NamedPrintStream;
+import gr.interamerican.bo2.impl.open.namedstreams.NamedStream;
 import gr.interamerican.bo2.impl.open.namedstreams.NamedStreamsProvider;
 
 /**
@@ -15,7 +16,6 @@ class SharedStreams {
 	 * streams used a log files by multithreaded processes.
 	 */
 	private static final String LOGFILES_PROVIDER_NAME = "LOGFILES"; //$NON-NLS-1$
-	
 	
 	/**
 	 * Postfix of successes stream name.
@@ -145,6 +145,23 @@ class SharedStreams {
 		}
 	}
 	
+	/**
+	 * Gets the stream with the specified name from the specified provider.
+	 * 
+	 * @param p
+	 *        Provider.
+	 * @param streamName
+	 *        stream name.
+	 *        
+	 * @return Returns the stream.
+	 * 
+	 * @throws InitializationException
+	 */
+	public static NamedStream<?> sharedStream(Provider p, String streamName) 
+	throws InitializationException {		
+		NamedStreamsProvider nsp = p.getResource(LOGFILES_PROVIDER_NAME, NamedStreamsProvider.class);
+		return nsp.getSharedStream(streamName);
+	}
 
 
 	

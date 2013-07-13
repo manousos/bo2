@@ -17,7 +17,6 @@ import gr.interamerican.bo2.arch.PersistenceWorker;
 import gr.interamerican.bo2.arch.exceptions.DataException;
 import gr.interamerican.bo2.impl.open.hibernate.GenericHibernatePersistenceWorker;
 import gr.interamerican.bo2.impl.open.workers.AbstractOperation;
-import gr.interamerican.bo2.impl.open.workers.AbstractResourceConsumer;
 import gr.interamerican.bo2.samples.archutil.po.User;
 import gr.interamerican.bo2.samples.implopen.pw.UserPwImpl;
 import gr.interamerican.bo2.utils.annotations.Child;
@@ -46,7 +45,6 @@ extends AbstractOperation {
 	public HibSaveJdbcDeleteJdbcStoreHibRead(int id) {
 		super();
 		this.id = id;
-		((AbstractResourceConsumer)hibPw).setManagerName("LOCALDB");
 	}
 
 

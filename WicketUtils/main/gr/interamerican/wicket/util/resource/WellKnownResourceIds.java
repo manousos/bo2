@@ -70,6 +70,11 @@ public class WellKnownResourceIds {
 	public static final String MSP_SELECT_BTN_LABEL = "msp_selectButtonLabel";
 	
 	/**
+	 * Second select button label of {@link MultipleSelectionsPanel}.
+	 */
+	public static final String MSP_2ND_SELECT_BTN_LABEL = "msp_2ndSelectButtonLabel";
+	
+	/**
 	 * Label of the select/deselect all checkbox of {@link MultipleSelectionsPanel}.
 	 */
 	public static final String MSP_CHECKGROUP_SELECTOR_LABEL = "msp_checkGroupSelectorLabel";
