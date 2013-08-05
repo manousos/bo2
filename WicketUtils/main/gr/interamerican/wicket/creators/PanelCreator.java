@@ -17,11 +17,10 @@ import gr.interamerican.wicket.markup.html.panel.service.ServicePanel;
 
 import java.io.Serializable;
 
-import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.markup.html.panel.Panel;
 
 /**
- * Class that creates a {@link DataTable}.
+ * Class that creates a {@link Panel}.
  * 
  * @param <B> 
  *        Type of bean presented in the panel.
