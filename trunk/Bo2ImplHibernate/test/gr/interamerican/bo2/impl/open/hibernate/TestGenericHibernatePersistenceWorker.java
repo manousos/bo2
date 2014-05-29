@@ -13,7 +13,7 @@
 package gr.interamerican.bo2.impl.open.hibernate;
 
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import gr.interamerican.bo2.arch.PersistenceWorker;
 import gr.interamerican.bo2.arch.Provider;
 import gr.interamerican.bo2.arch.exceptions.DataException;
@@ -30,9 +30,9 @@ import gr.interamerican.bo2.test.def.posamples.Invoice;
 import gr.interamerican.bo2.test.utils.UtilityForBo2Test;
 import gr.interamerican.bo2.utils.meta.exceptions.ValidationException;
 import gr.interamerican.bo2.utils.meta.validators.Validator;
-import junit.framework.Assert;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -148,7 +148,7 @@ public class TestGenericHibernatePersistenceWorker {
 	 */
 	@Test
 	public void testGetDetachStrategy() {
-		assertEquals(HibernateDetachStrategy.INSTANCE, userPw.getDetachStrategy());
+		assertTrue(userPw.getDetachStrategy() instanceof HibernateDetachStrategy);
 	}
 	
 	/**

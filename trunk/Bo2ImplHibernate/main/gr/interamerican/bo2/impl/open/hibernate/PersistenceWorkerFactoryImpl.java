@@ -15,7 +15,7 @@ package gr.interamerican.bo2.impl.open.hibernate;
 import gr.interamerican.bo2.arch.PersistenceWorker;
 import gr.interamerican.bo2.arch.PersistenceWorkerFactory;
 import gr.interamerican.bo2.arch.PersistentObject;
-import gr.interamerican.bo2.utils.meta.Validators;
+import gr.interamerican.bo2.utils.meta.ValidatorRegistry;
 import gr.interamerican.bo2.utils.meta.validators.Validator;
 
 import java.util.Properties;
@@ -31,7 +31,7 @@ import java.util.Properties;
  * type, provided that the property <i>Hibernate</i> is set to true
  * in the deployment.properties file. <br/>
  * In the case that a GenericHibernatePersistenceWorker is created, the
- * factory uses the utility class {@link Validators} searching for a
+ * factory uses the utility class {@link ValidatorRegistry} searching for a
  * registered validator of the persistent class. If there is a validator
  * registered for the persistent class, then it is passed as a parameter
  * to the constructor of the GenericHibernatePersistenceWorker.
@@ -55,7 +55,7 @@ extends gr.interamerican.bo2.impl.open.creation.PersistenceWorkerFactoryImpl {
 	PersistenceWorker<M> createPw(Class<M> poClass) {
 		PersistenceWorker<M> pw = createMappedPw(poClass);
 		if (pw==null) {
-			Validator<M> validator = Validators.getValidator(poClass);			
+			Validator<M> validator = ValidatorRegistry.getValidator(poClass);			
 			pw = GenericHibernatePersistenceWorker.newInstance(poClass, validator);
 			@SuppressWarnings("unchecked") Class<? extends PersistenceWorker<?>> pwType = 
 				(Class<? extends PersistenceWorker<?>>) GenericHibernatePersistenceWorker.class;

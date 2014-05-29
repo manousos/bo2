@@ -152,7 +152,7 @@ public class SimpleFilesPanel extends ServicePanel {
 		Label label = new Label(LABEL_WICKET_ID, fd.getName());
 		if(!StringUtils.isNullOrBlank(fd.getDescription())) {
 			IModel<String> model = new Model<String>(fd.getDescription());
-			AttributeModifier am = new AttributeModifier("title", true, model); //$NON-NLS-1$
+			AttributeModifier am = new AttributeModifier("title", model); //$NON-NLS-1$
 			label.add(am);
 		}
 		return label;
@@ -165,6 +165,11 @@ public class SimpleFilesPanel extends ServicePanel {
 	 */
 	private class BeforeSubmitAction extends AbstractCallbackAction {
 		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public void callBack(AjaxRequestTarget target) {
 			callback();
 		}

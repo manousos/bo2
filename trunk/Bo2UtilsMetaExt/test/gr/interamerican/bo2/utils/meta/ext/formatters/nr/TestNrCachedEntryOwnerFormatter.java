@@ -16,8 +16,8 @@ import static org.junit.Assert.assertEquals;
 import gr.interamerican.bo2.arch.ext.TranslatableEntryOwner;
 import gr.interamerican.bo2.samples.utils.meta.ext.ObjectType;
 import gr.interamerican.bo2.utils.meta.formatters.FormatterResolver;
-import junit.framework.Assert;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 /**

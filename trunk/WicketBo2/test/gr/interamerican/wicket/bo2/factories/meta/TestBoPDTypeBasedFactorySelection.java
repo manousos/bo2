@@ -12,8 +12,7 @@
  ******************************************************************************/
 package gr.interamerican.wicket.bo2.factories.meta;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 /**

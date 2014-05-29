@@ -25,6 +25,8 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses(
 	{			
 		TestThreadUtils.class,
+		TestSumBd.class,
+		TestCounter.class,
 	}
 )
 public class TestSuiteBo2UtilsConcurrent { 

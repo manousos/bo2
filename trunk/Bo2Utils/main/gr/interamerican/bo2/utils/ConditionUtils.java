@@ -28,46 +28,49 @@ public class ConditionUtils {
 	 *
 	 */
 	private ConditionUtils() { /* empty */ }
-	
-	
+
 	/**
 	 * Puts all elements of a collection that fill a specified condition to
 	 * another collection.
 	 * 
 	 * @param superSet
-	 *        Collection with all elements being checked.
+	 *            Collection with all elements being checked.
 	 * @param subSet
-	 *        Collection where the elements are put that fill the condition.
+	 *            Collection where the elements are put that fill the condition.
 	 * @param condition
-	 *        Condition.
+	 *            Condition.
+	 * @param <S>
+	 *            Type of element that the condition validates
 	 * @param <T>
-	 *        Type of elements in the collections.
+	 *            Type of elements in the collections (must extend <S>)
 	 */
-	public static <T> void fillSubset(Collection<T> superSet, Collection<T> subSet, Condition<T> condition) {		
+	public static <S, T extends S> void fillSubset(Collection<T> superSet, Collection<T> subSet, Condition<S> condition) {
 		for (T t : superSet) {
 			if (condition.check(t)) {
 				subSet.add(t);
 			}
 		}
 	}
-	
+
 	/**
-	 * Gets a list with all elements of a collection that fill a specified condition.
+	 * Gets a list with all elements of a collection that fill a specified
+	 * condition.
 	 * 
 	 * @param superSet
-	 *        Collection with all elements being checked.
+	 *            Collection with all elements being checked.
 	 * @param condition
-	 *        Condition.
+	 *            Condition.
+	 * @param <S>
+	 *            Type of element that the condition validates
 	 * @param <T>
-	 *        Type of elements in the collections.
-	 *        
+	 *            Type of elements in the collections (must extend <S>)
+	 * 
 	 * @return Returns a list with the elements that fulfill the condition.
 	 */
-	public static <T> List<T> getSubset(Collection<T> superSet, Condition<T> condition) {
+	public static <S, T extends S> List<T> getSubset(Collection<T> superSet, Condition<S> condition) {
 		List<T> list = new ArrayList<T>();
 		fillSubset(superSet, list, condition);
 		return list;
 	}
-	
 	
 }

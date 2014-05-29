@@ -17,6 +17,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import gr.interamerican.bo2.arch.DetachStrategy;
 import gr.interamerican.bo2.arch.PersistenceWorker;
 import gr.interamerican.bo2.arch.PersistentObject;
 import gr.interamerican.bo2.arch.exceptions.DataException;
@@ -45,6 +46,11 @@ import gr.interamerican.bo2.utils.DateUtils;
 import gr.interamerican.bo2.utils.Debug;
 import gr.interamerican.bo2.utils.annotations.Child;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Date;
 import java.util.Set;
 
@@ -53,6 +59,7 @@ import org.hibernate.LazyInitializationException;
 import org.hibernate.LockOptions;
 import org.hibernate.ReplicationMode;
 import org.hibernate.Session;
+import org.hibernate.proxy.HibernateProxy;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -759,6 +766,126 @@ public class TestScenarioInvoiceHibernateOperations {
 	}
 	
 	/**
+	 * Tests re-attaching an object graph containing uninitialized HibernateProxy instances
+	 * after serializing and de-serializing it with the standard Java serialization
+	 * mechanism. After re-attaching the proxies are initialized.
+	 * 
+	 * @throws UnexpectedException
+	 * @throws DataException
+	 * @throws LogicException
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
+	 */
+	@Test
+	public void testReattachToSession_deSerializedInstance() 
+	throws UnexpectedException, DataException, LogicException, IOException, ClassNotFoundException {
+		
+		/* first, store the samples - including a Customer */
+		new AbstractBo2RuntimeCmd() {
+			@Override public void work() throws LogicException,
+			DataException, InitializationException, UnexpectedException {
+				customer = factory.sampleCustomer(taxId);
+				customer.setCustomerNo(customerNo);
+				PersistenceWorker<Customer> cpw = openPw(Customer.class);
+				cpw.store(customer);
+				
+				invoice = factory.sampleInvoiceFull(4);
+				invoice.setInvoiceNo(invoiceNo);
+				invoice.getCustomer().setCustomer(customer);
+				PersistenceWorker<Invoice> ipw = openPw(Invoice.class);
+				ipw.store(invoice);
+			}
+		}.execute();
+		
+		new AbstractBo2RuntimeCmd() {
+			@Override
+			public void work() throws LogicException, DataException, InitializationException, UnexpectedException {
+				invoice = Factory.create(Invoice.class);
+				invoice.setInvoiceNo(invoiceNo);
+				invoice = openPw(Invoice.class).read(invoice);
+			}
+		}.execute();
+		Customer c = invoice.getCustomer().getCustomer();
+		Assert.assertTrue(c instanceof HibernateProxy);
+		Assert.assertTrue(((HibernateProxy)c).getHibernateLazyInitializer().isUninitialized());
+		
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(baos);
+        oos.writeObject(invoice);
+        oos.flush();
+        baos.flush();
+        oos.close();
+        baos.close();
+        ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+        ObjectInputStream ois = new ObjectInputStream(bais);
+        invoice = (Invoice) ois.readObject();
+		
+        new AbstractBo2RuntimeCmd() {
+			@Override
+			public void work() throws LogicException, DataException, InitializationException, UnexpectedException {
+				PoUtils.reattach(invoice, getProvider());
+				Assert.assertEquals(taxId, invoice.getCustomer().getCustomer().getTaxId());
+			}
+		}.execute();
+		
+	}
+	
+	/**
+	 * Tests re-attaching an object graph of a deep copied object. Many-to-one associations
+	 * should be reattached for reading.
+	 * 
+	 * @throws UnexpectedException
+	 * @throws DataException
+	 * @throws LogicException
+	 */
+	@Test
+	public void testReattachToSession_deepCopiedInstance() 
+	throws UnexpectedException, DataException, LogicException {
+		
+		/* first, store the samples - including a Customer */
+		new AbstractBo2RuntimeCmd() {
+			@Override public void work() throws LogicException,
+			DataException, InitializationException, UnexpectedException {
+				customer = factory.sampleCustomer(taxId);
+				customer.setCustomerNo(customerNo);
+				PersistenceWorker<Customer> cpw = openPw(Customer.class);
+				cpw.store(customer);
+				
+				invoice = factory.sampleInvoiceFull(4);
+				invoice.setInvoiceNo(invoiceNo);
+				invoice.getCustomer().setCustomer(customer);
+				PersistenceWorker<Invoice> ipw = openPw(Invoice.class);
+				ipw.store(invoice);
+			}
+		}.execute();
+		
+		new AbstractBo2RuntimeCmd() {
+			@Override
+			public void work() throws LogicException, DataException, InitializationException, UnexpectedException {
+				invoice = Factory.create(Invoice.class);
+				invoice.setInvoiceNo(invoiceNo);
+				invoice = openPw(Invoice.class).read(invoice);
+				invoice = PoUtils.deepCopy(invoice);
+			}
+		}.execute();
+		
+		Customer c = invoice.getCustomer().getCustomer();
+		Assert.assertNull(invoice.getLastModified());
+		Assert.assertTrue(HibernateBo2Utils.isTransient(invoice));
+		Assert.assertTrue(c instanceof HibernateProxy);
+		Assert.assertTrue(((HibernateProxy)c).getHibernateLazyInitializer().isUninitialized());
+		
+        new AbstractBo2RuntimeCmd() {
+			@Override
+			public void work() throws LogicException, DataException, InitializationException, UnexpectedException {
+				PoUtils.reattach(invoice, getProvider());
+				Assert.assertEquals(taxId, invoice.getCustomer().getCustomer().getTaxId());
+			}
+		}.execute();
+		
+	}
+	
+	/**
 	 * Tests re-attaching a detached MODIFIED instance.
 	 * 
 	 * <li>transaction1: store
@@ -1102,6 +1229,154 @@ public class TestScenarioInvoiceHibernateOperations {
 		};
 		updateOp.setPo(invoice);
 		Execute.transactional(updateOp);
+		
+	}
+	
+	/**
+	 * Tests that when re-attaching a detached instance transient objects
+	 * on its graph are not attached.
+	 * 
+	 * @throws DataException
+	 * @throws LogicException
+	 * @throws UnexpectedException 
+	 */
+	@Test
+	public void testReattachInvoiceDoesNotAttachTransientChildren() 
+	throws DataException, LogicException, UnexpectedException {
+		
+		/* first, store the samples - including a Customer */
+		new AbstractBo2RuntimeCmd() {
+			@Override public void work() throws LogicException,
+			DataException, InitializationException, UnexpectedException {
+				invoice = factory.sampleInvoiceFull(4);
+				invoice.setInvoiceNo(invoiceNo);
+				PersistenceWorker<Invoice> ipw = openPw(Invoice.class);
+				invoice = ipw.store(invoice);
+				invoice.getLines().size(); //force init persistent collection
+			}
+		}.execute();
+		
+		/* now add an invoiceline and reattach */
+		new AbstractBo2RuntimeCmd() {
+			@Override public void work() throws LogicException,
+			DataException, InitializationException, UnexpectedException {
+				InvoiceLine line = factory.sampleInvoiceLine(5);
+				invoice.getLines().add(line);
+				PoUtils.reattach(invoice, getProvider());
+				Assert.assertNull(line.getLastModified());
+			}
+		}.execute();
+		
+		/* now perform an update */
+		new AbstractBo2RuntimeCmd() {
+			@Override public void work() throws LogicException,
+			DataException, InitializationException, UnexpectedException {
+				/*
+				 * INFAMOUS NONTHREADSAFEACCESS TO SESSION ASSERTION ERROR
+				 * The following line, if uncommented causes the above error.
+				 * The reason is that transient instances are attached and 
+				 * then evicted from the session. When the worker update
+				 * is performed they are attached again. Hibernate then throws
+				 * an AssertionError on flush(), because, this is a fishy
+				 * behavior. There is no reason to reattach before a worker
+				 * update since Bo2 2.0.0061.
+				 */
+//				PoUtils.reattach(invoice, getProvider()); 
+				PersistenceWorker<Invoice> ipw = openPw(Invoice.class);
+				Invoice i = ipw.update(invoice);
+				Assert.assertTrue(i == invoice);
+			}
+		}.execute();
+		
+	}
+	
+	/**
+	 * Tests that when re-attaching a detached instance transient objects
+	 * on its graph are not attached.
+	 * 
+	 * @throws DataException
+	 * @throws LogicException
+	 * @throws UnexpectedException 
+	 */
+	@Test
+	public void testReattachForUpdateInvoiceAttachesTransientChildren() 
+	throws DataException, LogicException, UnexpectedException {
+		
+		/* first, store the samples */
+		new AbstractBo2RuntimeCmd() {
+			@Override public void work() throws LogicException,
+			DataException, InitializationException, UnexpectedException {
+				invoice = factory.sampleInvoiceFull(4);
+				invoice.setInvoiceNo(invoiceNo);
+				PersistenceWorker<Invoice> ipw = openPw(Invoice.class);
+				invoice = ipw.store(invoice);
+				invoice.getLines().size(); //force init persistent collection
+			}
+		}.execute();
+		
+		/* now add an invoiceline and reattach for update */
+		new AbstractBo2RuntimeCmd() {
+			@Override public void work() throws LogicException,
+			DataException, InitializationException, UnexpectedException {
+				InvoiceLine line = factory.sampleInvoiceLine(5);
+				invoice.getLines().add(line);
+				PoUtils.reattachForUpdate(invoice, getProvider());
+				Assert.assertNotNull(line.getLastModified()); //attached
+				
+				/* perform the db update in this UoW */
+				PersistenceWorker<Invoice> ipw = openPw(Invoice.class);
+				Invoice i = ipw.update(invoice);
+				Assert.assertTrue(i == invoice);
+			}
+		}.execute();
+		
+	}
+	
+	/**
+	 * Tests that when re-attaching a detached instance transient objects
+	 * on its graph are not attached.
+	 * 
+	 * @throws DataException
+	 * @throws LogicException
+	 * @throws UnexpectedException 
+	 */
+	@Test
+	public void testDetachAfterReattachForUpdateInvoiceLeavesTransientChildrenDetached() 
+	throws DataException, LogicException, UnexpectedException {
+		
+		/* first, store the samples */
+		new AbstractBo2RuntimeCmd() {
+			@Override public void work() throws LogicException,
+			DataException, InitializationException, UnexpectedException {
+				invoice = factory.sampleInvoiceFull(4);
+				invoice.setInvoiceNo(invoiceNo);
+				PersistenceWorker<Invoice> ipw = openPw(Invoice.class);
+				invoice = ipw.store(invoice);
+				invoice.getLines().size(); //force init persistent collection
+			}
+		}.execute();
+		
+		/* now add an invoiceline with a subline and reattach for update */
+		new AbstractBo2RuntimeCmd() {
+			@Override public void work() throws LogicException,
+			DataException, InitializationException, UnexpectedException {
+				InvoiceLine line = factory.sampleInvoiceLine(5);
+				InvoiceSubLine sLine = factory.sampleInvoiceSubLine(1);
+				line.getSubLines().add(sLine);
+				invoice.getLines().add(line);
+				
+				PoUtils.reattachForUpdate(invoice, getProvider());
+				Assert.assertNotNull(line.getLastModified()); //attached
+				Assert.assertNotNull(sLine.getLastModified()); //attached
+				
+				DetachStrategy ds = PoUtils.getDetachStrategy(invoice);
+				ds.detach(invoice, getProvider());
+				Assert.assertNull(line.getLastModified()); //detached
+				Assert.assertNull(sLine.getLastModified()); //detached
+			}
+		}.execute();
+		
+		
 		
 	}
 	

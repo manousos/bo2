@@ -17,14 +17,18 @@ import gr.interamerican.bo2.arch.ResourceWrapper;
 import gr.interamerican.bo2.arch.TransactionManager;
 import gr.interamerican.bo2.arch.exceptions.CouldNotEnlistException;
 import gr.interamerican.bo2.arch.utils.ext.Bo2Session;
+import gr.interamerican.bo2.impl.open.jdbc.JdbcConnectionProvider;
 import gr.interamerican.bo2.impl.open.jee.jta.JtaTransactionManager;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.naming.NamingException;
 import javax.transaction.SystemException;
 
+import org.enhydra.jdbc.standard.StandardXAConnectionHandle;
 import org.objectweb.jotm.Jotm;
 
 /**
@@ -41,6 +45,15 @@ import org.objectweb.jotm.Jotm;
  * has yet to create more Providers. In this case, the Jotm singleton will stop
  * but it will be replaced, as soon as another Provider gets instantiated by
  * a new instance.
+ * <br/>
+ * XaPool does not close physical pooled JDBC connections when closing
+ * the {@link StandardXAConnectionHandle}. This is not compatible with
+ * the design of Bo2, which does not provide the concept a connection pool.
+ * Bo2 expects the physical connection to close when {@link Connection#close()}
+ * is invoked.
+ * <br/> 
+ * This mismatch is handled here. A collection of pooled connections is maintained 
+ * and the physical connections are closed, if still open, when this TransactionManager closes.
  */
 public class JotmTransactionManager extends JtaTransactionManager  {
 	
@@ -53,6 +66,11 @@ public class JotmTransactionManager extends JtaTransactionManager  {
 	 * All providers (implicitly) accessing the JOTM singleton instance.
 	 */
 	private static Set<Provider> PROVIDERS_ACCESSING_JOTM = new HashSet<Provider>();
+	
+	/**
+	 * A collection of pooled connections opened in the scope of this {@link TransactionManager}.
+	 */
+	private Set<StandardXAConnectionHandle> pooledConnections = new HashSet<StandardXAConnectionHandle>();
 	
 	/**
 	 * Creates a new JotmTransactionManager object.
@@ -90,9 +108,15 @@ public class JotmTransactionManager extends JtaTransactionManager  {
 
 	@Override
 	public void enList(ResourceWrapper resource) throws CouldNotEnlistException {
+		super.enList(resource);
+		if (resource instanceof JdbcConnectionProvider) {
+			JdbcConnectionProvider jdbc = (JdbcConnectionProvider) resource;
+			Connection connection = jdbc.getConnection();
+			if(connection instanceof StandardXAConnectionHandle) {
+				pooledConnections.add((StandardXAConnectionHandle) connection);
+			}
+		}
 		/*
-		 * This method is overridden to add implementation documentation.
-		 * 
 		 * Normally, this is where we should demarcate the transaction boundaries
 		 * for the specific resource (if it is transactional anyway). 
 		 * 
@@ -107,13 +131,35 @@ public class JotmTransactionManager extends JtaTransactionManager  {
 	
 	@Override
 	public void close() {
+		super.close();
 		synchronized (JotmTransactionManager.class) {
+			for(StandardXAConnectionHandle c : pooledConnections) {
+				closePhysicalConnection(c);
+			}
+			pooledConnections.clear();
 			PROVIDERS_ACCESSING_JOTM.remove(Bo2Session.getProvider());
 			if(PROVIDERS_ACCESSING_JOTM.isEmpty()) {
 				JOTM.stop();
 				JOTM = null;
 			}
 		}
+	}
+	
+	/**
+	 * Closes the physical JDBC connections.
+	 * 
+	 * @param c
+	 */
+	void closePhysicalConnection(StandardXAConnectionHandle c) {
+		Connection physical = c.con;
+		try {
+			if(!physical.isClosed()) {
+				physical.close();
+			}
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		
 	}
 	
 	/**

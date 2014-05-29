@@ -12,6 +12,8 @@
  ******************************************************************************/
 package gr.interamerican.bo2.gui.batch;
 
+import gr.interamerican.bo2.utils.CollectionUtils;
+
 import java.util.Properties;
 
 import org.junit.Assert;
@@ -30,5 +32,17 @@ public class TestBatchProcessFrame {
 		Properties model = new Properties();
 		BatchProcessFrame frame = new BatchProcessFrame(model);
 		Assert.assertNotNull(frame.inputPanel);
+	}
+	
+	/**
+	 * Main method.
+	 * 
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		String path = "/gr/interamerican/rsrc/batchprocess/PrintStrings.properties"; //$NON-NLS-1$
+		Properties p = CollectionUtils.readProperties(path);
+		BatchProcessFrame frame = new BatchProcessFrame(p);
+		frame.setVisible(true);
 	}
 }

@@ -45,8 +45,6 @@ implements PersistenceWorker<P> {
 	 *        Persistent class. 
 	 * @param validator 
 	 *        Validator.
-	 * @param mode 
-	 *        Refresh mode.         
 	 * @param <E>
 	 *        Persistent class.
 	 * 
@@ -69,8 +67,6 @@ implements PersistenceWorker<P> {
 	 *        Persistent class. 
 	 * @param <E>
 	 *        Persistent class.
-	 * @param mode 
-	 *
 	 *        
 	 * @return Returns a new GenericHibernatePersistenceWorker.
 	 */	
@@ -122,13 +118,20 @@ implements PersistenceWorker<P> {
 	}
 	
 	public DetachStrategy getDetachStrategy() {		
-		return HibernateDetachStrategy.INSTANCE;
+		return new HibernateDetachStrategy();
 	}
 	
 	@Override
 	public P read(P o) 
 	throws DataException, PoNotFoundException {		
 		P po = super.read(o);
+		PoUtils.setDetachStrategy(po, getDetachStrategy());
+		return po;
+	}
+	
+	@Override
+	public P store(P o) throws DataException, PoNotFoundException {
+		P po = super.store(o);
 		PoUtils.setDetachStrategy(po, getDetachStrategy());
 		return po;
 	}

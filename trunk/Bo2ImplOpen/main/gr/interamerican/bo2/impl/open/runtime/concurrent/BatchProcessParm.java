@@ -12,12 +12,13 @@
  ******************************************************************************/
 package gr.interamerican.bo2.impl.open.runtime.concurrent;
 
-import java.util.Map;
-
 import gr.interamerican.bo2.arch.EntitiesQuery;
 import gr.interamerican.bo2.arch.Operation;
+import gr.interamerican.bo2.arch.exceptions.TransactionManagerException;
 import gr.interamerican.bo2.utils.adapters.Modification;
 import gr.interamerican.bo2.utils.meta.formatters.Formatter;
+
+import java.util.Map;
 
 /**
  * Parameters for the creation of a {@link BatchProcess}.
@@ -356,8 +357,21 @@ public interface BatchProcessParm<T> {
 	 */
 	void setSharedStreamNames(String[] sharedStreamNames);
 	
+	/**
+	 * Indicates if the batch process re-attempts when a 
+	 * {@link TransactionManagerException} is caught.
+	 * 
+	 * @return Returns true if the batch process re-attempts when a 
+	 *         {@link TransactionManagerException} is caught.
+	 */
+	Boolean getReattemptOnTmex();
 	
-	
-
+	/**
+	 * Specifies if the batch process re-attempts when a 
+	 * {@link TransactionManagerException} is caught.
+	 *  
+	 * @param reattemptOnTmex
+	 */
+	void setReattemptOnTmex(Boolean reattemptOnTmex);
 
 }

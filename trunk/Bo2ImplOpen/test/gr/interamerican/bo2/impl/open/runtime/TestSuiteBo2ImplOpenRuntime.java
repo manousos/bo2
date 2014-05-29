@@ -20,7 +20,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 
 /**
- * Test suite for package <code>gr.interamerican.bo2.impl.open.hibernate</code>.
+ * Test suite for package <code>gr.interamerican.bo2.impl.open.runtime</code>.
  *
  */
 @RunWith(Suite.class)
@@ -33,6 +33,7 @@ import org.junit.runners.Suite.SuiteClasses;
 		TestAbstractBo2RuntimeCmd.class,
 		TestUnitTestCmd.class,
 		TestCrudCmd.class,
+		TestEntitiesQueryCmd.class,
 		TestSuiteBo2ImplOpenRuntimeConcurrent.class,
 	}
 )

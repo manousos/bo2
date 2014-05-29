@@ -14,8 +14,7 @@ package gr.interamerican.bo2.utils.concurrent;
 
 import java.util.Date;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 /**

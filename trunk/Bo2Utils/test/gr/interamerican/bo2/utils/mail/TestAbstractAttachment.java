@@ -15,8 +15,7 @@ package gr.interamerican.bo2.utils.mail;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeBodyPart;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 /**

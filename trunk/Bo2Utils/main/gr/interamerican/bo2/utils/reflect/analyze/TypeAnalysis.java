@@ -38,6 +38,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Analysis of a type.
@@ -47,8 +48,8 @@ public class TypeAnalysis {
 	/**
 	 * Cached analysis.
 	 */
-	private static final Map<Class<?>, TypeAnalysis> cache = 
-		new HashMap<Class<?>, TypeAnalysis>();
+	private static final ConcurrentHashMap<Class<?>, TypeAnalysis> cache = 
+		new ConcurrentHashMap<Class<?>, TypeAnalysis>();
 	
 	/**
 	 * Gets an interface analysis from the cache.
@@ -60,9 +61,10 @@ public class TypeAnalysis {
 	 */
 	public static TypeAnalysis analyze(Class<?> type) {
 		TypeAnalysis analysis = cache.get(type);
+		
 		if (analysis==null) {
-			analysis = new TypeAnalysis(type);
-			cache.put(type, analysis);
+           	analysis = new TypeAnalysis(type);
+           	cache.putIfAbsent(type, analysis);
 		}
 		return analysis;
 	}
@@ -191,9 +193,9 @@ public class TypeAnalysis {
 	Array propertyKey(String name, Type genericType, Class<?> type) {		
 		if (genericType instanceof TypeVariable) {
 			return new Array(name, Object.class);
-		} else {
-			return new Array(name, type);
-		}		
+		}
+		
+		return new Array(name, type);
 	}
 	
 	/**

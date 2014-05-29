@@ -19,8 +19,7 @@ import gr.interamerican.bo2.samples.iempty.IEmpty4;
 
 import java.io.Serializable;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 /**

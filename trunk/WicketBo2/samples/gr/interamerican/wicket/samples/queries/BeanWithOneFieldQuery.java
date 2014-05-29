@@ -34,8 +34,6 @@ implements EntitiesQuery<BeanWith1Field>, CriteriaDependent<BeanWith1Field> {
 
 	/**
 	 * Creates a new BeanQueryImpl object. 
-	 *
-	 * @param array
 	 */
 	public BeanWithOneFieldQuery() {
 		super(new BeanWith1Field[]{new BeanWith1Field(1L)});

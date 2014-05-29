@@ -12,8 +12,7 @@
  ******************************************************************************/
 package gr.interamerican.bo2.utils.meta.descriptors;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 /**

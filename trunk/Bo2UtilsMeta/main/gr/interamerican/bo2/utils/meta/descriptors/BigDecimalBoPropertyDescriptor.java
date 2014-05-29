@@ -27,6 +27,11 @@ public class BigDecimalBoPropertyDescriptor
 extends AbstractNumberBoPropertyDescriptor<BigDecimal> {
 		
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
 	 * Creates a new BigDecimalBoPropertyDescriptor object. 
 	 */
 	public BigDecimalBoPropertyDescriptor() {
@@ -44,6 +49,14 @@ extends AbstractNumberBoPropertyDescriptor<BigDecimal> {
 			return new NrDecimalFormatter<BigDecimal>(getLengthOfDecimalPart());
 		}
 		return new DecimalFormatter<BigDecimal>(getLengthOfDecimalPart());
+	}
+	
+	@Override
+	public BigDecimal valueOf(Number value) {
+		if (value instanceof BigDecimal) {
+			return (BigDecimal)value;
+		}
+		return new BigDecimal(value.doubleValue());
 	}
 	
 	

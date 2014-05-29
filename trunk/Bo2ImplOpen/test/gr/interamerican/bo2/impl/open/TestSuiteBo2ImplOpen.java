@@ -17,6 +17,7 @@ import gr.interamerican.bo2.impl.open.beans.TestSuiteBo2ImplOpenBeans;
 import gr.interamerican.bo2.impl.open.creation.TestSuiteBo2ImplOpenCreation;
 import gr.interamerican.bo2.impl.open.doc.TestSuiteBo2ImplOpenDoc;
 import gr.interamerican.bo2.impl.open.jdbc.TestSuiteBo2ImplOpenJdbc;
+import gr.interamerican.bo2.impl.open.modifications.TestSuiteBo2ImplOpenModifications;
 import gr.interamerican.bo2.impl.open.namedstreams.TestSuiteBo2ImplOpenNamedStreams;
 import gr.interamerican.bo2.impl.open.operations.TestSuiteBo2ImplOpenOperations;
 import gr.interamerican.bo2.impl.open.parse.TestSuiteBo2ImplOpenParse;
@@ -57,6 +58,7 @@ import org.junit.runners.Suite.SuiteClasses;
 		TestSuiteBo2ImplOpenParse.class,
 		TestSuiteBo2ImplOpenDoc.class,
 		TestSuiteBo2ImplOpenTransformations.class,
+		TestSuiteBo2ImplOpenModifications.class,
 		
 	}
 )

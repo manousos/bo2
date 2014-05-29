@@ -15,6 +15,8 @@ package gr.interamerican.bo2.impl.open.namedstreams;
 import gr.interamerican.bo2.arch.records.Record;
 import gr.interamerican.bo2.impl.open.records.CsvRecord;
 
+import java.nio.charset.Charset;
+
 /**
  * NamedStreamBasicQuery that fetches CSV records.
  */
@@ -47,8 +49,10 @@ extends NamedStreamBasicQuery {
 	}
 
 	@Override
-	protected Record emptyRecord() {
-		return new CsvRecord(columnCount, separator);
+	protected Record emptyRecord(Charset charset) {
+		CsvRecord csvRecord = new CsvRecord(columnCount, separator);
+		csvRecord.setCharset(charset);
+		return csvRecord;
 	}
 
 }

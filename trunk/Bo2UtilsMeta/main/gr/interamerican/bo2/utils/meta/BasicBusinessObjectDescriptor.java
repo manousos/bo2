@@ -12,6 +12,7 @@
  ******************************************************************************/
 package gr.interamerican.bo2.utils.meta;
 
+import gr.interamerican.bo2.utils.SelectionUtils;
 import gr.interamerican.bo2.utils.meta.descriptors.BoPropertyDescriptor;
 import gr.interamerican.bo2.utils.meta.exceptions.MultipleValidationsException;
 import gr.interamerican.bo2.utils.meta.exceptions.ValidationException;
@@ -34,6 +35,10 @@ import java.util.Set;
  */
 public class BasicBusinessObjectDescriptor<T> implements BusinessObjectDescriptor<T> {
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
 	 * label.
 	 */
 	private String label;
@@ -46,11 +51,6 @@ public class BasicBusinessObjectDescriptor<T> implements BusinessObjectDescripto
 	 * Expressions.
 	 */
 	private Set<BusinessObjectValidationExpression> expressions = new HashSet<BusinessObjectValidationExpression>();
-	
-	/**
-	 * mediator gets and sets property values to and from beans.
-	 */
-	private Mediator mediator = Mediator.getInstance();
 	
 	/**
 	 * Descriptors of the bean's properties.
@@ -67,16 +67,16 @@ public class BasicBusinessObjectDescriptor<T> implements BusinessObjectDescripto
 	}
 
 	public Map<BoPropertyDescriptor<?>, Object> get(T object) {		
-		return mediator.getValues(this, object);
+		return Mediator.getInstance().getValues(this, object);
 	}
 	
 	public void set(T object, Map<BoPropertyDescriptor<?>, Object> values)
 	throws MultipleValidationsException {
-		mediator.setValues(values, object);		
+		Mediator.getInstance().setValues(values, object);		
 	}
 	
 	public void validate(T bean) throws MultipleValidationsException {
-		mediator.validate(this, bean);
+		Mediator.getInstance().validate(this, bean);
 		/*
 		 * If no exception was thrown, we can evaluate against
 		 * any T-wide expressions that cover checks that relate
@@ -132,12 +132,35 @@ public class BasicBusinessObjectDescriptor<T> implements BusinessObjectDescripto
 	 * @return Map<String, Object>
 	 */
 	private Map<String, Object> getExpressionContext(T bean) {
-		Map<BoPropertyDescriptor<?>, Object> map = mediator.getValues(this, bean);
+		Map<BoPropertyDescriptor<?>, Object> map = Mediator.getInstance().getValues(this, bean);
 		Map<String, Object> context = new HashMap<String, Object>();
 		for(Map.Entry<BoPropertyDescriptor<?>, Object> entry : map.entrySet()) {
 			context.put(entry.getKey().getName(), entry.getValue());
 		}
 		return context;
+	}
+	
+	/**
+	 * @param descriptorName
+	 * 
+	 * @return Returns the BoPropertyDescriptor of this {@link BusinessObjectDescriptor}
+	 *         with the specified name. 
+	 */
+	public BoPropertyDescriptor<?> getDescriptorByName(String descriptorName) {
+		for(BoPropertyDescriptor<?> bpd : getPropertyDescriptors()) {
+			if(descriptorName.equals(bpd.getName())) {
+				return bpd;
+			}
+		}
+		return null;
+	}
+
+	public BoPropertyDescriptor<?> whoAffectsMe(BoPropertyDescriptor<?> affected) {
+		if(!getPropertyDescriptors().contains(affected)) {
+			throw new RuntimeException(affected.getFullyQualifiedName() + " does not belong to " + getName()); //$NON-NLS-1$
+		}
+		BoPropertyDescriptor<?> result = SelectionUtils.selectFirstByProperty("affected", affected.getName(), getPropertyDescriptors(), BoPropertyDescriptor.class); //$NON-NLS-1$
+		return result;
 	}
 
 }

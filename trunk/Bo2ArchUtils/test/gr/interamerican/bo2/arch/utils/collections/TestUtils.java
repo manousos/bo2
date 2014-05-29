@@ -12,9 +12,9 @@
  ******************************************************************************/
 package gr.interamerican.bo2.arch.utils.collections;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import gr.interamerican.bo2.arch.PersistentObject;
 import gr.interamerican.bo2.arch.utils.beans.CodifiedNamedImpl;
 

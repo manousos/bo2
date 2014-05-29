@@ -33,6 +33,7 @@ import org.junit.runners.Suite.SuiteClasses;
 		TestGetPoKey.class,
 		TestPoCache.class,
 		TestPoFetcher.class,
+		TestChildAdder.class,
 	}
 )
 public class TestSuiteBo2ImplOpenPo {

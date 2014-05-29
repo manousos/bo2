@@ -1,8 +1,0 @@
-gr.interamerican.bo2.utils.meta.ext
-gr.interamerican.bo2.utils.meta.ext.descriptors
-gr.interamerican.bo2.utils.meta.ext.factories
-gr.interamerican.bo2.utils.meta.ext.formatters
-gr.interamerican.bo2.utils.meta.ext.formatters.nf
-gr.interamerican.bo2.utils.meta.ext.formatters.nr
-gr.interamerican.bo2.utils.meta.ext.parsers
-gr.interamerican.bo2.utils.meta.ext.validators

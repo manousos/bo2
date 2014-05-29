@@ -13,31 +13,30 @@
 package gr.interamerican.bo2.utils.meta.ext.descriptors;
 
 import static org.junit.Assert.assertEquals;
-import gr.interamerican.bo2.arch.ext.Cache;
 import gr.interamerican.bo2.arch.ext.TranslatableEntryOwner;
-import gr.interamerican.bo2.arch.utils.beans.CacheImpl;
 import gr.interamerican.bo2.samples.utils.meta.ext.EnumElement;
 import gr.interamerican.bo2.samples.utils.meta.ext.ObjectType;
 import gr.interamerican.bo2.utils.StringConstants;
 import gr.interamerican.bo2.utils.meta.exceptions.ParseException;
+import gr.interamerican.bo2.utils.meta.ext.AbstractCacheRelatedTest;
 import gr.interamerican.bo2.utils.meta.formatters.Formatter;
 import gr.interamerican.bo2.utils.meta.formatters.ObjectFormatter;
 import gr.interamerican.bo2.utils.meta.parsers.LongParser;
 import gr.interamerican.bo2.utils.meta.parsers.Parser;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
  * Unit test for {@link PalleteCachedEntriesOwnersBoPropertyDescriptor}.
  */
-public class TestPalleteCachedEntriesOwnersBoPropertyDescriptor {
+public class TestPalleteCachedEntriesOwnersBoPropertyDescriptor extends AbstractCacheRelatedTest {
 	/**
 	 * TYPE
 	 */
@@ -60,11 +59,6 @@ public class TestPalleteCachedEntriesOwnersBoPropertyDescriptor {
 	private static final Long CODE_3 = 3L;
 	
 	/**
-	 * cache
-	 */
-	static final Cache<Long> cache = new CacheImpl<Long>();
-	
-	/**
 	 * codesParser
 	 */
 	static final Parser<Long> codesParser = new LongParser();
@@ -78,7 +72,7 @@ public class TestPalleteCachedEntriesOwnersBoPropertyDescriptor {
 	 * MultipleCachedEntriesBoPropertyDescriptor
 	 */
 	PalleteCachedEntriesOwnersBoPropertyDescriptor<ObjectType, Long> descriptor = 
-		new PalleteCachedEntriesOwnersBoPropertyDescriptor<ObjectType, Long>(TYPE,SUBTYPE,cache,codesParser, formatter);
+		new PalleteCachedEntriesOwnersBoPropertyDescriptor<ObjectType, Long>(TYPE,SUBTYPE,TEST_CACHE_NAME,codesParser, formatter);
 
 	
 	/**
@@ -89,18 +83,17 @@ public class TestPalleteCachedEntriesOwnersBoPropertyDescriptor {
 		EnumElement enumElement = new EnumElement(TYPE, ObjectType.OBJECT1);
 		enumElement.setCode(CODE_1);
 		enumElement.setSubTypeId(SUBTYPE);
-		cache.put(enumElement);
+		cache().put(enumElement);
 		
 		EnumElement enumElement2 = new EnumElement(TYPE, ObjectType.OBJECT2);
 		enumElement2.setCode(CODE_2);
 		enumElement2.setSubTypeId(SUBTYPE);
-		cache.put(enumElement2);
+		cache().put(enumElement2);
 		
 		EnumElement enumElement3 = new EnumElement(TYPE, ObjectType.OBJECT3);
 		enumElement3.setCode(CODE_3);
 		enumElement3.setSubTypeId(SUBTYPE);
-		cache.put(enumElement3);
-		
+		cache().put(enumElement3);
 	}
 	
 	/**
@@ -110,8 +103,7 @@ public class TestPalleteCachedEntriesOwnersBoPropertyDescriptor {
 	@Test
 	public void testParse() throws ParseException{	
 		String codes = createCodes();
-		
-		List<ObjectType> values = descriptor.parse(codes); 
+		Collection<ObjectType> values = descriptor.parse(codes); 
 		assertEquals(3, values.size());
 	}
 

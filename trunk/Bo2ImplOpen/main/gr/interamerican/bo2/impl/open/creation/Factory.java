@@ -28,8 +28,6 @@ import gr.interamerican.bo2.utils.reflect.beans.VariableDefinition;
 
 import java.util.Properties;
 
-import javassist.ClassClassPath;
-
 /**
  * Utility class that serves as a facade hiding the default object factory.
  */
@@ -56,8 +54,13 @@ public class Factory {
 		} catch (RuntimeException rtex) {
 			throw new ExceptionInInitializerError(rtex);
 		}
-		Bo2Creation.getBo2ClassPool().appendClassPath(new ClassClassPath(Factory.class));
+		Bo2Creation.appendClassPath(Factory.class);
 	}	
+	
+	/**
+	 * Hidden constructor of a utility class.
+	 */
+	private Factory() {/* empty */}
 
 	/**
 	 * Gets the current factory.
@@ -140,6 +143,65 @@ public class Factory {
 	}
 	
 	/**
+	 * Registers a fixture that the underlying {@link ObjectFactory} will use
+	 * when the application requires the creation of an object instance
+	 * for the supplied <code>declarationType</code>
+	 * <br/>
+	 * The normal process for object creation will not be used if a
+	 * fixture has been set. 
+	 * <br/>
+	 * This facility is meant to allow developers to specify mock instances
+	 * to be created for a declarationType in certain unit testing scenarions
+	 * where the actual implementation is not available in the classpath.
+	 * <br/>
+	 * The fixtures concern only invocations to {@link #create(Class)}.
+	 * 
+	 * @param declarationType
+	 *         Declaration class
+	 * @param fixture
+	 *         Instance to be returned upon a request for a declarationType
+	 *         object creation
+	 */
+	public static <M> void registerFixture(Class<M> declarationType, M fixture) {
+		currentFactory.registerFixture(declarationType, fixture);
+	}
+	
+	/**
+	 * Registers a fixture that the underlying {@link ObjectFactory} will use
+	 * when the application requires the creation of an object instance
+	 * for the supplied <code>declarationType</code>
+	 * <br/>
+	 * The normal process for object creation will not be used if a
+	 * fixture has been set. 
+	 * <br/>
+	 * This facility is meant to allow developers to specify ObjectFactory 
+	 * instances that will be used for the instantiation of a declarationType 
+	 * in certain unit testing scenarios where the actual implementation 
+	 * is not available in the classpath.
+	 * <br/>
+	 * The fixtures only affect calls to the {@link #create(Class)} method
+	 * of this {@link ObjectFactory}. 
+	 *
+	 * @param <M> 
+	 *         Type of fixture.
+	 * @param declarationType
+	 *         Declaration class
+	 * @param fixtureFactory
+	 *         ObjectFactory that will actually perform the instantiation.
+	 */
+	public static <M> void registerFixture(Class<M> declarationType, ObjectFactory fixtureFactory) {
+		currentFactory.registerFixture(declarationType, fixtureFactory);
+	}
+	
+	/**
+	 * Resets any fixtures configured programmatically to the underlying
+	 * {@link ObjectFactory} using {@link #registerFixture(Class, Object)}
+	 */
+	public static void resetFixtures() {
+		currentFactory.resetFixtures();
+	}
+	
+	/**
 	 * Makes sure that a reference to an object is not null.
 	 * 
 	 * If value is null, then the method will create a new object,
@@ -155,37 +217,8 @@ public class Factory {
 	public static <M> M nullSafe (M value, Class<M> type) {
 		if (value==null) {
 			return create(type);
-		} else {
-			return value;
 		}
-	}
-	
-
-	/**
-	 * Gets the default detach strategy of objects of the specified class. <br/>.
-	 *   
-	 * @param clazz
-	 *        Class 
-	 *        
-	 * @return Returns the detach strategy of the specified object.
-	 */	
-	public static DetachStrategy getDefaultDetachStrategy (Class<?> clazz) {
-		if (!PersistentObject.class.isAssignableFrom(clazz)) {
-			return null;
-		}
-		Class<?> declarationType = currentFactory.getDeclarationType(clazz);
-		if (declarationType==null) {
-			declarationType = clazz;
-		}
-		Class<? extends PersistentObject<?>> poClass = Utils.cast(clazz);
-		return defaultPwFactory.getDetachStrategy(poClass);		
-	}
-
-	/**
-	 * Hidden constructor of a utility class.
-	 */
-	private Factory() {
-		/* empty */
+		return value;
 	}
 	
 	/**
@@ -230,7 +263,25 @@ public class Factory {
 		}
 	}
 	
-	
+	/**
+	 * Gets the default detach strategy of objects of the specified class. <br/>.
+	 *   
+	 * @param clazz
+	 *        Class 
+	 *        
+	 * @return Returns the detach strategy of the specified object.
+	 */	
+	public static DetachStrategy getDefaultDetachStrategy (Class<?> clazz) {
+		if (!PersistentObject.class.isAssignableFrom(clazz)) {
+			return null;
+		}
+		Class<?> declarationType = currentFactory.getDeclarationType(clazz);
+		if (declarationType==null) {
+			declarationType = clazz;
+		}
+		Class<? extends PersistentObject<?>> poClass = Utils.cast(clazz);
+		return defaultPwFactory.getDetachStrategy(poClass);		
+	}
 	
 	
 

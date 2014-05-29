@@ -18,8 +18,7 @@ import java.util.Properties;
 
 import javax.mail.MessagingException;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 /**

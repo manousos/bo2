@@ -1,13 +1,13 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/copyleft/lesser.html
  * 
- * This library is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  ******************************************************************************/
 package gr.interamerican.bo2.impl.open.jotm;
@@ -25,9 +25,8 @@ import gr.interamerican.bo2.utils.ReflectionUtils;
 
 import java.sql.Connection;
 
-import junit.framework.Assert;
-
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
@@ -37,12 +36,12 @@ import org.mockito.stubbing.Answer;
  * Test {@link JotmConnectionStrategy}
  */
 public class TestJotmConnectionStrategy {
-	
+
 	/**
 	 * Fixture.
 	 */
 	JotmTransactionManager jotm;
-	
+
 	/**
 	 * Fixtures.
 	 */
@@ -57,7 +56,7 @@ public class TestJotmConnectionStrategy {
 		});
 		Bo2Session.setProvider(prov);
 	}
-	
+
 	/**
 	 * Teardown fixtures.
 	 */
@@ -66,7 +65,7 @@ public class TestJotmConnectionStrategy {
 		jotm.close();
 		Bo2Session.setProvider(null);
 	}
-	
+
 	/**
 	 * Test doConnect
 	 * @throws InitializationException
@@ -79,7 +78,7 @@ public class TestJotmConnectionStrategy {
 		Connection conn = subject.doConnect();
 		Assert.assertNotNull(conn);
 	}
-	
+
 	/**
 	 * Tests validateSetup
 	 */
@@ -88,7 +87,7 @@ public class TestJotmConnectionStrategy {
 		JotmConnectionStrategy subject = new JotmConnectionStrategy();
 		ReflectionUtils.invokeMethodByUniqueName(subject, "validateSetup", new Object[]{}); //$NON-NLS-1$
 	}
-	
+
 	/**
 	 * Tests validateSetup with invalid config.
 	 */

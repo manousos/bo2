@@ -20,8 +20,7 @@ import gr.interamerican.bo2.utils.sql.parsers.ParserUtils;
 
 import java.io.IOException;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 

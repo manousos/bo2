@@ -58,4 +58,18 @@ implements ObjectFactory  {
 		return null;
 	}
 
+	@Override
+	public <M> void registerFixture(Class<M> declarationType, M fixture) {
+		/* empty */
+	}
+	
+	public <M> void registerFixture(Class<M> declarationType, ObjectFactory fixtureFactory) {
+		/* empty */
+	}
+
+	@Override
+	public void resetFixtures() {
+		/* empty */
+	}
+
 }

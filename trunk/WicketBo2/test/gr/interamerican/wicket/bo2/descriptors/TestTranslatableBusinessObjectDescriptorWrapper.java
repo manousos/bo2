@@ -13,14 +13,15 @@
 package gr.interamerican.wicket.bo2.descriptors;
 
 import static org.junit.Assert.assertEquals;
+import gr.interamerican.bo2.arch.utils.TranslatorRegistry;
 import gr.interamerican.bo2.arch.utils.beans.TranslatorImpl;
 import gr.interamerican.bo2.samples.utils.meta.Bean1;
 import gr.interamerican.bo2.samples.utils.meta.Bean1descriptor;
 import gr.interamerican.bo2.utils.meta.exceptions.MultipleValidationsException;
 import gr.interamerican.wicket.bo2.protocol.http.Bo2WicketSession;
 import gr.interamerican.wicket.bo2.test.Bo2WicketTest;
-import junit.framework.Assert;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -65,7 +66,7 @@ public class TestTranslatableBusinessObjectDescriptorWrapper  extends Bo2WicketT
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private TranslatableBusinessObjectDescriptorWrapper<Bean1, ?, ?> wrapper = 
-		new TranslatableBusinessObjectDescriptorWrapper(bean1Descriptor,resourceId,translator); 
+		new TranslatableBusinessObjectDescriptorWrapper(bean1Descriptor,resourceId,this.getClass().getName()); 
 	
 	/**
 	 * Init
@@ -75,6 +76,9 @@ public class TestTranslatableBusinessObjectDescriptorWrapper  extends Bo2WicketT
 		bean1Descriptor.setName(NAME);		
 		session.setLanguageId(1L);
 		translator.learn(resourceId, 1L, TRANSLATION);
+		if(TranslatorRegistry.getRegisteredTranslator(this.getClass().getName()) == null) {
+			TranslatorRegistry.registerTranslator(this.getClass().getName(), translator);
+		}
 	}
 	
 	/**

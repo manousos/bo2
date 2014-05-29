@@ -15,8 +15,8 @@ package gr.interamerican.bo2.gui.batch;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 import gr.interamerican.bo2.arch.batch.LongProcessStatus;
-import junit.framework.Assert;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 

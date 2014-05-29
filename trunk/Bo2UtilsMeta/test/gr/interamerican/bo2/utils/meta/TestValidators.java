@@ -22,7 +22,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 /**
- * Unit test for {@link Validators}.
+ * Unit test for {@link ValidatorRegistry}.
  */
 public class TestValidators {
 	
@@ -34,13 +34,13 @@ public class TestValidators {
 	public void testUtility() {		
 		Validator<BeanWith1Field> v1 = Mockito.mock(Validator.class);
 		Validator<BeanWith2Fields> v2 = Mockito.mock(Validator.class);
-		Validators.register(v1, BeanWith1Field.class);
-		Validators.register(v2, BeanWith2Fields.class);
-		Validator<BeanWith1Field> actual1 = Validators.getValidator(BeanWith1Field.class);
+		ValidatorRegistry.register(v1, BeanWith1Field.class);
+		ValidatorRegistry.register(v2, BeanWith2Fields.class);
+		Validator<BeanWith1Field> actual1 = ValidatorRegistry.getValidator(BeanWith1Field.class);
 		Assert.assertEquals(v1, actual1);
-		Validator<BeanWith2Fields> actual2 = Validators.getValidator(BeanWith2Fields.class);
+		Validator<BeanWith2Fields> actual2 = ValidatorRegistry.getValidator(BeanWith2Fields.class);
 		Assert.assertEquals(v2, actual2);
-		Validator<BeanWith3Fields> actual3 = Validators.getValidator(BeanWith3Fields.class);
+		Validator<BeanWith3Fields> actual3 = ValidatorRegistry.getValidator(BeanWith3Fields.class);
 		Assert.assertNull(actual3);
 	}
 

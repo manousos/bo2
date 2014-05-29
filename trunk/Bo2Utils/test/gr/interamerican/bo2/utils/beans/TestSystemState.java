@@ -16,7 +16,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * 
+ * Tests {@link SystemState}.
  */
 public class TestSystemState {
 	

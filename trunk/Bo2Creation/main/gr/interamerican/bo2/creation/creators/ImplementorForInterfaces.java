@@ -18,6 +18,7 @@ import gr.interamerican.bo2.creation.exception.ClassCreationException;
 import gr.interamerican.bo2.creation.util.CodeGenerationUtilities;
 import gr.interamerican.bo2.utils.reflect.beans.BeanPropertyDefinition;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Set;
@@ -34,22 +35,26 @@ import java.util.Set;
 public class ImplementorForInterfaces 
 extends AbstractClassCreator {
 	
-	/**
-	 * Templates.
-	 */
-	private PropertyWithDirectAccessCodeTemplates templates =
-		new PropertyWithDirectAccessCodeTemplates();
+	
+	@Override
+	protected boolean mustImplementSerializable() {	
+		return true;
+	}
+	
+	
 	
 	/**
 	 * Handles the properties of the interface.
 	 */
-	void supportProperties() {
+	@Override
+	protected void supportProperties() {
+		PropertyWithDirectAccessCodeTemplates templates = directProperty;
 		Set<BeanPropertyDefinition<?>> properties = analysis.getAllProperties();
 		for (BeanPropertyDefinition<?> bpd : properties) {
 			String name = bpd.getName();
 			Class<?> type = bpd.getType();
 			Map<String, String> vars = Variables.variablesForProperty(name, type, name, type);
-			addFieldCode(templates.getFieldDeclarationCode(vars));
+			addFieldCode(templates.getFieldDeclarationCode(vars)); //TODO: initialize field?
 			Method getter = bpd.getGetter(); 
 			if (getter!=null) {				
 				String code = templates.getPropertyGetter(vars,getter.getName());
@@ -63,12 +68,8 @@ extends AbstractClassCreator {
 		}
 	}
 	
-	@Override
-	protected void supportType() throws ClassCreationException {
-		addSerialVersionUid();
-		supportProperties();	
-		addBasicUpdaters();	
-	}
+	
+	
 	
 	@Override
 	protected String getSuffix() {
@@ -83,7 +84,7 @@ extends AbstractClassCreator {
 		if (analysis.isContainsAbstractMethods()) {
 			throw cantImplementAllMethods(analysis.getAbstractMethods());
 		}		
-		if (analysis.isContainsOddProperties()) {
+		if (analysis.isContainsOddProperties() && !canSupportOddProperties()) {
 			throw cantSupportOddProperties();
 		}
 	}
@@ -91,8 +92,16 @@ extends AbstractClassCreator {
 	
 	@Override
 	protected String[] interfaces() {	
-		String[] types = {analysis.getClazz().getCanonicalName()};
+		String[] types = {
+				analysis.getClazz().getCanonicalName(),
+				Serializable.class.getCanonicalName(),				
+		};
 		return types;
+	}
+	
+	@Override
+	protected void supportMethods() {
+		/* do nothing */
 	}
 	
 	

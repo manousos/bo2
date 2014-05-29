@@ -24,6 +24,7 @@ import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParm
 import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmNames.PRE_PROCESSING_CLASS;
 import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmNames.PROCESSORS_COUNT;
 import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmNames.QUERY_CLASS;
+import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmNames.REATTEMPT_ON_TMEX;
 import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmNames.SHARED_STREAM_NAMES;
 import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmNames.TIDY_INTERVAL;
 import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmNames.UI_CAN_ADD_THREADS;
@@ -32,7 +33,9 @@ import static gr.interamerican.bo2.utils.StringConstants.COMMA;
 import static gr.interamerican.bo2.utils.StringUtils.isNullOrBlank;
 import gr.interamerican.bo2.arch.EntitiesQuery;
 import gr.interamerican.bo2.arch.Operation;
+import gr.interamerican.bo2.arch.ext.CriteriaDependent;
 import gr.interamerican.bo2.impl.open.creation.Factory;
+import gr.interamerican.bo2.impl.open.modifications.CriteriaAwareCopyFromProperties;
 import gr.interamerican.bo2.utils.ExceptionUtils;
 import gr.interamerican.bo2.utils.NumberUtils;
 import gr.interamerican.bo2.utils.StringConstants;
@@ -66,7 +69,8 @@ implements BatchProcessParmsFactory {
 		String operationClassName = getMandatoryProperty(properties, OPERATION_CLASS).trim();
 		String inputProperty = getMandatoryProperty(properties, INPUT_PROPERTY).trim();
 		EntitiesQuery query = (EntitiesQuery<?>)Factory.create(queryClassName);
-		Class operationClass = Factory.getType(operationClassName);		
+		Class operationClass = Factory.getType(operationClassName);
+		Class queryClass = query.getClass();
 		input.setName(name);
 		input.setQuery(query);
 		input.setOperationClass(operationClass);
@@ -80,25 +84,29 @@ implements BatchProcessParmsFactory {
 
 		String formatterClassName = properties.getProperty(FORMATTER_CLASS);		
 		Formatter formatter = createFormatter(formatterClassName);
-		input.setFormatter(formatter);
+		input.setFormatter(formatter);		
 		
-		Modification<Object> copy = createModification(properties);
 		
-		input.setQueryParametersSetter(copy);
-		input.setOperationParametersSetter(copy);
+		Modification<Object> copyToQuery = createModification(properties,queryClass);
+		input.setQueryParametersSetter(copyToQuery);
+		
+		Modification<Object> copyToOperation = createModification(properties,operationClass);
+		input.setOperationParametersSetter(copyToOperation);
 		
 		String preProcessClassName = properties.getProperty(PRE_PROCESSING_CLASS);
 		if (!isNullOrBlank(preProcessClassName)) {
 			Operation preProcess = (Operation) Factory.create(preProcessClassName.trim());
 			input.setPreProcessing(preProcess);
-			input.setPreOperationParametersSetter(copy);
+			Modification<Object> copyToPreProcess = createModification(properties,preProcess.getClass());
+			input.setPreOperationParametersSetter(copyToPreProcess);
 		}
 		
 		String postProcessClassName = properties.getProperty(POST_PROCESSING_CLASS);
 		if (!isNullOrBlank(postProcessClassName)) {
 			Operation postProcess = (Operation) Factory.create(postProcessClassName.trim());
+			Modification<Object> copyToPostProcess = createModification(properties,postProcess.getClass());
 			input.setPostProcessing(postProcess);
-			input.setPostOperationParametersSetter(copy);
+			input.setPostOperationParametersSetter(copyToPostProcess);
 		}
 		
 		String mailRecipients = properties.getProperty(MONITOR_MESSAGE_RECIPIENTS);
@@ -120,6 +128,14 @@ implements BatchProcessParmsFactory {
 		String[] sharedStreams = TokenUtils.splitTrim(strNamedStreams, COMMA, false);
 		input.setSharedStreamNames(sharedStreams);
 		
+		String strReattemptOnTmex = properties.getProperty(REATTEMPT_ON_TMEX);
+		if(StringUtils.isNullOrBlank(strReattemptOnTmex)) {
+			input.setReattemptOnTmex(true);
+		} else {
+			boolean reattemptOnTmex = StringUtils.string2Bool(strReattemptOnTmex);
+			input.setReattemptOnTmex(reattemptOnTmex);
+		}
+		
 		return input;
 		
 	}
@@ -129,10 +145,14 @@ implements BatchProcessParmsFactory {
 	 * parameters.
 	 * 
 	 * @param properties
+	 *        Properties from which the object will be modified.
+	 * @param clazz 
+	 *        Class of the object.
 	 * 
 	 * @return Returns the modification.
-	 */	
-	protected Modification<Object> createModification(Properties properties) {
+	 */
+	@SuppressWarnings("unchecked")
+	protected Modification<Object> createModification(Properties properties, Class<?> clazz) {
 		Properties p = new Properties();
 		Enumeration<?> names = properties.propertyNames();
 		int count = 0;
@@ -147,7 +167,16 @@ implements BatchProcessParmsFactory {
 		if (count==0) {
 			return null;
 		}
-		return new CopyFromProperties<Object>(p);		
+		Modification<Object> copy;
+		if (CriteriaDependent.class.isAssignableFrom(clazz)) {		
+			@SuppressWarnings("rawtypes")
+			CriteriaAwareCopyFromProperties cacfp = new CriteriaAwareCopyFromProperties(p);
+			copy = cacfp;
+		} else {
+			copy = new CopyFromProperties<Object>(p);			
+		}
+		return copy;
+				
 	}
 	
 	/**
@@ -219,6 +248,8 @@ implements BatchProcessParmsFactory {
 		}
 		
 		output.setNamedInputFiles(inputFileDefinitions);
+		
+		output.setReattemptOnTmex(Utils.notNull(input.getReattemptOnTmex(), true));
 		
 		return output;
 	}

@@ -69,6 +69,15 @@ implements HibernateSessionProvider {
 	private static final String SESSION_INTERCEPTOR = "SESSION_INTERCEPTOR"; //$NON-NLS-1$
 	
 	/**
+	 * Input properties Property name for hibernate mappings indexer.
+	 * The indexer lists a number of txt files that, in turn, list class
+	 * paths to hbm.xml files.
+	 * <br/>
+	 * This file, as well as the txt files it points to may, or may not exist.
+	 */
+	private static final String HIBERNATE_MAPPINGS = "HIBERNATE_MAPPINGS"; //$NON-NLS-1$
+	
+	/**
 	 * Hibernate SessionFactory used to create sessions
 	 */
 	private SessionFactory sessionFactory;
@@ -111,7 +120,8 @@ implements HibernateSessionProvider {
 		String pathToCfg = ProviderUtils.getMandatoryProperty(getProperties(), HIBERNATE_CFG_XML);
 		String dbSchema = ProviderUtils.getMandatoryProperty(getProperties(), KEY_DBSCHEMA);
 		String sessionInterceptor = getProperties().getProperty(SESSION_INTERCEPTOR);
-		sessionFactory = HibernateConfigurations.getSessionFactory(pathToCfg, dbSchema, sessionInterceptor);
+		String hibernateMappingsPath = getProperties().getProperty(HIBERNATE_MAPPINGS);
+		sessionFactory = HibernateConfigurations.getSessionFactory(pathToCfg, dbSchema, sessionInterceptor, hibernateMappingsPath);
 	}
 	
 	public Session getHibernateSession() {		

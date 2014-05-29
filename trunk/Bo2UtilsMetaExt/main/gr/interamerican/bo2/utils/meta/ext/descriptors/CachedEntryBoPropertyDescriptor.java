@@ -17,6 +17,7 @@ import gr.interamerican.bo2.arch.ext.TypedSelectable;
 import gr.interamerican.bo2.utils.meta.exceptions.ParseException;
 import gr.interamerican.bo2.utils.meta.ext.formatters.CachedEntryFormatter;
 import gr.interamerican.bo2.utils.meta.ext.formatters.nr.NrCachedEntryFormatter;
+import gr.interamerican.bo2.utils.meta.ext.parsers.CachedEntryParser;
 import gr.interamerican.bo2.utils.meta.ext.validators.CachedEntryValidator;
 import gr.interamerican.bo2.utils.meta.formatters.Formatter;
 import gr.interamerican.bo2.utils.meta.parsers.Parser;
@@ -36,24 +37,30 @@ public class CachedEntryBoPropertyDescriptor<T extends TypedSelectable<C>, C ext
 extends AbstractCacheRelatedObjectBoPropertyDescriptor<T, C> {
 	
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
 	 * Creates a new CachedEntryBoPropertyDescriptor object. 
 	 *
 	 * @param typeId
 	 * @param subTypeId
-	 * @param cache
+	 * @param cacheName
 	 * @param codeParser
 	 * @param codeFormatter 
 	 */
 	public CachedEntryBoPropertyDescriptor(
-	Long typeId, Long subTypeId, Cache<C> cache, Parser<C> codeParser, Formatter<C> codeFormatter) {
-		super(typeId, subTypeId, cache, codeParser, codeFormatter);
+	Long typeId, Long subTypeId, String cacheName, Parser<C> codeParser, Formatter<C> codeFormatter) {
+		super(typeId, subTypeId, cacheName, codeParser, codeFormatter);
+		
 	}
 	
 	@Override
 	@SuppressWarnings("unchecked")
 	public T parse(String value) throws ParseException {
 		C code = codeParser.parse(value);
-		return (T) cache.get(typeId, code);
+		return (T) cache().get(typeId, code);
 	}
 	
 	/**
@@ -62,12 +69,17 @@ extends AbstractCacheRelatedObjectBoPropertyDescriptor<T, C> {
 	 * @return Returns a set containing the possible values for the entry.
 	 */
 	public Set<T> getValues() {
-		return cache.getSubCache(typeId, subTypeId);
+		return cache().getSubCache(typeId, subTypeId);
 	}
-
+	
 	@Override
-	protected Validator<T> getValidator() {
-		return new CachedEntryValidator<T, C>(cache);
+	protected Validator<T> getCacheRelatedValidator() {
+		return new CachedEntryValidator<T, C>(cacheName);
+	}
+	
+	@Override
+	public Parser<T> getParser() {
+		return new CachedEntryParser<T, C>(cacheName, typeId, codeParser);
 	}
 
 	@Override

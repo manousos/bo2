@@ -1,13 +1,13 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/copyleft/lesser.html
  * 
- * This library is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  ******************************************************************************/
 package gr.interamerican.bo2.samples.archutil.po;
@@ -21,34 +21,34 @@ import gr.interamerican.bo2.arch.PersistentObject;
  * Simple PersistentObject for the tests.
  * 
  */
-public class UserProfile 
+public class UserProfile
 implements PersistentObject<UserProfileKey> {
 
 	/**
 	 * serialVersionUID
 	 */
 	static final long serialVersionUID = 1L;
-	
+
 	/**
 	 * id
-	 */	
-	Integer profileId; 
-	
+	 */
+	Integer profileId;
+
 	/**
 	 * id
-	 */	
-	Integer userId; 
-	
+	 */
+	Integer userId;
+
 	/**
 	 * name
 	 */
 	String name;
-	
+
 	/**
-	 * Creates a new User object. 
-	 * @param userId 
-	 * @param profileId 
-	 * @param name 
+	 * Creates a new User object.
+	 * @param userId
+	 * @param profileId
+	 * @param name
 	 *
 	 */
 	public UserProfile(Integer userId, Integer profileId, String name) {
@@ -57,27 +57,43 @@ implements PersistentObject<UserProfileKey> {
 		this.profileId = profileId;
 		this.name = name;
 	}
-	
+
 	/**
-	 * Creates a new User object. 
+	 * Creates a new User object.
 	 *
 	 */
 	public UserProfile() {
 		super();
 	}
-	
+
+	/**
+	 * @return profile id.
+	 */
 	public Integer getProfileId() {
 		return profileId;
 	}
 
+	/**
+	 * sets the profile id
+	 * 
+	 * @param profileId
+	 */
 	public void setProfileId(Integer profileId) {
 		this.profileId = profileId;
 	}
 
+	/**
+	 * @return the user id.
+	 */
 	public Integer getUserId() {
 		return userId;
 	}
 
+	/**
+	 * sets the user id.
+	 * 
+	 * @param userId
+	 */
 	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
@@ -99,8 +115,8 @@ implements PersistentObject<UserProfileKey> {
 
 	/**
 	 * Creates and initializes a new user profile.
-	 * @param userId 
-	 * @param profileId 
+	 * @param userId
+	 * @param profileId
 	 * 
 	 * @return returns a user profile.
 	 */
@@ -123,35 +139,35 @@ implements PersistentObject<UserProfileKey> {
 		sb.append(name);
 		return sb.toString();
 	}
-		
+
 	@Override
 	public UserProfileKey getKey() {
-		return new UserProfileKey(userId, profileId);		
+		return new UserProfileKey(userId, profileId);
 	}
-	
+
 	@Override
 	public void setKey(UserProfileKey key) {
 		userId = key.getId();
 		profileId = key.getProfileId();
 	}
-	
+
 	@Override
 	public void tidy() {
 		/* empty */
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof UserProfile) {
 			UserProfile that = (UserProfile) obj;
-			return this.getKey().equals(that.getKey());			
+			return getKey().equals(that.getKey());
 		}
-		return false;		
+		return false;
 	}
 
 	@Override
-	public int hashCode() {		
+	public int hashCode() {
 		return getKey().hashCode();
 	}
-	
+
 }

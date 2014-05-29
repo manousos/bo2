@@ -20,8 +20,7 @@ import gr.interamerican.bo2.utils.enums.AccessType;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 /**

@@ -12,31 +12,33 @@
  ******************************************************************************/
 package gr.interamerican.wicket.markup.html.panel;
 
-import static gr.interamerican.wicket.util.resource.WellKnownResourceIds.FP_CLEAR_BTN_LABEL;
-import gr.interamerican.bo2.utils.StringConstants;
-import gr.interamerican.bo2.utils.attributes.SimpleCommand;
-import gr.interamerican.wicket.callback.CallbackAction;
-import gr.interamerican.wicket.callback.MethodBasedCallbackAction;
-import gr.interamerican.wicket.factories.ButtonFactory;
-import gr.interamerican.wicket.factories.LinkFactory;
-import gr.interamerican.wicket.markup.html.form.SimpleCommandForm;
 import gr.interamerican.wicket.markup.html.panel.bean.SingleBeanPanel;
-import gr.interamerican.wicket.util.resource.ByteArrayAsResourceStream;
+import gr.interamerican.wicket.util.resource.WellKnownResourceIds;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
-import org.apache.wicket.request.target.resource.ResourceStreamRequestTarget;
+import org.apache.wicket.model.util.ListModel;
+import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.util.lang.Bytes;
+import org.apache.wicket.util.resource.AbstractResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
+import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A panel that allows to add the content of a file to a model object.
@@ -44,17 +46,12 @@ import org.apache.wicket.util.resource.IResourceStream;
  * a byte[] field of a bean when creating a {@link SingleBeanPanel}.
  * 
  * This panel allows the user to choose a file from his local filesystem. 
- * When the form is submitted the file's content is set to the model object
- * of the panel. The user may also choose to clear the byte[] that represents
- * the file content. This is performed with the clear button. The clear button
- * submits the form, but in this case a flag indicates that the model of the panel
- * must not be updated with whatever input is in the file chooser. Otherwise, the
- * form's onSubmit would update the model again.
+ * When the upload button is pressed the file's content is set to the model object
+ * of the panel. Form submissions not happening from pressing the upload button
+ * (e.g. from outer forms) do not do anything.
  * 
  * When the file panel is rendered with a non-empty model object, the size of this
- * model object is shown next to the clear button. If the clear button is pressed,
- * this is updated to zero. The size of the model object also serves as a link that
- * allows the user to download the file.
+ * model object is shown next to the upload button.
  */
 public class FilePanel extends Panel {
 	
@@ -64,19 +61,24 @@ public class FilePanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	
 	/**
-	 * Wicket id.
+	 * LOG
 	 */
-	private static final String FILE_CHOOSER_ID = "fileChooser"; //$NON-NLS-1$
+	static final Logger LOG = LoggerFactory.getLogger(FilePanel.class.getName());
 	
 	/**
 	 * Wicket id.
 	 */
-	private static final String FORM_ID = "form"; //$NON-NLS-1$
+	static final String FILE_CHOOSER_ID = "fileChooser"; //$NON-NLS-1$
 	
 	/**
 	 * Wicket id.
 	 */
-	private static final String CLEAR_FILE_BUTTON_ID = "clearButton"; //$NON-NLS-1$
+	static final String FORM_ID = "form"; //$NON-NLS-1$
+	
+	/**
+	 * Wicket id.
+	 */
+	private static final String UPLOAD_FILE_BUTTON_ID = "uploadButton"; //$NON-NLS-1$
 	
 	/**
 	 * Wicket id.
@@ -91,7 +93,7 @@ public class FilePanel extends Panel {
 	/**
 	 * Link that allows the user to download the file.
 	 */
-	private AjaxLink<String> downloadFileLink;
+	private Link<String> downloadFileLink;
 	
 	/**
 	 * Link label.
@@ -101,7 +103,7 @@ public class FilePanel extends Panel {
 	/**
 	 * Current content.
 	 */
-	IModel<byte[]> model;
+	private IModel<byte[]> model;
 	
 	/**
 	 * File chooser.
@@ -109,9 +111,14 @@ public class FilePanel extends Panel {
 	private FileUploadField fileChooser;
 	
 	/**
-	 * Indicates if the Form submit occurred after pressing the clear button.
+	 * uploadButtonSubmit
 	 */
-	private boolean isClearSubmit = false;
+	boolean uploadButtonSubmit = false;
+	
+	/**
+	 * Client file name
+	 */
+	String fileName;
 
 	/**
 	 * Creates a new FilePanel object. 
@@ -125,72 +132,58 @@ public class FilePanel extends Panel {
 		
 		this.model = model;
 		
-		CallbackAction onDownloadLinkClick = 
-			new MethodBasedCallbackAction("onDownloadLinkClick", this); //$NON-NLS-1$
-		downloadFileLink = LinkFactory.createLink(DOWNLOAD_FILE_LINK_ID, onDownloadLinkClick);
+		downloadFileLink = new DownloadTemplateLink(DOWNLOAD_FILE_LINK_ID);
 		downloadFileLink.setOutputMarkupId(true);
 		linkLabel = new Label(LINK_LABEL_ID, new Model<String>());
 		downloadFileLink.add(linkLabel);
 		updateLinkLabel(null);
 		
-		fileChooser = new FileUploadField(FILE_CHOOSER_ID, new Model<FileUpload>());
+		fileChooser = new FileUploadField(FILE_CHOOSER_ID, new ListModel<FileUpload>(new ArrayList<FileUpload>()));
 		
+		Form<Void> panelForm = new Form<Void>(FORM_ID) {
+			/**
+			 * serialVersionUID.
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			@SuppressWarnings("nls")
+			protected void onSubmit() {
+				if(!uploadButtonSubmit) {
+					LOG.debug("form submit on other form processing - does nothing");
+					return; //do not process submits from outer forms
+				}
+				FileUpload fileUpload = fileChooser.getFileUpload();
+				if(fileUpload!=null && fileUpload.getBytes().length > 0) {
+					LOG.debug("uploaded template: " + fileUpload.getBytes().length + " bytes");
+					model.setObject(fileUpload.getBytes());
+					fileName = fileUpload.getClientFileName();
+				}
+				updateLinkLabel(null);
+				uploadButtonSubmit = false;
+				super.onSubmit();
+			}
+		};
+		panelForm.setMultiPart(true);
 		
-		SimpleCommand onFormSubmit = 
-			new MethodBasedCallbackAction("onFormSubmit", this); //$NON-NLS-1$
-		Form<Void> panelForm = new SimpleCommandForm<Void>(FORM_ID, onFormSubmit);
-		panelForm.setMultiPart(true);		
-		
-		CallbackAction onClearButtonClick = 
-			new MethodBasedCallbackAction("onClearButtonClick", this); //$NON-NLS-1$
-		IModel<String> buttonModel = new StringResourceModel(FP_CLEAR_BTN_LABEL, null);
-		AjaxButton clearButton = ButtonFactory.createButton
-			(CLEAR_FILE_BUTTON_ID, buttonModel, onClearButtonClick, null);
-		
+		AjaxButton uploadButton = new AjaxButton(
+				UPLOAD_FILE_BUTTON_ID, new StringResourceModel(WellKnownResourceIds.FP_UPLOAD_BTN_LABEL, null)) {
+			/**
+			 * serialVersionUID.
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				target.add(FilePanel.this);
+				uploadButtonSubmit = true;
+			}
+		};
+			
 		add(panelForm);
 		add(downloadFileLink);
+		panelForm.add(fileChooser, uploadButton, downloadFileLink);
 		
-		panelForm.add(fileChooser, clearButton, downloadFileLink);
-		
 	}
-	
-	
-	/**
-	 * Event handler for the click event of the clear button.
-	 * 
-	 * @param target
-	 */
-	void onClearButtonClick(AjaxRequestTarget target) {
-		model.setObject(new byte[0]);
-		updateLinkLabel(target);
-		isClearSubmit = true;		
-	}
-	
-	/**
-	 * Event handler for the form submit event.
-	 */
-	void onFormSubmit() {
-		FileUpload fileUpload = fileChooser.getFileUpload();
-		if(fileUpload!=null && !isClearSubmit) {
-			if (fileUpload.getBytes().length > 0) {
-				model.setObject(fileUpload.getBytes());
-			}
-		}
-		isClearSubmit = false;
-	}
-	
-	/**
-	 * Event handler for the click event of the download link.
-	 */
-	void onDownloadLinkClick() {
-		byte[] bytes = model.getObject();
-		if (bytes!=null && bytes.length>0) {
-			IResourceStream stream = new ByteArrayAsResourceStream(bytes);
-			ResourceStreamRequestTarget target = new ResourceStreamRequestTarget(stream); 
-			getRequestCycle().setRequestTarget(target);
-		}	
-	}
-	
 	
 	/**
 	 * Refreshes the link label.
@@ -198,9 +191,9 @@ public class FilePanel extends Panel {
 	 * @param target
 	 */
 	@SuppressWarnings("nls")
-	void updateLinkLabel(AjaxRequestTarget target) {
+	private void updateLinkLabel(AjaxRequestTarget target) {
 		if(target!=null) {
-			target.addComponent(downloadFileLink);
+			target.add(downloadFileLink);
 		}
 		byte[] content = model.getObject()!=null ? model.getObject() : new byte[0];
 		Bytes bytes = Bytes.bytes(content.length);
@@ -208,18 +201,55 @@ public class FilePanel extends Panel {
 	}
 	
 	/**
+	 * A Link that prompts the user to download the file.
+	 */
+	private class DownloadTemplateLink extends Link<String> {
+		/**
+		 * serialVersionUID.
+		 */
+		private static final long serialVersionUID = 1L;
+
+		/**
+		 * Creates a new ExportCsvLink object. 
+		 *
+		 * @param id
+		 */
+		public DownloadTemplateLink(String id) {
+			super(id);
+		}
+
+		@SuppressWarnings("nls")
+		@Override
+		public void onClick() {
+			IResourceStream stream = new AbstractResourceStream () {
+				/**
+				 * serialVersionUID.
+				 */
+				private static final long serialVersionUID = 1L;
+				
+				InputStream in = null;
+				public InputStream getInputStream()	throws ResourceStreamNotFoundException {
+					in = new ByteArrayInputStream(model.getObject());
+					return in;
+				}
+				public void close() throws IOException {
+					in.close();
+				}
+			};
+			if(model.getObject()!=null && model.getObject().length >0) {
+				LOG.debug("downloading template: " + model.getObject().length + " bytes");
+				getRequestCycle().scheduleRequestHandlerAfterCurrent(new ResourceStreamRequestHandler(stream));
+			} else {
+				LOG.debug("download size 0, no action performed on link clink");
+			}
+		}
+	}
+	
+	/**
 	 * @return Returns the fileName for the local file that was picked.
 	 *         In edit mode, this will always return an empty String. 
 	 */
 	public String getFileName() {
-		if(fileChooser==null) {
-			return StringConstants.EMPTY;
-		}
-		if(fileChooser.getFileUpload()==null) {
-			return StringConstants.EMPTY;
-		}
-		return fileChooser.getFileUpload().getClientFileName();
-	}
-	
-	
+		return fileName;
+	}	
 }

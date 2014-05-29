@@ -12,7 +12,6 @@
  ******************************************************************************/
 package gr.interamerican.bo2.impl.open.po;
 
-import gr.interamerican.bo2.arch.CompositePo;
 import gr.interamerican.bo2.arch.DetachStrategy;
 import gr.interamerican.bo2.arch.Key;
 import gr.interamerican.bo2.arch.PersistentObject;
@@ -32,11 +31,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,11 +61,14 @@ import org.slf4j.LoggerFactory;
  * <li> Child collections can only be of type {@link Set}. 
  *      All these collections can be declared as sets. These sets are 
  *      created by the constructor. </li> 
- * <li> Child element must always be {@link CompositePo}. Defining
- *      a child element that is not instance of {@link CompositePo}
+ * <li> Child element must always be {@link PersistentObject}s. Defining
+ *      a child element that is not instance of {@link PersistentObject}
  *      makes no sense. The reason to mark an element as child is to have
  *      its key modified by the father's key. If the child can't be modified
- *      by the father's key it is useless to mark it as child. </li> 
+ *      by the father's key it is useless to mark it as child. </li>
+ * <li> Child elements are <strong>owned</strong> by this instance. Their
+ *      existence either in the java heap or in the persistence layer makes
+ *      no sense without this object </li>
  * 
  * @param <K> Type of the persistent object key.
  */
@@ -102,7 +103,12 @@ implements PersistentObject<K> {
 	/**
 	 * Non children fields per class cache.
 	 */
-	private static Map<Class<?>, List<Field>> nonChildFieldsCache = new HashMap<Class<?>, List<Field>>();
+	private static ConcurrentHashMap<Class<?>, List<Field>> nonChildFieldsCache = new ConcurrentHashMap<Class<?>, List<Field>>();
+	
+	/**
+	 * Child fields per class cache.
+	 */
+	private static ConcurrentHashMap<Class<?>, List<Field>> childFieldsCache = new ConcurrentHashMap<Class<?>, List<Field>>();
 
 	/**
 	 * List with the fields of the class of this object that
@@ -298,6 +304,11 @@ implements PersistentObject<K> {
 	 * childFields field is used. 
 	 */
 	private void resolveChildFields() {
+		childFields = childFieldsCache.get(this.getClass());
+		if(childFields!=null) {
+			return;
+		}
+		
 		childFields = new ArrayList<Field>();
 		TypeAnalysis analysis = TypeAnalysis.analyze(this.getClass());
 		Set<Field> children = analysis.getAnnotated(Child.class);		
@@ -307,6 +318,8 @@ implements PersistentObject<K> {
 				ReflectionUtils.setAccessible(field);
 			}
 		}
+		
+		childFieldsCache.putIfAbsent(this.getClass(), childFields);
 	}
 	
 	/**
@@ -344,7 +357,8 @@ implements PersistentObject<K> {
 				}
 			}
 		}
-		nonChildFieldsCache.put(this.getClass(), nonChildFields);
+		
+		nonChildFieldsCache.putIfAbsent(this.getClass(), nonChildFields);
 	}
 	
 	/**
@@ -478,5 +492,8 @@ implements PersistentObject<K> {
 				//StringConstants.COLON,
 				StringUtils.toString(key));
 	}
+	
+	
+	
 
 }

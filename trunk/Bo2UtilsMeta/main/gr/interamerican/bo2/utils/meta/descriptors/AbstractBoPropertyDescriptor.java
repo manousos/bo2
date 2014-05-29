@@ -24,6 +24,7 @@ import gr.interamerican.bo2.utils.meta.validators.NotNullValidator;
 import gr.interamerican.bo2.utils.meta.validators.Validator;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -34,6 +35,11 @@ import java.util.Map;
  */
 public abstract class AbstractBoPropertyDescriptor<T> 
 implements BoPropertyDescriptor<T> {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * {@link Validator}s associated with this descriptor instance.
@@ -84,6 +90,10 @@ implements BoPropertyDescriptor<T> {
 	 * length
 	 */
 	int maxLength;
+	/**
+	 * affected.
+	 */
+	private String affected;
 
 	/**
 	 * Creates a new AbstractBoPropertyDescriptor object. 
@@ -98,34 +108,42 @@ implements BoPropertyDescriptor<T> {
 		}
 	}
 	
+	@Override
 	public String getName() {
 		return name;
 	}
 	
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
 	
+	@Override
 	public String getClassName() {
 		return className;
 	}
 	
+	@Override
 	public void setClassName(String className) {
 		this.className = className;
 	}
 	
+	@Override
 	public boolean isReadOnly() {
 		return readOnly;
 	}
 	
+	@Override
 	public void setReadOnly(boolean readOnly) {
 		this.readOnly = readOnly;
 	}
 	
+	@Override
 	public boolean isNullAllowed() {
 		return nullAllowed;
 	}
 	
+	@Override
 	public void setNullAllowed(boolean nullAllowed) {
 		this.nullAllowed = nullAllowed;
 		if (!nullAllowed) {
@@ -135,44 +153,54 @@ implements BoPropertyDescriptor<T> {
 		}
 	}
 	
+	@Override
 	public boolean isHasDefault() {
 		return hasDefault;
 	}
 	
+	@Override
 	public void setHasDefault(boolean hasDefault) {
 		this.hasDefault = hasDefault;
 	}
 	
+	@Override
 	public T getDefaultValue() {
 		return defaultValue;
 	}
 	
+	@Override
 	public void setDefaultValue(T defaultValue) {
 		this.defaultValue = defaultValue;
 	}
 	
+	@Override
 	public void validate(T value) throws ValidationException {
-		new MultipleValidatorsValidator<T>(validators.values(), getLabel()).validate(value);
+		getValidator().validate(value);
 	}
 	
+	@Override
 	public String getFullyQualifiedName() {		
 		return StringUtils.concat(getFullyQualifiedClassName(), StringConstants.DOT, getName());
 	}
 	
+	@Override
 	public String getFullyQualifiedClassName() {
 		return StringUtils.concat(getPackageName(), StringConstants.DOT, getClassName());
 	}
 	
+	@Override
 	public T parseAndValidate(String value) throws ParseException, ValidationException {
 		T t = parse(value);
 		validate(t);
 		return t;
 	}
 	
+	@Override
 	public String getPackageName() {
 		return packageName;
 	}
 	
+	@Override
 	public void setPackageName(String packageName) {
 		this.packageName = packageName;
 	}
@@ -184,7 +212,7 @@ implements BoPropertyDescriptor<T> {
 	 * 
 	 * @return Returns a valid value, either the value specified or the
 	 *         default.
-	 */
+	 */	
 	protected T checkDefault(T value) {
 		if ((value==null) && (!isNullAllowed()) && (isHasDefault())) {
 			return defaultValue;
@@ -192,8 +220,9 @@ implements BoPropertyDescriptor<T> {
 		return value;
 	}
 
+	@Override
 	public T parse(String value) throws ParseException {		
-		return parser.parse(value);
+		return getParser().parse(value);
 	}	
 	
 	@Override
@@ -221,22 +250,27 @@ implements BoPropertyDescriptor<T> {
 		return nm.hashCode();
 	}
 	
+	@Override
 	public String format(T value) {
 		return getFormatter().format(value);
 	}
 	
+	@Override
 	public Integer getIndex() {
 		return index;
 	}
 
+	@Override
 	public void setIndex(Integer index) {
 		this.index = index;
 	}
 
+	@Override
 	public String getLabel() {
 		return(label==null ? getName() : label);
 	}
 
+	@Override
 	public void setLabel(String label) {
 		this.label = label;
 	}
@@ -262,14 +296,35 @@ implements BoPropertyDescriptor<T> {
 		return (V) validators.get(type);
 	}
 
+	@Override
 	public int getMaxLength() {
 		return maxLength;
 	}
 
+	@Override
 	public void setMaxLength(int formatLength) {
 		this.maxLength = formatLength;
 	}
 	
+	@Override
+	public T valueOf(Number value) {	
+		return null;
+	}
 	
+	public String getAffected() {
+		return affected;
+	}
+
+	public void setAffected(String affected) {
+		this.affected = affected;
+	}
+	
+	public Parser<T> getParser() {
+		return parser;
+	}
+	
+	public Validator<T> getValidator() {
+		return new MultipleValidatorsValidator<T>(new HashSet<Validator<T>>(validators.values()), getLabel());
+	}
 
 }

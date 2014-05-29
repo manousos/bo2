@@ -27,6 +27,7 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Buffer is a fixed length byte array with named fields of fixed length. <br/>
@@ -38,7 +39,7 @@ import java.util.List;
  * The basic language equivalent is <code>type</code>. 
  * The cobol language equivalent is a record described by a copybook.
  */
-public class Buffer 
+public class Buffer extends AbstractBaseRecord
 implements ModifiableIndexedFieldsRecord<String> {
 	
 	/**
@@ -60,6 +61,11 @@ implements ModifiableIndexedFieldsRecord<String> {
 	 * buffer
 	 */
 	private char[] buffer;
+	
+	/**
+	 * Positions to put a delimiter in order to transform the record to CSV.
+	 */
+	private Set<Integer> delimiterPositions;
 		
 	/**
 	 * Creates a new Buffer object.
@@ -73,6 +79,8 @@ implements ModifiableIndexedFieldsRecord<String> {
 		for (int i = 0; i < buffer.length; i++) {
 			buffer[i] = DEFAULT;
 		}
+		delimiterPositions = spec.getFieldPositions();
+		delimiterPositions.remove(0);
 	}
 		
 	public byte[] getBytes(String field) {		
@@ -223,7 +231,7 @@ implements ModifiableIndexedFieldsRecord<String> {
 	}	
 	
 	public String getBuffer() {		
-		return new String(getBytes());
+		return new String(getBytes(), charset());
 	}
 	
 	public void setBytes(byte[] arg) {
@@ -232,7 +240,7 @@ implements ModifiableIndexedFieldsRecord<String> {
 	}
 	
 	public void setBuffer(String arg) {
-		setBytes(arg.getBytes());		
+		setBytes(arg.getBytes(charset()));		
 	}
 	
 	public List<String> getFields() {		
@@ -266,7 +274,7 @@ implements ModifiableIndexedFieldsRecord<String> {
 	 * @return Returns the char array.
 	 */
 	char[] toCharArray(byte[] bytes) {
-		String s = new String(bytes);
+		String s = new String(bytes, charset());
 		return s.toCharArray();		
 	}
 	
@@ -279,7 +287,7 @@ implements ModifiableIndexedFieldsRecord<String> {
 	 */
 	byte[] toByteArray(char[] chars) {
 		String s = new String(chars);
-		return s.getBytes();		
+		return s.getBytes(charset());		
 	}
 	
 	/**
@@ -333,6 +341,27 @@ implements ModifiableIndexedFieldsRecord<String> {
 		char[] ret = new char[len];
 		System.arraycopy(buffer, pos, ret, 0, len);
 		return ret;
+	}
+	
+	/**
+	 * Creates a new CSV record with the results of this Buffer.
+	 * 
+	 * @param delimiter
+	 *        Delimiter for the CSV record.
+	 * 
+	 * @return Returns the buffer converted to a CSV record.
+	 */
+	public String toCsv(char delimiter) {
+		int capacity = buffer.length + delimiterPositions.size();		
+		StringBuilder sb = new StringBuilder(capacity);
+		sb.append(buffer);
+		int i=0;
+		for (Integer pos : delimiterPositions) {
+			int p = pos + i;			
+			sb.insert(p, delimiter);
+			i++;
+		}
+		return sb.toString();
 	}
 	
 	

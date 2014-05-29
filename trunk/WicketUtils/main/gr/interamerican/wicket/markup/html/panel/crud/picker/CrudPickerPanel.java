@@ -191,7 +191,7 @@ extends PickerPanel<B> {
 			@Override
 			public void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				if(!ServicePanelUtils.authorizedByFlag(getDefinition().getDeleteActionFlag())) {
-					target.addComponent(feedBackPanel);
+					target.add(feedBackPanel);
 					CrudPickerPanel.this.error(getDefinition().getDeleteActionFlag().getDownMessage());
 					return;
 				}
@@ -228,7 +228,7 @@ extends PickerPanel<B> {
 			@Override
 			public void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				if(!ServicePanelUtils.authorizedByFlag(getDefinition().getUpdateActionFlag())) {
-					target.addComponent(feedBackPanel);
+					target.add(feedBackPanel);
 					CrudPickerPanel.this.error(getDefinition().getUpdateActionFlag().getDownMessage());
 					return;
 				}
@@ -238,12 +238,25 @@ extends PickerPanel<B> {
 				if(preEditValidator !=null && !preEditValidator.check(selection, target)) {
 					return;
 				}
+				
+				/*
+				 * When copying we do not update the definition list. The point
+				 * is to leave it intact. If the  update succeeds the updated
+				 * instance will be properly replaced. If not, the original instance
+				 * will still be on the list.
+				 */
 				selection = copyBean(selection);
 				getDefinition().getBeanModel().setObject(selection);
+				
+				/*
+				 * the instance might be changed here, so we resynch
+				 */
 				if(getDefinition().getReadBeforeEdit()) {
-					selection = readBean();
-					getDefinition().getBeanModel().setObject(selection);
+					B updatedSelection = selection;
+					updatedSelection = readBean();
+					resynchDefinition(selection, updatedSelection);
 				}
+				
 				AjaxEnabledCondition<B> formValidator = getDefinition().getUpdateValidator();
 				SingleBeanPanelDef<B> sbpDef = createSingleBeanPanelDef(
 						new RefreshTableAction(new EditItemAction(getDefinition().getUpdateAction())), formValidator, PanelCreatorMode.EDIT);
@@ -252,7 +265,7 @@ extends PickerPanel<B> {
 				beanPanel.replaceWith(replacement);
 				beanPanel = replacement;
 				beanPanel.setVisible(true);
-				target.addComponent(CrudPickerPanel.this);
+				target.add(CrudPickerPanel.this);
 			}
 		};
 		
@@ -289,7 +302,7 @@ extends PickerPanel<B> {
 					sbpFieldsPanel.setEnabled(false);
 				}
 				beanPanel.setVisible(true);
-				target.addComponent(CrudPickerPanel.this);
+				target.add(CrudPickerPanel.this);
 			}
 		};
 		
@@ -304,7 +317,7 @@ extends PickerPanel<B> {
 			@Override
 			public void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				if(!ServicePanelUtils.authorizedByFlag(getDefinition().getSaveActionFlag())) {
-					target.addComponent(feedBackPanel);
+					target.add(feedBackPanel);
 					CrudPickerPanel.this.error(getDefinition().getSaveActionFlag().getDownMessage());
 					return;
 				}
@@ -317,7 +330,7 @@ extends PickerPanel<B> {
 				beanPanel.replaceWith(replacement);
 				beanPanel = replacement;
 				beanPanel.setVisible(true);
-				target.addComponent(CrudPickerPanel.this);
+				target.add(CrudPickerPanel.this);
 			}
 		};
 		
@@ -520,6 +533,30 @@ extends PickerPanel<B> {
 	}
 	
 	/**
+	 * Updates the model object and the list in case a new instance is created.
+	 * <br/>
+	 * The case where the object equality between a list element and the oldInstance
+	 * is true for more than one of the list elements is not checked. This should not
+	 * happen.
+	 * 
+	 * @param oldInstance
+	 * @param newInstance
+	 */
+	void resynchDefinition(B oldInstance, B newInstance) {
+		if(oldInstance == newInstance) {
+			return; //nothing to do
+		}
+		
+		getDefinition().getBeanModel().setObject(newInstance);
+		
+		List<B> list = getDefinition().getList();
+		
+		int index = list.indexOf(oldInstance);
+		//an exception may be thrown here, if index=-1; this is intentional and should never happen
+		getDefinition().getList().set(index, newInstance); 
+	}
+	
+	/**
 	 * Wrapper around the delete action that is supplied by the service
 	 * panel client. This wrapper is responsible for repainting the 
 	 * panel's data table with the updated data.
@@ -529,6 +566,11 @@ extends PickerPanel<B> {
 	 */
 	private class DeleteItemAction extends CallbackWrapper {
 		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		/**
 		 * Creates a new CrudPickerPanel.DeleteItemAction object. 
 		 * @param action 
@@ -562,33 +604,39 @@ extends PickerPanel<B> {
 	private class EditItemAction extends CallbackWrapper {
 		
 		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		
+		/**
+		 * Placeholder for model object when before() runs.
+		 */
+		B oldInstance;
+
+		/**
 		 * Creates a new CrudPickerPanel.DeleteItemAction object. 
 		 * @param action 
 		 */
 		public EditItemAction(CallbackAction action) {
 			super(action);
-		} 
+		}
+		
+		@Override public void before(AjaxRequestTarget target) {
+			oldInstance = getDefinition().getBeanModel().getObject();
+		}
 
 		@Override public void after(AjaxRequestTarget target) {
-			/*
-			 * REMOVED to distribute other changes. Work in progress.
-			 */
-//			if(CrudPickerPanel.this.getFeedBackPanel().anyErrorMessage()) {
-//				return;
-//			}
-			B item = getDefinition().getBeanModel().getObject();
+			B newInstance = getDefinition().getBeanModel().getObject();
 			beanPanel.setVisible(false);
-			if(item == null) { return; }
+			if(newInstance == null) { return; }
 			CallbackAction refreshAction = getDefinition().getRefreshAfterDataOpAction();
 			if(refreshAction != null) {
 				 refreshAction.callBack(target);
 				 return;
 			}
-			List<B> list = getDefinition().getList();
-			if(list.contains(item)) {
-				int idx = list.indexOf(item);
-				list.set(idx, item);
-			}
+			
+			resynchDefinition(oldInstance, newInstance);
+			oldInstance = null;
 		}
 	}
 	
@@ -600,6 +648,11 @@ extends PickerPanel<B> {
 	 */
 	private class NewItemAction extends CallbackWrapper {
 		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		/**
 		 * Creates a new CrudPickerPanel.NewItemAction object.
 		 * 
@@ -625,6 +678,11 @@ extends PickerPanel<B> {
 	 */
 	private class HideBeanPanelAction implements CallbackAction {
 
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public void callBack(AjaxRequestTarget target) { hide(target); }
 		public void callBack(AjaxRequestTarget target, Form<?> form) { hide(target); }
 		public void setCaller(Component caller) { /* empty */ }
@@ -635,7 +693,7 @@ extends PickerPanel<B> {
 		 * @param target
 		 */
 		private void hide(AjaxRequestTarget target) {
-			target.addComponent(beanPanel);
+			target.add(beanPanel);
 			beanPanel.setVisible(false);
 		}
 	}

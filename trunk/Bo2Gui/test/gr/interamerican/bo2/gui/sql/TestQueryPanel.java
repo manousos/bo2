@@ -22,8 +22,7 @@ import javax.swing.JComboBox;
 import javax.swing.JTextArea;
 import javax.swing.table.TableModel;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 

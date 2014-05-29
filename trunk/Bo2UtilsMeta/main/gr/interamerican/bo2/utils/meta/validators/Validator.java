@@ -14,12 +14,14 @@ package gr.interamerican.bo2.utils.meta.validators;
 
 import gr.interamerican.bo2.utils.meta.exceptions.ValidationException;
 
+import java.io.Serializable;
+
 /**
  * A Validator validates a value, according to some validation rules.
  * 
  * @param <T> Type of object to validate. 
  */
-public interface Validator<T> {
+public interface Validator<T> extends Serializable {
 	
 	/**
 	 * Validates the value.

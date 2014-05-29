@@ -21,11 +21,11 @@ import gr.interamerican.wicket.bo2.markup.html.formcomponent.MoneyPage;
 import gr.interamerican.wicket.bo2.markup.html.formcomponent.SelfDrawnMoneyField;
 import gr.interamerican.wicket.bo2.test.Bo2WicketTest;
 import gr.interamerican.wicket.utils.WicketUtils;
-import junit.framework.Assert;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.tester.WicketTester;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -69,8 +69,8 @@ public class TestMoneyBoPDComponentFactory extends Bo2WicketTest{
 	public void testDrawMain_First(){
 		Component component = moneyBoPDComponentFactory.drawMain(moneyBoPropertyDescriptor,COMPONENT);
 		Assert.assertNotNull(component);
-		MoneyPage moneyPage = new MoneyPage(component);
 		wicketTester = new WicketTester();
+		MoneyPage moneyPage = new MoneyPage(component);
 		wicketTester.startPage(moneyPage);
 		wicketTester.assertRenderedPage(moneyPage.getClass());
 		wicketTester.assertComponent(WicketUtils.wicketPath(COMPONENT), SelfDrawnMoneyField.class);  
@@ -83,8 +83,8 @@ public class TestMoneyBoPDComponentFactory extends Bo2WicketTest{
 	public void testDrawMain_Sec(){
 		PropertyModel<Money> model  = new PropertyModel<Money>(moneyOwner, moneyBoPropertyDescriptor.getName());
 		Component component = moneyBoPDComponentFactory.drawMain(COMPONENT,model,moneyBoPropertyDescriptor);
-		MoneyPage moneyPage = new MoneyPage(component);
 		wicketTester = new WicketTester();
+		MoneyPage moneyPage = new MoneyPage(component);
 		wicketTester.startPage(moneyPage);
 		wicketTester.assertRenderedPage(moneyPage.getClass());
 		wicketTester.assertComponent(WicketUtils.wicketPath(COMPONENT), SelfDrawnMoneyField.class);  

@@ -15,8 +15,8 @@ package gr.interamerican.bo2.utils.meta.ext.formatters.nr;
 import gr.interamerican.bo2.arch.ext.TypedSelectable;
 import gr.interamerican.bo2.arch.utils.beans.TypedSelectableImpl;
 import gr.interamerican.bo2.utils.meta.formatters.FormatterResolver;
-import junit.framework.Assert;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 /**

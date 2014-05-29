@@ -20,9 +20,9 @@ import gr.interamerican.bo2.impl.open.utils.Exceptions;
 import gr.interamerican.bo2.impl.open.utils.Messages;
 import gr.interamerican.bo2.impl.open.utils.Util;
 import gr.interamerican.bo2.utils.CollectionUtils;
+import gr.interamerican.bo2.utils.ExceptionUtils;
 import gr.interamerican.bo2.utils.ReflectionUtils;
 import gr.interamerican.bo2.utils.StringUtils;
-import gr.interamerican.bo2.utils.beans.TypeBasedSelection;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -64,12 +64,6 @@ public class PersistenceWorkerFactoryImpl implements PersistenceWorkerFactory {
 	protected Map <Class<? extends PersistentObject<?>>, Class<? extends PersistenceWorker<?>>> pwClasses =
 		new HashMap <Class<? extends PersistentObject<?>>, Class<? extends PersistenceWorker<?>>> ();
 	
-	/**
-	 * Type based selection for the detached strategies.
-	 **/	 
-	protected TypeBasedSelection<DetachStrategy> detachStrategies = 
-		new TypeBasedSelection<DetachStrategy>();
-
 	/**
 	 * Maps classes with their names.
 	 */
@@ -203,9 +197,6 @@ public class PersistenceWorkerFactoryImpl implements PersistenceWorkerFactory {
 		if (!associatedPoClasses.contains(poClass)) {
 			pwClasses.put(poClass, pwClass);
 			associatedPoClasses.add(poClass);
-			PersistenceWorker<?> pw = newInstance(poClass, pwClass);
-			DetachStrategy pwStrategy = pw.getDetachStrategy();
-			detachStrategies.registerSelection(poClass, pwStrategy);
 			
 			if (logger.isInfoEnabled()) {
 				String msg = "Associated PersistentObject class " //$NON-NLS-1$
@@ -291,23 +282,45 @@ public class PersistenceWorkerFactoryImpl implements PersistenceWorkerFactory {
 		for (int i = 0; i < paths.length; i++) {
 			String path = paths[i].trim();
 			if (path.length()!=0) {
-				Properties p = CollectionUtils.readProperties(path);
+				Properties p = loadPropertiesIfAvailable(path);
 				CollectionUtils.putPropertiesToMap(p, pwMappings);
 			}
 		}		
 	}
 	
-	public <M extends PersistentObject<?>> 
-	DetachStrategy getDetachStrategy(Class<M> type) {
-		DetachStrategy detachStrategy = detachStrategies.selectionForType(type);
-		if (detachStrategy==null) {			
-			PersistenceWorker<M> pw = createPw(type);
-			detachStrategy = pw.getDetachStrategy();
-		}		
-		return detachStrategy;
+	/**
+	 * Loads a properties file resource, if it is available. If unavailable,
+	 * a warning is printed. This is not normally acceptable and should be 
+	 * considered a fatal error when in production. 
+	 * 
+	 * @param path
+	 *        Resource path.
+	 * 
+	 * @return loaded properties.
+	 */
+	@SuppressWarnings("nls")
+	private Properties loadPropertiesIfAvailable(String path) {
+		try {
+			Properties p = CollectionUtils.readProperties(path);
+			return p;
+		} catch(RuntimeException rtex) {
+			if(ExceptionUtils.isCausedBy(rtex, IOException.class)) {
+				String msg = StringUtils.concat(
+						"Non existant pw mappings file: ",
+						path,
+						". This is FATAL in production deployments and should be investigated.");
+				logger.error(msg);
+			} else {
+				throw rtex;
+			}
+		}
+		return new Properties();
 	}
 	
-	
-	
+	public <M extends PersistentObject<?>> 
+	DetachStrategy getDetachStrategy(Class<M> type) {
+		PersistenceWorker<M> pw = createPw(type);
+		return pw.getDetachStrategy();
+	}
 
 }

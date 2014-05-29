@@ -20,8 +20,7 @@ import gr.interamerican.bo2.impl.open.runtime.RuntimeCommand;
 
 import java.io.BufferedReader;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -58,6 +57,7 @@ public class TestAbstractNamedStreamOperation {
 			super("Sample.csv"); //$NON-NLS-1$
 		}
 		
+		@Override
 		public void execute() throws LogicException, DataException {
 			Assert.assertNotNull(stream);
 			String s = stream.readString();

@@ -16,16 +16,14 @@ import gr.interamerican.bo2.utils.meta.formatters.Formatter;
 import gr.interamerican.bo2.utils.meta.formatters.FormatterResolver;
 import gr.interamerican.bo2.utils.meta.parsers.ParserResolver;
 
-import java.io.Serializable;
-
 /**
  * {@link BoPropertyDescriptor} for Long.
  */
 public class LongBoPropertyDescriptor 
-extends AbstractIntTypesBoPropertyDescriptor<Long> implements Serializable {
+extends AbstractIntTypesBoPropertyDescriptor<Long> {
 	
 	/**
-	 * serialVersionUID.
+	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -42,6 +40,11 @@ extends AbstractIntTypesBoPropertyDescriptor<Long> implements Serializable {
 			return FormatterResolver.<Long>getNrFormatter(Long.class);
 		}
 		return FormatterResolver.<Long>getFormatter(Long.class);
+	}
+	
+	@Override
+	public Long valueOf(Number value) {	
+		return value.longValue();
 	}
 	
 }

@@ -24,11 +24,14 @@ import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParm
 import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmNames.UI_CAN_ADD_THREADS;
 import static gr.interamerican.bo2.impl.open.runtime.concurrent.BatchProcessParmNames.UI_REFRESH_INTERVAL;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import gr.interamerican.bo2.arch.Operation;
 import gr.interamerican.bo2.arch.Query;
+import gr.interamerican.bo2.arch.ext.CriteriaDependent;
+import gr.interamerican.bo2.samples.archutil.beans.SampleCriteriaDependentBean;
 import gr.interamerican.bo2.samples.bean.BeanWith2Fields;
 import gr.interamerican.bo2.samples.implopen.operations.FailingOperation;
 import gr.interamerican.bo2.samples.implopen.runtime.concurrent.PrintStringOperation;
@@ -40,8 +43,7 @@ import gr.interamerican.bo2.utils.meta.formatters.ObjectFormatter;
 
 import java.util.Properties;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -153,7 +155,14 @@ public class TestBatchProcessParmFactoryImpl {
 		Modification<Object> mod3 = in.getPreOperationParametersSetter();
 		assertNotNull(mod3);
 		Modification<Object> mod4 = in.getPostOperationParametersSetter();
-		assertNotNull(mod4);		
+		assertNotNull(mod4);	
+		
+		assertNotEquals(mod1, mod2);
+		assertNotEquals(mod1, mod3);
+		assertNotEquals(mod1, mod4);
+		assertNotEquals(mod2, mod3);
+		assertNotEquals(mod2, mod4);
+		assertNotEquals(mod3, mod4);
 		
 		assertEquals(interval, in.getMonitoringMailInterval());
 		assertEquals(recipients, in.getMonitoringMailRecipients());
@@ -170,7 +179,7 @@ public class TestBatchProcessParmFactoryImpl {
 	public void testCreateModification_withNoParams() {
 		Properties p = sample();
 		BatchProcessParmFactoryImpl impl = new BatchProcessParmFactoryImpl();
-		Modification<Object> mod = impl.createModification(p);
+		Modification<Object> mod = impl.createModification(p,Object.class);
 		assertNull(mod);
 	}
 	
@@ -189,12 +198,42 @@ public class TestBatchProcessParmFactoryImpl {
 		p.setProperty(field2, v2.toString());
 		
 		BatchProcessParmFactoryImpl impl = new BatchProcessParmFactoryImpl();		
-		Modification<Object> mod = impl.createModification(p);
+		Modification<Object> mod = impl.createModification(p,Object.class);
 		assertNotNull(mod);
 		BeanWith2Fields bean = new BeanWith2Fields();
 		mod.execute(bean);
 		Assert.assertEquals(v1, bean.getField1());
 		Assert.assertEquals(v2, bean.getField2());
+	}
+	
+	/**
+	 * Test for createModification() when no additional parameters
+	 * exist.
+	 */
+	@SuppressWarnings("nls")
+	@Test
+	public void testCreateModification_forCriteriaDependentClass() {
+		Properties p = sample();
+		String field1 = "field1"; 
+		String field2 = "field2"; 
+		String property1 = "property1"; 
+		String f1 = "f1";
+		Integer f2 = 2;		
+		String p1 = "p1";
+		
+		p.setProperty(field1, f1);
+		p.setProperty(field2, f2.toString());
+		p.setProperty(property1, p1);
+		
+		BatchProcessParmFactoryImpl impl = new BatchProcessParmFactoryImpl();		
+		Modification<Object> mod = impl.createModification(p,CriteriaDependent.class);
+		
+		SampleCriteriaDependentBean bean = new SampleCriteriaDependentBean();		
+		assertNotNull(mod);				
+		mod.execute(bean);
+		Assert.assertEquals(p1, bean.getProperty1());
+		Assert.assertEquals(f1, bean.getCriteria().getField1());
+		Assert.assertEquals(f2, bean.getCriteria().getField2());
 	}
 	
 	

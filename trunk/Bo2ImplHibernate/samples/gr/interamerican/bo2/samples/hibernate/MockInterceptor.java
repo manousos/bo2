@@ -1,13 +1,13 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/copyleft/lesser.html
  * 
- * This library is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  ******************************************************************************/
 package gr.interamerican.bo2.samples.hibernate;
@@ -51,37 +51,39 @@ public class MockInterceptor implements Interceptor {
 	public void onDelete(Object entity, Serializable id, Object[] state, String[] propertyNames, Type[] types)
 			throws CallbackException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onCollectionRecreate(Object collection, Serializable key) throws CallbackException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onCollectionRemove(Object collection, Serializable key) throws CallbackException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onCollectionUpdate(Object collection, Serializable key) throws CallbackException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void preFlush(Iterator entities) throws CallbackException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void postFlush(Iterator entities) throws CallbackException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -118,19 +120,19 @@ public class MockInterceptor implements Interceptor {
 	@Override
 	public void afterTransactionBegin(Transaction tx) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void beforeTransactionCompletion(Transaction tx) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void afterTransactionCompletion(Transaction tx) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

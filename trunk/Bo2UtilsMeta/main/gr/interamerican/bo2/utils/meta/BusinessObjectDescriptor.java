@@ -17,6 +17,7 @@ import gr.interamerican.bo2.utils.attributes.Named;
 import gr.interamerican.bo2.utils.meta.descriptors.BoPropertyDescriptor;
 import gr.interamerican.bo2.utils.meta.exceptions.MultipleValidationsException;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -28,7 +29,7 @@ import java.util.Set;
  * @param <T> Type of business object.
  */
 public interface BusinessObjectDescriptor<T> 
-extends Named, Labeled {
+extends Named, Labeled, Serializable {
 
 	/**
 	 * Gets the propertyDescriptors.
@@ -89,5 +90,24 @@ extends Named, Labeled {
 	 * @return Returns the expressions against which a T can be validated.
 	 */
 	public Set<BusinessObjectValidationExpression> getExpressions();
+	
+	/**
+	 * Returns the BoPropertyDescriptor with the specified name.
+	 * 
+	 * @param descriptorName
+	 * @return Returns the BoPropertyDescriptor with the specified name.
+	 */
+	public BoPropertyDescriptor<?> getDescriptorByName(String descriptorName);
+	
+	/**
+	 * Asks this {@link BusinessObjectDescriptor} which of its property descriptors
+	 * affects the argument. If the argument is not contained in {@link #getPropertyDescriptors()}
+	 * a RuntimeExcetion is thrown.
+	 * 
+	 * @param affected
+	 *        Affected 
+	 * @return The affecting BoPropertyDescriptor
+	 */
+	public BoPropertyDescriptor<?> whoAffectsMe(BoPropertyDescriptor<?> affected);
 	
 }

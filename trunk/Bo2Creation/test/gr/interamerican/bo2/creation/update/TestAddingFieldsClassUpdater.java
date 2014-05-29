@@ -15,8 +15,8 @@ package gr.interamerican.bo2.creation.update;
 import gr.interamerican.bo2.creation.exception.ClassCreationException;
 import gr.interamerican.bo2.samples.empty.IEmpty1Impl1;
 import gr.interamerican.bo2.utils.ReflectionUtils;
-import junit.framework.Assert;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 /**

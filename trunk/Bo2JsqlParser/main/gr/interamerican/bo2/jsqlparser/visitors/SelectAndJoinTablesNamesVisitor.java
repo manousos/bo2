@@ -47,16 +47,6 @@ public class SelectAndJoinTablesNamesVisitor implements StatementVisitor, Select
 	 */
 	protected Set<String> tableNames = new HashSet<String>();
 
-	/**
-	 * method to handle binary expressions.
-	 * 
-	 * @param b
-	 */
-	// private void handleBinaryExpression(BinaryExpression b) {
-	// b.getLeftExpression().accept(this);
-	// b.getRightExpression().accept(this);
-	// }
-
 	@Override
 	public void visit(Select select) {
 		select.getSelectBody().accept(this);

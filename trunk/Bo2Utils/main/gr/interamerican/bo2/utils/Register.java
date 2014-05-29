@@ -6,8 +6,13 @@ import java.util.HashMap;
  * Register lets register key-value pairs only once per key.
  * 
  * Trying to re-register the same key, will throw a RuntimeException.
+ * 
+ * Users can explicitly remove a key from the registry.
+ * 
+ * Register is VM scoped and it is not thread-safe.
  */
 public class Register {
+	
 	/**
 	 * Map.
 	 */
@@ -40,8 +45,13 @@ public class Register {
 		}
 	}
 	
-	
-	
-	
+	/**
+	 * Removes a value from the register.
+	 * 
+	 * @param key
+	 */
+	public static void remove(Object key) {
+		map.remove(key);
+	}
 
 }

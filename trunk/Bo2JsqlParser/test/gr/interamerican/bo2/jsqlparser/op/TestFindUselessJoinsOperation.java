@@ -17,8 +17,7 @@ import gr.interamerican.bo2.utils.sql.exceptions.SqlParseException;
 import java.util.HashMap;
 import java.util.Map;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 

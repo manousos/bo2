@@ -26,8 +26,6 @@ import gr.interamerican.wicket.test.WicketTest;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Assert;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.junit.Test;
@@ -42,7 +40,6 @@ public class TestSelfDrawnForm extends WicketTest {
 	 */
 	static final String SELF_DRAWN_FORM_ID = "sdf"; //$NON-NLS-1$
 	
-	
 	/**
 	 * Form to test.
 	 */
@@ -52,18 +49,10 @@ public class TestSelfDrawnForm extends WicketTest {
 	 * Tests creation.
 	 */
 	@Test
-	public void testConstructor() {
-		tester.startPage(testPageSource());
-		Assert.assertNotNull(form);
-		Assert.assertNotNull(form.boFormValidator);
-		Assert.assertNotNull(form.selfDrawnPanel);
-		Assert.assertTrue(form.getFormValidators().contains(form.boFormValidator));
-		Assert.assertTrue(form.contains(form.selfDrawnPanel, false));
-		getFormTester().submit();		
+	public void testCreation() {
+		tester.startPage(getTestPage());
+		getFormTester().submit();
 	}
-	
-	
-	
 	
 	@Override
 	@SuppressWarnings("nls")

@@ -23,6 +23,7 @@ import gr.interamerican.bo2.utils.meta.formatters.Formatter;
 import gr.interamerican.bo2.utils.meta.formatters.ObjectFormatter;
 
 import java.math.BigDecimal;
+import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,6 +35,11 @@ import java.util.Date;
  */
 public class MultiFormatter 
 implements Formatter<Object>{
+	
+	/**
+	 * serialVersionUID
+	 */
+	private static final long serialVersionUID = 1L;
 	
 	/**
 	 * Formatters.
@@ -52,6 +58,7 @@ implements Formatter<Object>{
 		formatters.registerSelection(Double.class, new DecimalFormatter<Double>(decimalDigits));
 		formatters.registerSelection(BigDecimal.class, new DecimalFormatter<BigDecimal>(decimalDigits));
 		DateFormat df = new SimpleDateFormat(Bo2UtilsEnvironment.getShortDateFormatPattern());
+		formatters.registerSelection(Time.class, new ObjectFormatter());
 		formatters.registerSelection(Date.class, new DateFormatter(df));
 		formatters.registerSelection(TranslatableEntry.class, new TranslatableEntryFormatter<Object>());
 		formatters.registerSelection(TranslatableEntryOwner.class, new TranslatableEntryOwnerFormatter<Object>());

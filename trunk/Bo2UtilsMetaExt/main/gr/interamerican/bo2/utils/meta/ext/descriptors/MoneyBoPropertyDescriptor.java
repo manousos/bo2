@@ -13,11 +13,14 @@
 package gr.interamerican.bo2.utils.meta.ext.descriptors;
 
 import gr.interamerican.bo2.arch.Money;
+import gr.interamerican.bo2.arch.utils.beans.MoneyImpl;
 import gr.interamerican.bo2.utils.meta.descriptors.AbstractBoPropertyDescriptor;
 import gr.interamerican.bo2.utils.meta.exceptions.ParseException;
 import gr.interamerican.bo2.utils.meta.ext.formatters.MoneyFormatter;
 import gr.interamerican.bo2.utils.meta.ext.parsers.MoneyParser;
 import gr.interamerican.bo2.utils.meta.formatters.Formatter;
+
+import java.math.BigDecimal;
 
 /**
  * Property description for a {@link Money} property.
@@ -25,6 +28,10 @@ import gr.interamerican.bo2.utils.meta.formatters.Formatter;
 public class MoneyBoPropertyDescriptor
 extends AbstractBoPropertyDescriptor<Money> {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	/**
 	 * zero allowed flag.
 	 */
@@ -129,6 +136,18 @@ extends AbstractBoPropertyDescriptor<Money> {
 	@Override
 	public Money parse(String value) throws ParseException {
 		return new MoneyParser(getLengthOfDecimalPart()).parse(value);
+	}
+	
+	@Override
+	public Money valueOf(Number value) {
+		BigDecimal bd; 
+		if (value instanceof BigDecimal) {
+			bd = (BigDecimal)value;
+		} else {
+			bd = new BigDecimal(value.doubleValue()); 
+		}
+		return new MoneyImpl(bd);
+	
 	}
 
 }

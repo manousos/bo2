@@ -18,10 +18,10 @@ import gr.interamerican.bo2.utils.meta.descriptors.BigDecimalBoPropertyDescripto
 import gr.interamerican.wicket.bo2.markup.html.form.SelfDrawnBigDecimalTextField;
 import gr.interamerican.wicket.bo2.markup.html.form.SelfDrawnLabel;
 import gr.interamerican.wicket.markup.html.TestPage;
-import junit.framework.Assert;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.PropertyModel;
+import org.junit.Assert;
 import org.junit.Test;
 
 
@@ -75,7 +75,7 @@ public class TestGenericBoPDComponentFactory extends BaseClassForTestingComponen
 //	@Test
 //	public void testDrawMain_First(){
 //		Component component = doubleBoPDComponentFactory.drawMain(doubleBoPropertyDescriptor, TEST_WICKET_ID);
-//		tester.startPage(testPageSource(component));
+//		tester.startPage(getTestPage(component));
 //		tester.assertComponent(path(StringConstants.EMPTY), SelfDrawnBigDecimalTextField.class); 
 //	}
 //	
@@ -85,7 +85,7 @@ public class TestGenericBoPDComponentFactory extends BaseClassForTestingComponen
 //	@Test
 //	public void testDrawMain_Second(){
 //		Component component = doubleBoPDComponentFactory.drawMain(bean1, doubleBoPropertyDescriptor,TEST_WICKET_ID);
-//		tester.startPage(testPageSource(component));
+//		tester.startPage(getTestPage(component));
 //		tester.assertComponent(path(StringConstants.EMPTY), SelfDrawnBigDecimalTextField.class); 
 //	}
 	

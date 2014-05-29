@@ -24,7 +24,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses(
 	{
 
-		TestAbstractCachedObjectBoPropertyDescriptor.class,
+		TestAbstractCacheRelatedObjectBoPropertyDescriptor.class,
 		TestCachedEntryBoPropertyDescriptor.class,
 		TestCachedEntryOwnerBoPropertyDescriptor.class,
 		TestMoneyBoPropertyDescriptor.class,

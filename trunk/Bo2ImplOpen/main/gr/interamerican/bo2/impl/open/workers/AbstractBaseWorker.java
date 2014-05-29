@@ -20,6 +20,7 @@ import gr.interamerican.bo2.impl.open.annotations.Bo2AnnoUtils;
 import gr.interamerican.bo2.impl.open.annotations.Parameter;
 import gr.interamerican.bo2.impl.open.annotations.ParametersOrder;
 import gr.interamerican.bo2.utils.ReflectionUtils;
+import gr.interamerican.bo2.utils.StringConstants;
 import gr.interamerican.bo2.utils.annotations.Child;
 import gr.interamerican.bo2.utils.reflect.analyze.TypeAnalysis;
 
@@ -93,6 +94,11 @@ implements Worker {
 	 */
 	Set<Field> parameterBeanFields;
 	
+	/**
+	 * Other workers marked as children.
+	 */
+	List<Worker> markedChildren=new ArrayList<Worker>();
+	
 
 	/**
 	 * indicates if the worker is in state open.
@@ -130,7 +136,6 @@ implements Worker {
 	}
 	
 	
-	
 	/**
 	 * Gets the children workers.
 	 * 
@@ -138,8 +143,10 @@ implements Worker {
 	 *         worker. 
 	 */
 	List<Worker> getChildren() {
-		return ReflectionUtils.getValuesOfFields
+		List<Worker> list = ReflectionUtils.getValuesOfFields
 			(this, childFields, Worker.class, false);
+		list.addAll(markedChildren);
+		return list;
 	}
 	
 	/**
@@ -207,7 +214,7 @@ implements Worker {
 	 */
 	protected void validateOpen() throws DataException {
 		if (!open) {
-			throw new DataException(NOT_OPEN); 
+			throw new DataException(NOT_OPEN + StringConstants.SPACE + this.getClass().getName()); 
 		}
 	}
 
@@ -271,6 +278,27 @@ implements Worker {
 	protected String[] getParameterNamesArray() {
 		return Bo2AnnoUtils.getParameterNames(this.getClass());
 	}
+	
+	/**
+	 * Marks the specified worker as a child.
+	 * 
+	 * @param child
+	 */
+	protected void markAsChild(Worker child) {
+		markedChildren.add(child);
+	}
+	
+	/**
+	 * Marks the specified workers as a children.
+	 * 
+	 * @param children
+	 */
+	protected <T extends Worker> void markAsChildren(T[] children) {
+		for (T t : children) {
+			markAsChild(t);			
+		}		
+	}
+
 
 
 }

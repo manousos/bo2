@@ -48,6 +48,10 @@ import org.junit.runners.Suite.SuiteClasses;
 		TestConditionalMethod.class,
 		TestDynamicMethod.class,
 		TestMultipleValuesMap.class,
+		TestTimer.class,
+		TestSystemState.class,
+		TestSegmentedDistance.class,
+		TestSegmentedArea.class,
 	}
 )
 public class TestSuiteBo2UtilsBeans {

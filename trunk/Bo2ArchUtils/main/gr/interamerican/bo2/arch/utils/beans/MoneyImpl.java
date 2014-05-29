@@ -19,10 +19,11 @@ import gr.interamerican.bo2.utils.Utils;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Currency;
-import java.util.Locale;
 
 /**
- * Money.
+ * {@link Money} implementation.
+ * 
+ * TODO: Choose default currency from the environment.
  * 
  */
 public class MoneyImpl implements Money {
@@ -32,25 +33,20 @@ public class MoneyImpl implements Money {
 	 */
 	private static final long serialVersionUID = 1L;
 
-
 	/**
 	 * Amount.
 	 */
 	private BigDecimal amount=BigDecimal.ZERO;
 
-
 	/**
-	 * Currency. For now euro. 
-	 * 
-	 * TODO: Default value based on default environment Locale.
+	 * Currency. Default value based on default environment Locale.
 	 */
-	private Currency currency=Currency.getInstance("EUR");
+	private Currency currency=Currency.getInstance("EUR"); //$NON-NLS-1$
 	
 	/**
 	 * Creates a new MoneyImpl object. 
 	 */
 	public MoneyImpl() {
-		super();
 		/* empty */
 	}
 	
@@ -98,7 +94,7 @@ public class MoneyImpl implements Money {
 		if(!StringUtils.isNullOrBlank(currencyCode)) {
 			currency = Currency.getInstance(currencyCode);
 		} else {
-			currency = Currency.getInstance(Locale.getDefault());
+			currency = Currency.getInstance("EUR"); //$NON-NLS-1$
 		}
 	}
 	

@@ -14,8 +14,8 @@ package gr.interamerican.bo2.utils.meta.ext.parsers;
 
 import gr.interamerican.bo2.arch.ext.TypedSelectable;
 import gr.interamerican.bo2.utils.meta.exceptions.ParseException;
-import junit.framework.Assert;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 /**

@@ -24,11 +24,17 @@ import gr.interamerican.wicket.samples.creators.FieldsPanelCreatorForBeanWithOrd
 import gr.interamerican.wicket.samples.panels.BeanWithOrderedFieldsFormPanel;
 import gr.interamerican.wicket.test.WicketTest;
 
+import java.io.Serializable;
+import java.text.DecimalFormat;
+import java.util.List;
+
+import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.util.tester.FormTester;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -117,7 +123,7 @@ public class TestSingleBeanPanel extends WicketTest {
 		formTester.setValue("beanFormFieldsPanel:second", String.valueOf(userInput.getSecond()));
 		formTester.setValue("beanFormFieldsPanel:third", String.valueOf(userInput.getThird()));
 		formTester.setValue("beanFormFieldsPanel:fourth", String.valueOf(userInput.getFourth()));
-		formTester.setValue("beanFormFieldsPanel:fifth", String.valueOf(userInput.getFifth()));
+		formTester.setValue("beanFormFieldsPanel:fifth", new DecimalFormat().format((userInput.getFifth())));
 		
 		callback.setExecuted(false);
 		
@@ -229,8 +235,12 @@ public class TestSingleBeanPanel extends WicketTest {
 			tester.getComponentFromLastRenderedPage(path("feedback"));
 		assertNotNull(feedbackPanel);
 		
-		tester.assertErrorMessages(new String[]{"\'noDoubleHere\' is not a valid Double."});
 		tester.assertNoInfoMessage();
+		List<Serializable> errors = tester.getMessages(FeedbackMessage.ERROR);
+		Assert.assertFalse(errors.isEmpty());
+		
+		Assert.assertTrue(errors.get(0).toString().contains("noDoubleHere"));
+		System.out.println(errors.get(0));
 		
     	BeanWithOrderedFields formBean = form.getModelObject();
     	BeanWithOrderedFields panelBean = (BeanWithOrderedFields) bwofPanel.getDefaultModelObject();
@@ -268,7 +278,7 @@ public class TestSingleBeanPanel extends WicketTest {
 				return new BeanWithOrderedFields();
 			}
 		};
-		tester.startPage(testPageSource(panel));
+		tester.startPage(getTestPage(panel));
 	}
 	
 	/**

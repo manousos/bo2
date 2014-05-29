@@ -59,20 +59,9 @@ extends AbstractNamedStreamsManager {
 	throws DataException {	
 		return new MockNamedStream(typeOfNewStream, StreamResource.OBJECT, null, nameOfNewStream, 0, Bo2UtilsEnvironment.getDefaultTextCharset());
 	}
-	
-	
 
-	
-	
-
-
-
-	
-	
-	
-	
-	
-	
-	
+	public Charset getCharset(String name) {
+		return Bo2UtilsEnvironment.getDefaultTextCharset();
+	}
 
 }

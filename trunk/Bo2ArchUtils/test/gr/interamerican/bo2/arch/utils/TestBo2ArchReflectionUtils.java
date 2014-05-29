@@ -14,11 +14,11 @@ package gr.interamerican.bo2.arch.utils;
 
 import gr.interamerican.bo2.arch.ext.Codified;
 import gr.interamerican.bo2.arch.utils.beans.CodifiedNamedImpl;
-import gr.interamerican.bo2.samples.archutil.beans.BeanWithCodeProperty;
 import gr.interamerican.bo2.samples.archutil.beans.BeanWithCodifiedProperty;
+import gr.interamerican.bo2.samples.archutil.beans.SampleBean1;
 import gr.interamerican.bo2.utils.StringConstants;
-import junit.framework.Assert;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -42,7 +42,7 @@ public class TestBo2ArchReflectionUtils {
 		source.setNumberProperty(codified);
 		source.setName(name);
 		
-		BeanWithCodeProperty target = new BeanWithCodeProperty();
+		SampleBean1 target = new SampleBean1();
 		Bo2ArchReflectionUtils.copyPropertyHandlingCodifieds(source, target, "numberProperty");
 		Bo2ArchReflectionUtils.copyPropertyHandlingCodifieds(source, target, "name");
 		
@@ -69,7 +69,7 @@ public class TestBo2ArchReflectionUtils {
 		BeanWithCodifiedProperty source = new BeanWithCodifiedProperty();
 		source.setStringProperty(codified);
 		source.setName(name);
-		BeanWithCodeProperty target = new BeanWithCodeProperty();
+		SampleBean1 target = new SampleBean1();
 		Bo2ArchReflectionUtils.copyPropertyHandlingCodifieds(source, target, "stringProperty");
 		Bo2ArchReflectionUtils.copyPropertyHandlingCodifieds(source, target, "name");
 		

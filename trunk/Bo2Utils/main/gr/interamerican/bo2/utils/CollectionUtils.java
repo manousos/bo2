@@ -149,10 +149,10 @@ public class CollectionUtils {
 	 * @return the value of the key or an epmty String if the key is not found
 	 */
 	public static String getOptionalProperty(Properties properties, String key) {
-		if(properties.getProperty(key)==null)
+		if(properties.getProperty(key)==null) {
 			return StringConstants.EMPTY;
-		else
-			return properties.getProperty(key).trim();
+		}
+		return properties.getProperty(key).trim();
 	}
 	
 	/**
@@ -340,6 +340,41 @@ public class CollectionUtils {
 		if (currentIndex<newIndex) {
 			ReflectionUtils.setProperty(indexPropertyName, newIndex, nextElement);
 		}		
+		collection.add(nextElement);
+	}
+
+	/**
+	 * Adds the next element in a collection.
+	 * 
+	 * This is exactly the same method as
+	 * <code>addNextI(collection, t, string)</code> with the difference that it
+	 * is intended for an index property of type Short.
+	 * 
+	 * @param collection
+	 *            Collection in which the next element is being added.
+	 * @param nextElement
+	 *            Next element that will be added in the collection.
+	 * @param indexPropertyName
+	 *            Name of the property that defines the index.
+	 * @param <T>
+	 *            Type of elements.
+	 * 
+	 * @see #addNextI(Collection, Object, String)
+	 */
+	public static <T> void addNextS(Collection<T> collection, T nextElement, String indexPropertyName) {
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		T maxOwner = SelectionUtils.<T,Comparable>max(collection, indexPropertyName);
+		Short newIndex = 1;
+		if (maxOwner != null) {
+			Short maxIndex = (Short) ReflectionUtils.getProperty(indexPropertyName, maxOwner);
+			maxIndex = Utils.notNull(maxIndex, (short) 0);
+			newIndex = (short) (maxIndex + 1);
+		}
+		Short currentIndex = (Short) ReflectionUtils.getProperty(indexPropertyName, nextElement);
+		currentIndex = Utils.notNull(currentIndex, (short) 0);
+		if (currentIndex < newIndex) {
+			ReflectionUtils.setProperty(indexPropertyName, newIndex, nextElement);
+		}
 		collection.add(nextElement);
 	}
 	
@@ -941,6 +976,36 @@ public class CollectionUtils {
 		return countByCondition(condition, collection);
 	}
 	
-		
+	/**
+	 * Partition a list to a list that contains sub-lists of the list with a specified size.
+	 * The last sub-list may be of size less than {@code size}. The sub-lists maintain the
+	 * initial ordering.
+	 * @param list
+	 * @param size
+	 * @return a list that contains sub-lists of specific size.
+	 */
+	public static <T> List<List<T>> partition(List<T> list, int size) {
+		List<List<T>> result = new ArrayList<List<T>>();
+		if(list.size() < size) {
+			result.add(list);
+			return result;
+		}
+		int ctr=0;
+		List<T> part = new ArrayList<T>();
+		for(T t : list) {
+			if(ctr >= size && ctr%size==0) { //not the first time
+				result.add(part);
+				part = new ArrayList<T>();
+				part.add(t);
+			} else {
+				part.add(t);
+			}
+			ctr++;
+		}
+		if(!part.isEmpty()) {
+			result.add(part);
+		}
+		return result;
+	}
 	
 }

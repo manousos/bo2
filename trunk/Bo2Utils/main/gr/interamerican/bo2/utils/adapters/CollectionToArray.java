@@ -23,12 +23,12 @@ import java.util.List;
  *        Type of elements in the collection.
  */
 public class CollectionToArray<T> 
-implements AnyOperation<List<T>, T[]> {
+implements Transformation<List<T>, T[]> {
 	
 	/**
 	 * Sample array.
 	 */
-	private T[] sample;
+	T[] sample;
 	
 	/**
 	 * Creates a new ListToArray object. 

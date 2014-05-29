@@ -29,7 +29,8 @@ import org.junit.runners.Suite.SuiteClasses;
 		TestExceptions.class,
 		TestBo2.class,
 		TestMessages.class,
-		TestErasers.class
+		TestErasers.class,
+		TestBo2Utils.class,
 	}
 )
 public class TestSuiteBo2ImplOpenUtils {

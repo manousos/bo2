@@ -15,8 +15,7 @@ package gr.interamerican.bo2.utils.beans;
 import java.util.HashSet;
 import java.util.Set;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 /**

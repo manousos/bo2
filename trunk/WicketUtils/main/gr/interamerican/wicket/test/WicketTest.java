@@ -15,50 +15,25 @@ package gr.interamerican.wicket.test;
 import gr.interamerican.wicket.markup.html.TestPage;
 import gr.interamerican.wicket.utils.WicketUtils;
 
-import java.util.Locale;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
-import org.apache.wicket.RequestCycle;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.util.tester.FormTester;
-import org.apache.wicket.util.tester.ITestPageSource;
 import org.apache.wicket.util.tester.WicketTester;
-import org.junit.After;
-import org.junit.Before;
+import org.apache.wicket.util.tester.WicketTesterHelper;
+import org.junit.Assert;
 
 
 /**
  * Base class for wicket tests.
  */
 public class WicketTest {
-	
-	/**
-	 * Placeholder for the default locale.
-	 */
-	private Locale defaultLocale;
-	
-	/**
-	 * Set the locale to English. Simplifies tests concerning
-	 * transformations of doubles between user input and actual
-	 * model data. 
-	 */
-	@Before
-	public void setupLocale() {
-		defaultLocale = Locale.getDefault();
-		Locale.setDefault(Locale.ENGLISH);
-	}
-	
-	/**
-	 * Restore the locale.
-	 */
-	@After
-	public void restoreLocale() {
-		Locale.setDefault(defaultLocale);
-	}
 	
 	/**
 	 * Creates a new WicketTest object. 
@@ -89,51 +64,29 @@ public class WicketTest {
 	protected WicketTester tester;
 	
 	/**
-	 * Creates a new ITestPageSource that contains the {@link TestPage}.
+	 * Creates a new Page that contains the component created by {@link #initializeComponent()}.
 	 *        
-	 * @return Returns the test page source.
+	 * @return Returns the test page.
 	 */
-	@SuppressWarnings("serial")
-	protected ITestPageSource testPageSource() {
-		return new ITestPageSource() {
-			public Page getTestPage() {				
-				return new TestPage(initializeComponent());
-			}
-		};
+	protected Page getTestPage() {
+		return new TestPage(initializeComponent());
 	}
 	
 	/**
-	 * Creates a new ITestPageSource that contains the {@link TestPage}
-	 * with the specified component.
+	 * Creates a new Page that contains the specified component.
 	 * 
 	 * @param cmp
 	 *        The component to test. 
 	 *        
-	 * @return Returns the test page source.
+	 * @return Returns the test page.
 	 */
-	@SuppressWarnings("serial")
-	protected ITestPageSource testPageSource(final Component cmp) {
-		return new ITestPageSource() {
-			public Page getTestPage() {				
-				return new TestPage(cmp);
-			}
-		};
-	}
-	
-	/**
-	 * Gets a new RequestCycle.
-	 * 
-	 * @return Returns a new RequestCycle.
-	 * 
-	 */
-	protected RequestCycle newRequestCycle() {
-		return tester.getApplication().newRequestCycle
-			(tester.getWicketRequest(), tester.getWicketResponse());
+	protected Page getTestPage(Component cmp) {
+		return new TestPage(cmp);
 	}
 	
 	/**
 	 * For components that require a provider in order to be initialized,
-	 * overriding this hook and using {@link #testPageSource()} might be 
+	 * overriding this hook and using {@link #getTestPage()} might be 
 	 * preferable.
 	 * 
 	 * @return Returns the test page source.
@@ -210,6 +163,27 @@ public class WicketTest {
 	 */
 	protected Component getTestSubject() {
 		return tester.getComponentFromLastRenderedPage(subjectPath());
+	}
+	
+	/**
+	 * Common assertions.
+	 */
+	protected void commonAssertions_noError() {
+		tester.assertNoErrorMessage();
+		Assert.assertTrue(tester.getLastRenderedPage() instanceof TestPage);
+		Assert.assertEquals(HttpServletResponse.SC_OK, tester.getResponse().getStatus());
+	}
+	
+	/**
+	 * Common assertions when error message is expected.
+	 * @param errorMessagePortion 
+	 */
+	protected void commonAssertions_error(String errorMessagePortion) {
+		String messages = WicketTesterHelper.asLined(tester.getMessages(FeedbackMessage.ERROR));
+		Assert.assertNotNull(messages);
+		Assert.assertTrue(messages.contains(errorMessagePortion));
+		Assert.assertTrue(tester.getLastRenderedPage() instanceof TestPage);
+		Assert.assertEquals(HttpServletResponse.SC_OK, tester.getResponse().getStatus());
 	}
 	
 	/**

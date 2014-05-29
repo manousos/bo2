@@ -12,7 +12,7 @@
  ******************************************************************************/
 package gr.interamerican.bo2.test.scenarios.hibernate;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 import gr.interamerican.bo2.arch.PersistenceWorker;
 import gr.interamerican.bo2.arch.exceptions.DataException;
 import gr.interamerican.bo2.impl.open.hibernate.GenericHibernatePersistenceWorker;

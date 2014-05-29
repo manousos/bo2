@@ -24,6 +24,7 @@ import gr.interamerican.bo2.arch.exceptions.LogicException;
 import gr.interamerican.bo2.arch.exceptions.NoTransactionManagerException;
 import gr.interamerican.bo2.arch.exceptions.ProviderCreationException;
 import gr.interamerican.bo2.arch.exceptions.UnexpectedException;
+import gr.interamerican.bo2.arch.utils.Bo2ExceptionUtils;
 import gr.interamerican.bo2.arch.utils.ext.Bo2Session;
 import gr.interamerican.bo2.impl.open.utils.Bo2;
 import gr.interamerican.bo2.impl.open.utils.Bo2Deployment;
@@ -129,7 +130,7 @@ public class RuntimeCommand {
 	}
 	
 	/**
-	 * Preparation before the main execution.
+	 * Work to do after the main execution.
 	 * 
 	 * @throws DataException 
 	 * @throws LogicException 
@@ -137,8 +138,6 @@ public class RuntimeCommand {
 	protected void after() throws DataException, LogicException {
 		/* empty */
 	}
-	
-	
 	
 	/**
 	 * Executable method of the command.
@@ -223,16 +222,7 @@ public class RuntimeCommand {
 	void rethrow(Throwable ex) 
 	throws DataException, LogicException, UnexpectedException {
 		ex.printStackTrace();
-		if (ex instanceof Error) {
-			throw (Error) ex;
-		}		
-		if (ex instanceof LogicException) {
-			throw (LogicException) ex;
-		}
-		if (ex instanceof DataException) {
-			throw (DataException) ex;
-		}		
-		throw new UnexpectedException(ex);
+		Bo2ExceptionUtils.throwDataLogicOrUnexpectedException(ex);
 	}
 	
 	/**
@@ -251,10 +241,10 @@ public class RuntimeCommand {
 	}
 	
 	/**
-	 * Begins the transaction.
+	 * Ends the transaction.
 	 * 
 	 * @throws UnexpectedException
-	 *         If the transactionManager fails to begin the transaction.
+	 *         If the transactionManager fails to commit the transaction.
 	 */
 	void commit() throws UnexpectedException {
 		try {

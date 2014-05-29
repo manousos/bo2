@@ -1,13 +1,13 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/copyleft/lesser.html
  * 
- * This library is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  ******************************************************************************/
 package gr.interamerican.bo2.jsqlparser.visitors;
@@ -86,7 +86,7 @@ import net.sf.jsqlparser.statement.update.Update;
  */
 @SuppressWarnings("unchecked")
 public abstract class AbstractTableNamesFinder implements SelectVisitor, SelectItemVisitor, ExpressionVisitor,
-		ItemsListVisitor, StatementVisitor {
+ItemsListVisitor, StatementVisitor {
 
 	@Override
 	abstract public void visit(PlainSelect plainSelect);
@@ -111,7 +111,7 @@ public abstract class AbstractTableNamesFinder implements SelectVisitor, SelectI
 	}
 
 	/**
-	 * @return
+	 * @return return if the sql is running for all columns
 	 */
 	public boolean getAllColumns() {
 		return allColumns;
@@ -169,32 +169,32 @@ public abstract class AbstractTableNamesFinder implements SelectVisitor, SelectI
 
 	@Override
 	public void visit(Addition addition) {
-		this.handleBinaryExpression(addition);
+		handleBinaryExpression(addition);
 	}
 
 	@Override
 	public void visit(Division division) {
-		this.handleBinaryExpression(division);
+		handleBinaryExpression(division);
 	}
 
 	@Override
 	public void visit(Multiplication multiplication) {
-		this.handleBinaryExpression(multiplication);
+		handleBinaryExpression(multiplication);
 	}
 
 	@Override
 	public void visit(Subtraction subtraction) {
-		this.handleBinaryExpression(subtraction);
+		handleBinaryExpression(subtraction);
 	}
 
 	@Override
 	public void visit(AndExpression andExpression) {
-		this.handleBinaryExpression(andExpression);
+		handleBinaryExpression(andExpression);
 	}
 
 	@Override
 	public void visit(OrExpression orExpression) {
-		this.handleBinaryExpression(orExpression);
+		handleBinaryExpression(orExpression);
 	}
 
 	@Override
@@ -218,7 +218,7 @@ public abstract class AbstractTableNamesFinder implements SelectVisitor, SelectI
 
 	@Override
 	public void visit(LikeExpression likeExpression) {
-		this.handleBinaryExpression(likeExpression);
+		handleBinaryExpression(likeExpression);
 	}
 
 	@Override
@@ -269,17 +269,17 @@ public abstract class AbstractTableNamesFinder implements SelectVisitor, SelectI
 
 	@Override
 	public void visit(BitwiseAnd bitwiseAnd) {
-		this.handleBinaryExpression(bitwiseAnd);
+		handleBinaryExpression(bitwiseAnd);
 	}
 
 	@Override
 	public void visit(BitwiseOr bitwiseOr) {
-		this.handleBinaryExpression(bitwiseOr);
+		handleBinaryExpression(bitwiseOr);
 	}
 
 	@Override
 	public void visit(BitwiseXor bitwiseXor) {
-		this.handleBinaryExpression(bitwiseXor);
+		handleBinaryExpression(bitwiseXor);
 	}
 
 	@Override
@@ -334,32 +334,32 @@ public abstract class AbstractTableNamesFinder implements SelectVisitor, SelectI
 
 	@Override
 	public void visit(MinorThan minorThan) {
-		this.handleBinaryExpression(minorThan);
+		handleBinaryExpression(minorThan);
 	}
 
 	@Override
 	public void visit(MinorThanEquals minorThanEquals) {
-		this.handleBinaryExpression(minorThanEquals);
+		handleBinaryExpression(minorThanEquals);
 	}
 
 	@Override
 	public void visit(NotEqualsTo notEqualsTo) {
-		this.handleBinaryExpression(notEqualsTo);
+		handleBinaryExpression(notEqualsTo);
 	}
 
 	@Override
 	public void visit(EqualsTo equalsTo) {
-		this.handleBinaryExpression(equalsTo);
+		handleBinaryExpression(equalsTo);
 	}
 
 	@Override
 	public void visit(GreaterThan greaterThan) {
-		this.handleBinaryExpression(greaterThan);
+		handleBinaryExpression(greaterThan);
 	}
 
 	@Override
 	public void visit(GreaterThanEquals greaterThanEquals) {
-		this.handleBinaryExpression(greaterThanEquals);
+		handleBinaryExpression(greaterThanEquals);
 	}
 
 	@Override
@@ -369,12 +369,12 @@ public abstract class AbstractTableNamesFinder implements SelectVisitor, SelectI
 
 	@Override
 	public void visit(Concat concat) {
-		this.handleBinaryExpression(concat);
+		handleBinaryExpression(concat);
 	}
 
 	@Override
 	public void visit(Matches matches) {
-		this.handleBinaryExpression(matches);
+		handleBinaryExpression(matches);
 	}
 
 	@Override

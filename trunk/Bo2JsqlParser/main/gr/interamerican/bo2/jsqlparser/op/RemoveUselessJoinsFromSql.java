@@ -12,7 +12,7 @@
  ******************************************************************************/
 package gr.interamerican.bo2.jsqlparser.op;
 
-import gr.interamerican.bo2.JsqlParser;
+import gr.interamerican.bo2.JsqlParserUtils;
 import gr.interamerican.bo2.jsqlparser.visitors.RebuildQueryWithOutUselessJoins;
 import gr.interamerican.bo2.utils.sql.exceptions.SqlParseException;
 
@@ -46,14 +46,14 @@ public class RemoveUselessJoinsFromSql {
 	public String remove(String sql) throws SqlParseException  {
 		Set<Join> joins = UselessJoinsFinder.INSTANCE.find(sql);
 		if (joins.size() == 0) {// nothing to remove
-			JsqlParser.getLogger().debug("No Joins where removed"); //$NON-NLS-1$
+			JsqlParserUtils.getLogger().debug("No Joins where removed"); //$NON-NLS-1$
 			return sql;
 		} else {
-			JsqlParser.getLogger().debug("Removing " + joins.size() + " joins"); //$NON-NLS-1$ //$NON-NLS-2$
-			JsqlParser.getLogger().debug("Original Query " + sql); //$NON-NLS-1$
-			if (JsqlParser.getLogger().isTraceEnabled()) {
+			JsqlParserUtils.getLogger().debug("Removing " + joins.size() + " joins"); //$NON-NLS-1$ //$NON-NLS-2$
+			JsqlParserUtils.getLogger().debug("Original Query " + sql); //$NON-NLS-1$
+			if (JsqlParserUtils.getLogger().isTraceEnabled()) {
 				for (Join j : joins) {
-					JsqlParser.getLogger().trace("Removing " + j.toString()); //$NON-NLS-1$
+					JsqlParserUtils.getLogger().trace("Removing " + j.toString()); //$NON-NLS-1$
 				}
 			}
 		}
@@ -72,7 +72,7 @@ public class RemoveUselessJoinsFromSql {
 		Select plain = (Select) st;
 		plain.accept(rebuild);
 		String rebuiltSql = rebuild.getResult();
-		JsqlParser.getLogger().debug("Rebuilt Query " + rebuiltSql); //$NON-NLS-1$
+		JsqlParserUtils.getLogger().debug("Rebuilt Query " + rebuiltSql); //$NON-NLS-1$
 		return rebuiltSql;
 	}
 	

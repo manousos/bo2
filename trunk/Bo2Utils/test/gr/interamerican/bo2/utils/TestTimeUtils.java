@@ -29,7 +29,7 @@ public class TestTimeUtils {
 	 */
 	@Test
 	public void testHours2Millis() {
-		assertEquals(720000L, hours2millis(2));
+		assertEquals(minutes2millis(180), hours2millis(3));
 	}
 	
 	/**
@@ -37,7 +37,7 @@ public class TestTimeUtils {
 	 */
 	@Test
 	public void testMinutes2Millis() {
-		assertEquals(60000L, minutes2millis(1));
+		assertEquals(seconds2millis(120), minutes2millis(2));
 	}
 	
 	/**
