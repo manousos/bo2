@@ -37,11 +37,14 @@ public class StreamUtils {
 	 * Reads a text file from a resource file in the local classpath
 	 * and returns an array with the lines of the file.
 	 * 
+	 * @see #readResourceFile(String, boolean, boolean)
+	 * 
 	 * @param path Path to the file. 
 	 * 
 	 * @return Returns an array with names of mappings files.
 	 *         If the resource file is not found, then returns null. 
 	 * @throws IOException 
+	 * @throws NullPointerException if the arg is null
 	 */
 	public static String[] readResourceFile(String path) 
 	throws IOException {		
@@ -51,6 +54,11 @@ public class StreamUtils {
 	/**
 	 * Reads a text file from a resource file in the local classpath
 	 * and returns an array with the lines of the file.
+	 * <br/>
+	 * If the file cannot be found, returns null.
+	 * <br/>
+	 * The file is assumed to be encoded with the default Bo2 deployment
+	 * <code>resourceFileEncoding</code> property.
 	 * 
 	 * @param path 
 	 *        Path to the file. 
@@ -60,8 +68,10 @@ public class StreamUtils {
 	 *        If true, anything that follows a '#' in a line is ignored
 	 * 
 	 * @return Returns an array with names of mappings files.
-	 *         If the resource file is not found, then returns null. 
+	 *         If the resource file is not found, then returns null.
+	 *          
 	 * @throws IOException 
+	 * @throws NullPointerException if the arg is null
 	 */
 	public static String[] readResourceFile(String path, boolean excludeEmptyLines, boolean excludeSharps) 
 	throws IOException {		
@@ -69,13 +79,15 @@ public class StreamUtils {
 		if(stream==null){
 			return null;
 		}
-		InputStreamReader insr = new InputStreamReader(stream);
+		InputStreamReader insr = new InputStreamReader(stream, Bo2UtilsEnvironment.getDefaultResourceFileCharset());
 		BufferedReader reader = new BufferedReader(insr);
 		return StreamUtils.consumeBufferedReader(reader, excludeEmptyLines, excludeSharps);
 	}
 	
 	/**
 	 * Reads a text file from the filesystem and returns an array with the lines of the file.
+	 * 
+	 * @see #readFile(String, boolean, boolean)
 	 * 
 	 * @param path Path to the file. 
 	 * 
@@ -90,6 +102,10 @@ public class StreamUtils {
 	
 	/**
 	 * Reads a text file from the filesystem and returns an array with the lines of the file.
+	 * <br/>
+	 * The file is assumed to be encoded with the default Bo2 deployment <code>textEncoding</code>
+	 * 
+	 * @see Bo2UtilsEnvironment
 	 * 
 	 * @param path 
 	 *        Path to the file. 
@@ -107,7 +123,7 @@ public class StreamUtils {
 		try {
 			File file = new File(path);
 			InputStream stream = new FileInputStream(file);
-			InputStreamReader insr = new InputStreamReader(stream);
+			InputStreamReader insr = new InputStreamReader(stream, Bo2UtilsEnvironment.getDefaultTextCharset());
 			BufferedReader reader = new BufferedReader(insr);
 			return StreamUtils.consumeBufferedReader(reader, excludeEmptyLines, excludeSharps);
 		} catch (FileNotFoundException fnfe) {

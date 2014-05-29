@@ -26,6 +26,7 @@ import java.util.List;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.serialize.java.JavaSerializer;
 import org.apache.wicket.util.tester.FormTester;
 import org.junit.Assert;
 import org.junit.Test;
@@ -45,9 +46,12 @@ public class TestSelfDrawnPanel extends WicketTest {
 	 */
 	@Test
 	public void testSelfDrawnPanel() {
-		tester.startPage(testPageSource());
+		tester.startPage(getTestPage());
+		
+		new JavaSerializer(tester.getApplication().getApplicationKey()).serialize(getTestSubject());
+		
 		@SuppressWarnings("unchecked")
-		TextField<Long> tf =  (TextField<Long>) tester.getComponentFromLastRenderedPage(path("repeater:field2:component")); //$NON-NLS-1$
+		TextField<Long> tf =  (TextField<Long>) tester.getComponentFromLastRenderedPage(path("field2")); //$NON-NLS-1$
 		
 		Long actual = tf.getModel().getObject();
 		Long expected = model.getObject().getField2();
@@ -61,24 +65,28 @@ public class TestSelfDrawnPanel extends WicketTest {
 		actual = tf.getModel().getObject();
 		expected = model.getObject().getField2();
 		Assert.assertEquals(expected, actual);
+		
+		commonAssertions_noError();
 	}
 	
 	/**
-	 * Unit test for submitting the form of a se
+	 * Unit test for submitting the form of a selfdrawnpanel when
+	 * the validation fails.
 	 */
 	@Test
+	@SuppressWarnings("nls")
 	public void testSelfDrawnPanel_componentValidators() {
-		tester.startPage(testPageSource());
+		tester.startPage(getTestPage());
 		Assert.assertFalse(getFeedbackPanel().anyErrorMessage());
 		FormTester formTester = tester.newFormTester(formPath());
-		formTester.setValue(TestPage.TEST_ID + ":repeater:field2:component", "-10"); //$NON-NLS-1$ //$NON-NLS-2$
+		formTester.setValue(TestPage.TEST_ID + ":field2", "-10");
 		formTester.submit(TestPage.SUBMIT_BUTTON_ID);
 		Assert.assertTrue(getFeedbackPanel().anyErrorMessage());
 		/*
 		 * This is added to refresh the markup with the feedback panel message.
-		 * It is not necessary for the test.
 		 */
-		tester.executeAjaxEvent(getAjaxButton(), "onclick"); //$NON-NLS-1$
+		tester.executeAjaxEvent(getAjaxButton(), "onclick");
+		commonAssertions_error("field2");
 	}
 	
 	@Override

@@ -1,13 +1,13 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/copyleft/lesser.html
  * 
- * This library is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  ******************************************************************************/
 package gr.interamerican.bo2.impl.open.hibernate.utils.reflect.analyze;
@@ -43,20 +43,20 @@ import org.slf4j.LoggerFactory;
  */
 @Deprecated
 public class ModificationRecordFieldsAnalyzer extends AbstractObjectStructureAnalyzer {
-	
+
 	/**
 	 * Logger.
 	 */
 	private static final Logger logger = LoggerFactory.getLogger(ModificationRecordFieldsAnalyzer.class);
-	
+
 	/**
-	 * Creates a new ModificationRecordFieldsAnalyzer object. 
+	 * Creates a new ModificationRecordFieldsAnalyzer object.
 	 */
 	public ModificationRecordFieldsAnalyzer() {
 		super();
 		ignoreDuplicates = false;
 	}
-	
+
 	@Override
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected List<VariableDefinition<?>> whichFieldsToInclude(Object object) {
@@ -65,7 +65,7 @@ public class ModificationRecordFieldsAnalyzer extends AbstractObjectStructureAna
 			return list;
 		}
 		List<Field> fieldsToInclude = getFieldsToInclude(object.getClass());
-		
+
 		/*
 		 * Create VariableDefinitions for all fields produced before, taking special care of
 		 * field values that are either HibernateProxy or PersistentCollection instances.
@@ -77,7 +77,7 @@ public class ModificationRecordFieldsAnalyzer extends AbstractObjectStructureAna
 			field.setAccessible(true);
 			Object value = ReflectionUtils.get(field, object);
 			VariableDefinition vd = null;
-			
+
 			if(value instanceof HibernateProxy) {
 				HibernateProxy proxy = (HibernateProxy) value;
 				if(proxy.getHibernateLazyInitializer().isUninitialized()) {
@@ -111,10 +111,10 @@ public class ModificationRecordFieldsAnalyzer extends AbstractObjectStructureAna
 				vd.setValue(value);
 			}
 			list.add(vd);
-		}		
+		}
 		return list;
 	}
-	
+
 	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected VariableDefinition<?> createVariableDefinition(Object object, String fieldName, Class<?> fieldType) {
@@ -128,9 +128,9 @@ public class ModificationRecordFieldsAnalyzer extends AbstractObjectStructureAna
 			result.setValue(object);
 			return result;
 		}
-		return super.createVariableDefinition(object, "unknown", object.getClass());
+		return super.createVariableDefinition(object, "unknown", object.getClass()); //$NON-NLS-1$
 	}
-	
+
 	/**
 	 * Include all fields up-to ModificationRecord and all Collection/Array fields
 	 * for further inspection. Ignore static fields.
@@ -145,8 +145,8 @@ public class ModificationRecordFieldsAnalyzer extends AbstractObjectStructureAna
 			if (Modifier.isStatic(field.getModifiers())) {
 				continue;
 			}
-			boolean isCollectionOrArray = ReflectionUtils.isArray(field.getType()) 
-									   || ReflectionUtils.isCollection(field.getType());
+			boolean isCollectionOrArray = ReflectionUtils.isArray(field.getType())
+					|| ReflectionUtils.isCollection(field.getType());
 			if(ModificationRecord.class.isAssignableFrom(field.getType()) || isCollectionOrArray) {
 				fieldsToInclude.add(field);
 			}

@@ -118,6 +118,11 @@ extends PropertiesInitializedBean {
 	private String streamsManagerName;
 	
 	/**
+	 * name of default resource manager for scheduling jobs
+	 */
+	private String schedulerManagerName;
+	
+	/**
 	 * Class name of TransactionManager.
 	 */
 	private String transactionManagerClass;
@@ -137,9 +142,14 @@ extends PropertiesInitializedBean {
 	private String pathToSecondaryBatchDeployment;
 	
 	/**
-	 * Encoding of test files accessed from the filesystem or from jars. 
+	 * Encoding of text files accessed from the filesystem. 
 	 */
 	private String textEncoding;
+	
+	/**
+	 * Encoding of text files accessed from jars.
+	 */
+	private String resourceFileEncoding;
 	
 	/**
 	 * Gets the debugEnabled.
@@ -215,6 +225,15 @@ extends PropertiesInitializedBean {
 	 */
 	public String getStreamsManagerName() {
 		return streamsManagerName;
+	}
+
+	/**
+	 * Gets the schedulerManagerName.
+	 *
+	 * @return Returns the schedulerManagerName
+	 */
+	public String getSchedulerManagerName() {
+		return schedulerManagerName;
 	}
 
 	/**
@@ -324,6 +343,24 @@ extends PropertiesInitializedBean {
 	 */
 	public void setTextEncoding(String textEncoding) {
 		this.textEncoding = textEncoding;
+	}
+
+	/**
+	 * Gets the resourceFileEncoding.
+	 *
+	 * @return Returns the resourceFileEncoding
+	 */
+	public String getResourceFileEncoding() {
+		return resourceFileEncoding;
+	}
+
+	/**
+	 * Assigns a new value to the resourceFileEncoding.
+	 *
+	 * @param resourceFileEncoding the resourceFileEncoding to set
+	 */
+	public void setResourceFileEncoding(String resourceFileEncoding) {
+		this.resourceFileEncoding = resourceFileEncoding;
 	}
 	
 }

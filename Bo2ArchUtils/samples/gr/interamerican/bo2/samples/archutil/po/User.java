@@ -1,13 +1,13 @@
 /*******************************************************************************
- * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A. 
+ * Copyright (c) 2013 INTERAMERICAN PROPERTY AND CASUALTY INSURANCE COMPANY S.A.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v3
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/copyleft/lesser.html
  * 
- * This library is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  ******************************************************************************/
 package gr.interamerican.bo2.samples.archutil.po;
@@ -32,19 +32,19 @@ import java.util.Set;
  * Simple PersistentObject for the tests.
  * 
  */
-public class User 
+public class User
 implements TypedSelectable<Long>, PersistentObject<UserKey>, ModificationRecord {
 
 	/**
 	 * serialVersionUID
 	 */
 	static final long serialVersionUID = 1L;
-	
+
 	/**
 	 * id
-	 */	
-	Integer id; 
-	
+	 */
+	Integer id;
+
 	/**
 	 * name
 	 */
@@ -59,7 +59,7 @@ implements TypedSelectable<Long>, PersistentObject<UserKey>, ModificationRecord 
 	 * user id
 	 */
 	String usrid;
-	
+
 	/**
 	 * user profiles.
 	 */
@@ -69,9 +69,9 @@ implements TypedSelectable<Long>, PersistentObject<UserKey>, ModificationRecord 
 	 * {@link ModificationRecord}.
 	 */
 	ModificationRecord mdf = new ModificationRecordImpl();
-	
+
 	/**
-	 * Creates a new User object. 
+	 * Creates a new User object.
 	 *
 	 * @param id
 	 * @param name
@@ -85,16 +85,16 @@ implements TypedSelectable<Long>, PersistentObject<UserKey>, ModificationRecord 
 		this.roleId = roleId;
 		this.usrid = usrid;
 	}
-	
+
 	/**
-	 * Creates a new User object. 
+	 * Creates a new User object.
 	 *
 	 */
 	public User() {
 		super();
 	}
-	
-	
+
+
 
 	/**
 	 * @return the id
@@ -102,14 +102,14 @@ implements TypedSelectable<Long>, PersistentObject<UserKey>, ModificationRecord 
 	public Integer getId() {
 		return id;
 	}
-	
+
 	/**
 	 * @param id
 	 */
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	
+
 	/**
 	 * @return the name
 	 */
@@ -156,8 +156,8 @@ implements TypedSelectable<Long>, PersistentObject<UserKey>, ModificationRecord 
 	public void setUsrid(String usrid) {
 		this.usrid = usrid;
 	}
-	
-	
+
+
 	/**
 	 * Gets the profiles.
 	 *
@@ -175,7 +175,7 @@ implements TypedSelectable<Long>, PersistentObject<UserKey>, ModificationRecord 
 	public void setProfiles(Set<UserProfile> profiles) {
 		this.profiles = profiles;
 	}
-	
+
 	/**
 	 * Creates and initializes a new user.
 	 * 
@@ -206,100 +206,101 @@ implements TypedSelectable<Long>, PersistentObject<UserKey>, ModificationRecord 
 		sb.append(roleId);
 		return sb.toString();
 	}
-		
+
 	@Override
 	public UserKey getKey() {
-		return new UserKey(id);		
+		return new UserKey(id);
 	}
-	
+
 	@Override
 	public void setKey(UserKey key) {
 		setId(key.getId());
 	}
-	
+
 	@Override
-	public Long getTypeId() {		
+	public Long getTypeId() {
 		return 1L;
 	}
-	
+
 	@Override
 	public void setTypeId(Long typeId) {
 		/* empty */
-	}	
-	
+	}
+
 	@Override
-	public Long getSubTypeId() {		
+	public Long getSubTypeId() {
 		return new Long(roleId);
 	}
-	
+
 	@Override
 	public void setSubTypeId(Long subTypeId) {
 		setRoleId(subTypeId.intValue());
-	}	
-		
+	}
+
 	@Override
 	public void setCode(Long code) {
 		if (code!=null) {
-			this.id = code.intValue();			
-		}		
+			id = code.intValue();
+		}
 	}
-		
+
 	@Override
-	public Long getCode() {	
+	public Long getCode() {
 		if (id==null) {
 			return null;
 		}
 		return new Long(id);
 	}
-	
+
 	@Override
 	public void tidy() {
 		/* empty */
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof User) {
 			User that = (User) obj;
-			return this.getKey().equals(that.getKey());			
+			return getKey().equals(that.getKey());
 		}
-		return false;		
+		return false;
 	}
 
 	@Override
-	public int hashCode() {		
+	public int hashCode() {
 		return getKey().hashCode();
 	}
 
 	@Override
 	public int compareTo(Codified<Long> o) {
 		if(o==null) { return 1; }
-		return Utils.nullSafeCompare(o.getCode(), this.getCode());
+		return Utils.nullSafeCompare(o.getCode(), getCode());
 	}
-	
+
 	@Override
 	public Date getLastModified() {
 		return mdf.getLastModified();
 	}
-	
+
 	@Override
 	public void setLastModified(Date lastModified) {
 		mdf.setLastModified(lastModified);
 	}
-	
+
 	@Override
 	public String getLastModifiedBy() {
 		return mdf.getLastModifiedBy();
 	}
-	
+
 	@Override
 	public void setLastModifiedBy(String lastModifiedBy) {
 		mdf.setLastModifiedBy(lastModifiedBy);
 	}
-	
+
 	/**
 	 * Gets the UserProfile associated with this that has the specified profileNo.
-	 * @param profileNo
+	 * 
+	 * @param profileId
 	 * @return UserProfile.
 	 */
 	public UserProfile getProfileById(Integer profileId) {
@@ -309,5 +310,5 @@ implements TypedSelectable<Long>, PersistentObject<UserKey>, ModificationRecord 
 		return SelectionUtils.selectFirstByProperty("profileId", profileId, profiles, UserProfile.class);		 //$NON-NLS-1$
 	}
 
-	
+
 }

@@ -33,14 +33,15 @@ import gr.interamerican.wicket.samples.creators.DataTableCreatorForBeanWithOrder
 import gr.interamerican.wicket.samples.creators.FieldsPanelCreatorForBeanWithOrderedFields;
 import gr.interamerican.wicket.test.WicketTest;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
+import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.markup.html.form.CheckGroup;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RadioGroup;
@@ -48,7 +49,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.tester.FormTester;
-import org.apache.wicket.util.tester.ITestPageSource;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -70,7 +71,8 @@ public class TestSearchFlowPanel extends WicketTest {
 	 */	
 	@Test
 	public void testCreation_Pick() {
-		tester.startPage(pageSource(definition_Pick));
+		panel = new SearchFlowPanel<BeanWithOrderedFields, BeanWithOrderedFields>(definition_Pick);
+		tester.startPage(getTestPage(panel));
 		
 		tester.assertComponent(path("criteriaPanel"), SingleBeanPanel.class);
 		tester.assertVisible(path("criteriaPanel"));
@@ -110,7 +112,8 @@ public class TestSearchFlowPanel extends WicketTest {
 	 */	
 	@Test
 	public void testCreation_MultiplePick() {
-		tester.startPage(pageSource(definition_MultiplePick));
+		panel = new SearchFlowPanel<BeanWithOrderedFields, BeanWithOrderedFields>(definition_MultiplePick);
+		tester.startPage(getTestPage(panel));
 		
 		tester.assertComponent(path("criteriaPanel"), SingleBeanPanel.class);
 		tester.assertVisible(path("criteriaPanel"));
@@ -149,7 +152,8 @@ public class TestSearchFlowPanel extends WicketTest {
 	 */
 	@Test
 	public void testShowResults_ErrorUserInput() {
-		tester.startPage(pageSource(definition_Pick));
+		panel = new SearchFlowPanel<BeanWithOrderedFields, BeanWithOrderedFields>(definition_Pick);
+		tester.startPage(getTestPage(panel));
 		
 		tester.assertComponent(path("criteriaPanel"), SingleBeanPanel.class);
 		tester.assertVisible(path("criteriaPanel"));
@@ -182,7 +186,12 @@ public class TestSearchFlowPanel extends WicketTest {
     	formTester.submit();
     	tester.executeAjaxEvent(executeButton, "onclick");
 		
-    	tester.assertErrorMessages(new String[]{"\'noDoubleHere\' is not a valid Double."});
+    	List<Serializable> errors = tester.getMessages(FeedbackMessage.ERROR);
+		Assert.assertFalse(errors.isEmpty());
+		
+		Assert.assertTrue(errors.get(0).toString().contains("noDoubleHere"));
+		System.out.println(errors.get(0));
+    	
 		tester.assertNoInfoMessage();
 		
 		tester.assertInvisible(path("resultsPanel"));
@@ -201,7 +210,8 @@ public class TestSearchFlowPanel extends WicketTest {
 	 */
 	@Test
 	public void testShowResults_Pick() {
-		tester.startPage(pageSource(definition_Pick));
+		panel = new SearchFlowPanel<BeanWithOrderedFields, BeanWithOrderedFields>(definition_Pick);
+		tester.startPage(getTestPage(panel));
 
 		tester.assertComponent(path("criteriaPanel"), SingleBeanPanel.class);
 		tester.assertVisible(path("criteriaPanel"));
@@ -254,7 +264,7 @@ public class TestSearchFlowPanel extends WicketTest {
     	 * simulate picking the first radio button and submitting.
     	 */
     	radioGroup.setModelObject(list.get(0));
-    	Map<String, String[]> map= tester.getWicketRequest().getParameterMap();	
+    	Map<String, String[]> map= tester.getRequest().getParameterMap();	
 		map.put("testId:tableForm:radioGroup", new String[]{"radio0"});
     	tester.executeAjaxEvent(pickButton, "onclick");
     	
@@ -276,7 +286,8 @@ public class TestSearchFlowPanel extends WicketTest {
 	 */
 	@Test
 	public void testShowResults_MultiplePick() {
-		tester.startPage(pageSource(definition_MultiplePick));
+		panel = new SearchFlowPanel<BeanWithOrderedFields, BeanWithOrderedFields>(definition_MultiplePick);
+		tester.startPage(getTestPage(panel));
 		
 		tester.assertComponent(path("criteriaPanel"), SingleBeanPanel.class);
 		tester.assertVisible(path("criteriaPanel"));
@@ -330,7 +341,7 @@ public class TestSearchFlowPanel extends WicketTest {
 		selections.add(list.get(0));
 		selections.add(list.get(1));
 		checkGroup.setModelObject(selections);
-		Map<String, String[]> map= tester.getWicketRequest().getParameterMap();	
+		Map<String, String[]> map= tester.getRequest().getParameterMap();	
 		map.put("testId:tableForm:checkGroup", new String[]{"check0", "check1"});
 		tester.executeAjaxEvent(pickButton, "onclick");
 		
@@ -346,7 +357,8 @@ public class TestSearchFlowPanel extends WicketTest {
 	 */	
 	@Test
 	public void testCreation_List() {
-		tester.startPage(pageSource(definition_List));
+		panel = new SearchFlowPanel<BeanWithOrderedFields, BeanWithOrderedFields>(definition_List);
+		tester.startPage(getTestPage(panel));
 		
 		tester.assertComponent(path("criteriaPanel"), SingleBeanPanel.class);
 		tester.assertVisible(path("criteriaPanel"));
@@ -393,7 +405,8 @@ public class TestSearchFlowPanel extends WicketTest {
 	 */
 	@Test
 	public void testShowResults_List() {
-		tester.startPage(pageSource(definition_List));
+		panel = new SearchFlowPanel<BeanWithOrderedFields, BeanWithOrderedFields>(definition_List);
+		tester.startPage(getTestPage(panel));
 		
 		tester.assertComponent(path("criteriaPanel"), SingleBeanPanel.class);
 		tester.assertVisible(path("criteriaPanel"));
@@ -448,7 +461,8 @@ public class TestSearchFlowPanel extends WicketTest {
 	 */
 	@Test
 	public void testCreation_ShowResults_CrudPick() {
-		tester.startPage(pageSource(definition_CrudPick));
+		panel = new SearchFlowPanel<BeanWithOrderedFields, BeanWithOrderedFields>(definition_CrudPick);
+		tester.startPage(getTestPage(panel));
 		
 		tester.assertComponent(path("criteriaPanel"), SingleBeanPanel.class);
 		tester.assertVisible(path("criteriaPanel"));
@@ -515,7 +529,8 @@ public class TestSearchFlowPanel extends WicketTest {
 	 */
 	@Test
 	public void testCrud_CrudPick() {
-		tester.startPage(pageSource(definition_CrudPick));
+		panel = new SearchFlowPanel<BeanWithOrderedFields, BeanWithOrderedFields>(definition_CrudPick);
+		tester.startPage(getTestPage(panel));
 		
 		tester.assertComponent(path("criteriaPanel"), SingleBeanPanel.class);
 		tester.assertVisible(path("criteriaPanel"));
@@ -818,37 +833,22 @@ public class TestSearchFlowPanel extends WicketTest {
 	}
 	
 	/**
-	 * Creates a page source
-	 * 
-	 * @param def
-	 * @return Returns a page source.
-	 */
-	@SuppressWarnings("serial")
-	ITestPageSource pageSource(final SearchFlowPanelDef<BeanWithOrderedFields, BeanWithOrderedFields> def) {		
-		return new ITestPageSource() {
-			public Page getTestPage() {
-				panel = new SearchFlowPanel<BeanWithOrderedFields, BeanWithOrderedFields>(def){
-					@Override protected BeanWithOrderedFields newBean() {
-						return new BeanWithOrderedFields();
-					}
-				};
-				return new TestPage(panel);
-			}
-		};
-	}
-	
-	/**
 	 * Query action.
 	 */
 	class QueryAction extends AbstractCallbackAction {
 		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public void callBack(AjaxRequestTarget target) {
-			target.addComponent(panel);
+			target.add(panel);
 			query();
 		}
 		
 		public void callBack(AjaxRequestTarget target, Form<?> form) {
-			target.addComponent(panel);
+			target.add(panel);
 			query();
 		}
 		
@@ -860,20 +860,23 @@ public class TestSearchFlowPanel extends WicketTest {
 		}
 	}
 	
-	
-	
 	/**
 	 * Query action.
 	 */
 	abstract class CrudAction extends AbstractCallbackAction {
 		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public void callBack(AjaxRequestTarget target) {
-			target.addComponent(panel.resultsPanel);
+			target.add(panel.resultsPanel);
 			work();
 		}
 		
 		public void callBack(AjaxRequestTarget target, Form<?> form) {
-			target.addComponent(panel.resultsPanel);
+			target.add(panel.resultsPanel);
 			work();
 		}
 		
@@ -888,6 +891,11 @@ public class TestSearchFlowPanel extends WicketTest {
 	 * Update action.
 	 */
 	class SaveAction extends CrudAction {		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		@Override
 		protected void work() {
 			BeanWithOrderedFields bwof = panel.getDefinition().getBeanModel().getObject();
@@ -901,6 +909,11 @@ public class TestSearchFlowPanel extends WicketTest {
 	 * Update action.
 	 */
 	class UpdateAction extends CrudAction {		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		@Override
 		protected void work() {
 			BeanWithOrderedFields bwof = panel.getDefinition().getBeanModel().getObject();
@@ -914,6 +927,11 @@ public class TestSearchFlowPanel extends WicketTest {
 	 * Delete action.
 	 */
 	class DeleteAction extends CrudAction {		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		@Override
 		protected void work() {
 			/* code that performs a delete SQL operation */
@@ -924,6 +942,11 @@ public class TestSearchFlowPanel extends WicketTest {
 	 * Multiple selections action.
 	 */
 	class MultipleSelectionsAction extends CrudAction {		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		@Override
 		protected void work() {
 			/* code that gets the selections from the definition and does something */

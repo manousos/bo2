@@ -55,6 +55,9 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * {@link BatchProcess} executes a batch process using multiple threads. <br/>
  * 
@@ -68,7 +71,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * the queue for an entity to process. The entity is set to the operation
  * using the appropriate setter defined by the argument <code>inputPropertyName</code>.
  * The operation is then executed. The results of each operation execution are 
- * logged by the queue processor that owns the operation. <br/>
+ * logged by the queue processor that owns the operation.  <br/>
  * 
  * @param <T> 
  *        Type of object being processed by the batch process.
@@ -81,6 +84,11 @@ implements Runnable, MultiThreadedLongProcess {
 	 * processors have finished processing.
 	 */
 	private static final int INTERVAL = 10;
+	
+	/**
+	 * Default logger for Bo2.
+	 */
+	private static final Logger LOGGER = LoggerFactory.getLogger(BatchProcess.class);
 	
 	/**
 	 * Queue with input elements.
@@ -255,7 +263,7 @@ implements Runnable, MultiThreadedLongProcess {
 		QueueProcessor<T> qp = new QueueProcessor<T>
 			(inputQueue, parameters.getName(), Integer.toString(id), op, 
 			 parameters.getInputPropertyName(), parameters.getFormatter(), 
-			 parameters.getQueryParametersSetter());	
+			 parameters.getOperationParametersSetter(), parameters.getReattemptOnTmex());	
 		queueProcessors.add(qp);
 		if (eod) {
 			qp.signalEndOfData();
@@ -351,7 +359,7 @@ implements Runnable, MultiThreadedLongProcess {
 			if (parametersSetter!=null) {
 				parametersSetter.execute(op);
 			}
-			Bo2.getLogger().info("Executing " + op.getClass().getName()); //$NON-NLS-1$
+			LOGGER.info("Executing " + op.getClass().getName()); //$NON-NLS-1$
 			RuntimeCommand cmd = new RuntimeCommand(op);
 			cmd.execute();
 		}		
@@ -430,8 +438,7 @@ implements Runnable, MultiThreadedLongProcess {
 	 * The manager for the streams is the default streams manager of the Bo2
 	 * deployment.
 	 * 
-	 * TODO: This is not executed. It will be refactored.
-	 * TODO: The input streams use default platform Charset. Do we want to include
+	 * TODO: The input streams use default deployment encoding. Do we want to include
 	 *       this in the BatchProcess metadata?
 	 * 
 	 * @throws InitializationException
@@ -681,15 +688,13 @@ implements Runnable, MultiThreadedLongProcess {
 	
 	@Override
 	public long getTotalElementsCount() {
-		return CollectionUtils.sumL
-			(getSubProcesses(), LongProcess.class, "totalElementsCount"); //$NON-NLS-1$
+		return totalElementsCount;
 	}
 	
 	@Override
 	public long getProcessedCount() {
 		return CollectionUtils.sumL
 			(getSubProcesses(), LongProcess.class, "processedCount"); //$NON-NLS-1$
-
 	}
 	
 	@Override

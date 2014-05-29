@@ -285,6 +285,24 @@ public class TestOdfToolkitTextDocument {
 		template.insertAt("Section2", small);
 		engine.saveDocument(template, outPath);
 	}
+	
+	/**
+	 * Test for insertAt().
+	 * @throws Exception 
+	 */	
+	@SuppressWarnings("nls")
+	@Test
+	public void testGetProperty() throws Exception {
+		OdfToolkitEngine engine = new OdfToolkitEngine();
+		String templatePath = ResourceUtils.inputPath("DocTestGetProperty.odt");
+		String propertyName = "Table1.minLength";		
+		BusinessDocument template = engine.openDocument(templatePath);
+		OdfToolkitTextDocument odfText = OdfToolkitEngine.safeCast(template);		
+		String expected = "30";
+		Object actual = odfText.getProperty(propertyName);
+		Assert.assertEquals(expected, actual);
+	}
+
 
 
 }

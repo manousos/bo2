@@ -12,8 +12,6 @@
  ******************************************************************************/
 package gr.interamerican.wicket.bo2.factories.meta;
 
-import gr.interamerican.bo2.arch.ext.Cache;
-import gr.interamerican.bo2.arch.utils.beans.CacheImpl;
 import gr.interamerican.bo2.samples.utils.meta.ext.EnumElement;
 import gr.interamerican.bo2.samples.utils.meta.ext.ObjectType;
 import gr.interamerican.bo2.samples.utils.meta.ext.ObjectTypeBean;
@@ -43,10 +41,6 @@ public class TestCachedEntryOwnerBoPDComponentFactory extends BaseClassForTestin
 	 * SUBTYPE
 	 */
 	private static final Long SUBTYPE = 1L;
-	/**
-	 * CACHE
-	 */
-	private static final Cache<Long> CACHE = new CacheImpl<Long>();
 	/**
 	 * CODE
 	 */
@@ -82,7 +76,7 @@ public class TestCachedEntryOwnerBoPDComponentFactory extends BaseClassForTestin
 	@Test
 	public void testDrawMain_First(){
 		Component component = cachedEntryOwnerBoPDFactory.drawMain(multipleChoiceDesc, TestPage.TEST_ID);
-		tester.startPage(testPageSource(component));
+		tester.startPage(getTestPage(component));
 		tester.assertComponent(path(StringConstants.EMPTY), SelfDrawnDropDownChoiceForEntryOwner.class); 
 	}
 
@@ -93,7 +87,7 @@ public class TestCachedEntryOwnerBoPDComponentFactory extends BaseClassForTestin
 	public void testDrawMain_Second(){
 		Model<Long> model = new Model<Long>(bean1.getId());
 		Component component = cachedEntryOwnerBoPDFactory.drawMain(TestPage.TEST_ID ,model, multipleChoiceDesc);
-		tester.startPage(testPageSource(component));
+		tester.startPage(getTestPage(component));
 		tester.assertComponent(path(StringConstants.EMPTY), SelfDrawnDropDownChoiceForEntryOwner.class); 
 	}
 	
@@ -107,20 +101,20 @@ public class TestCachedEntryOwnerBoPDComponentFactory extends BaseClassForTestin
 		 EnumElement value_1 = new EnumElement(TYPE, ObjectType.OBJECT1);
 		 value_1.setCode(CODE);
 		 value_1.setSubTypeId(SUBTYPE);
-		 CACHE.put(value_1);
+		 cache().put(value_1);
 		 
 		 EnumElement value_2 = new EnumElement(TYPE, ObjectType.OBJECT2);
 		 value_2.setCode(CODE);
 		 value_2.setSubTypeId(SUBTYPE);
-		 CACHE.put(value_2);
+		 cache().put(value_2);
 		 
 		 EnumElement value_3 = new EnumElement(TYPE, ObjectType.OBJECT3);
 		 value_3.setCode(CODE);
 		 value_3.setSubTypeId(SUBTYPE);
-		 CACHE.put(value_3);
+		 cache().put(value_3);
 		
 		 CachedEntryOwnerBoPropertyDescriptor<?,?> cd = new CachedEntryOwnerBoPropertyDescriptor<ObjectType,Long>(
-        		 1000L, 1L,CACHE, PARSER, FORMATTER);
+        		 1000L, 1L,TEST_CACHE_NAME, PARSER, FORMATTER);
 		 cd.setName("id"); //$NON-NLS-1$
 		 return cd;
 	}

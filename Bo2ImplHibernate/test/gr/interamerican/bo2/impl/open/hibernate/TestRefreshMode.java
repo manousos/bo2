@@ -12,8 +12,7 @@
  ******************************************************************************/
 package gr.interamerican.bo2.impl.open.hibernate;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 

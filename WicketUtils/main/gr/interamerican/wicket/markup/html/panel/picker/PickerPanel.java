@@ -134,7 +134,7 @@ extends ListTablePanel<B> {
 			@Override
 			public void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				if(!ServicePanelUtils.authorizedByFlag(getDefinition().getItemSelectedActionFlag())) {
-					target.addComponent(feedBackPanel);
+					target.add(feedBackPanel);
 					PickerPanel.this.error(getDefinition().getItemSelectedActionFlag().getDownMessage());
 					return;
 				}
@@ -152,7 +152,7 @@ extends ListTablePanel<B> {
 			@Override
 			public void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				if(!ServicePanelUtils.authorizedByFlag(getDefinition().getSecondItemSelectedActionFlag())) {
-					target.addComponent(feedBackPanel);
+					target.add(feedBackPanel);
 					PickerPanel.this.error(getDefinition().getSecondItemSelectedActionFlag().getDownMessage());
 					return;
 				}
@@ -207,6 +207,11 @@ extends ListTablePanel<B> {
 	 */
 	protected class RefreshTableAction extends CallbackWrapper {
 		
+		/**
+		 * serialVersionUID
+		 */
+		private static final long serialVersionUID = 1L;
+
 		/**
 		 * Creates a new CrudPickerPanel.NewItemAction object.
 		 * 

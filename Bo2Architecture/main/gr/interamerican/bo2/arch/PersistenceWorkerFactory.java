@@ -36,7 +36,7 @@ public interface PersistenceWorkerFactory {
 	createPw(Class<M> type);
 	
 	/**
-	 * Gets the {@link DetachStrategy} associated with the persistence
+	 * Gets a new {@link DetachStrategy} instance of the DetachStrategy type associated with the persistence
 	 * worker of the specified type of {@link PersistentObject}.
 	 *
 	 * @param type
@@ -49,7 +49,5 @@ public interface PersistenceWorkerFactory {
 	 */
 	public <M extends PersistentObject<?>> DetachStrategy 
 	getDetachStrategy(Class<M> type);
-
-	
 
 }

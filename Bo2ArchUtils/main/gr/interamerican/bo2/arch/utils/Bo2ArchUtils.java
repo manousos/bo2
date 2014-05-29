@@ -12,7 +12,7 @@
  ******************************************************************************/
 package gr.interamerican.bo2.arch.utils;
 
-import gr.interamerican.bo2.utils.Utils;
+import gr.interamerican.bo2.utils.ExceptionUtils;
 
 
 /**
@@ -30,20 +30,16 @@ public class Bo2ArchUtils {
 	 * 
 	 * If t is a {@link RuntimeException} or {@link Error}, the method will 
 	 * rethrow t. If it an instance of any type of checked {@link Exception}
-	 * the method will throw a WrapperException with t as its cause.
+	 * the method will throw a RuntimeException with t as its cause.
 	 * 
 	 * @param t Throwable that has to be transformed to an unchecked Exception.
 	 *  
 	 * @return Returns t wrapped inside a runtime exception.
 	 * 
-	 * @deprecated
+	 * @deprecated Use {@link ExceptionUtils#runtimeException(Throwable)} instead.
 	 */
-	public static RuntimeException runtimeException(Throwable t) {
-		if (t instanceof RuntimeException) {
-			return (RuntimeException) t;
-		} else {
-			return new RuntimeException(t);
-		}
+	public static RuntimeException runtimeException(Throwable t) {		
+		return ExceptionUtils.runtimeException(t);
 	}
 	
 	/**
@@ -52,16 +48,11 @@ public class Bo2ArchUtils {
 	 * @param t Throwable that has to be transformed.
 	 *  
 	 * @return Returns t or its cause.
+	 * 
+	 * @deprecated Use {@link ExceptionUtils#unwrap(Throwable)} instead.
 	 */
 	public static Throwable unwrap(Throwable t) {
-		if (t instanceof RuntimeException) {
-			Throwable cause = t.getCause();
-			return Utils.notNull(cause, t);
-		} else {
-			return t;
-		}
+		return ExceptionUtils.unwrap(t);
 	}
 	
-
-
 }

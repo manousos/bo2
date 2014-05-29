@@ -12,8 +12,8 @@
  ******************************************************************************/
 package gr.interamerican.bo2.arch.utils;
 
-import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import gr.interamerican.bo2.arch.ext.Cache;
 import gr.interamerican.bo2.arch.utils.beans.CacheImpl;
 

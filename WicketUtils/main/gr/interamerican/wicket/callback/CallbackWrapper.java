@@ -22,6 +22,10 @@ import org.apache.wicket.markup.html.form.Form;
 public class CallbackWrapper implements CallbackAction {
 	
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
 	 * Callback action wrapped by this wrapper.
 	 */
 	CallbackAction action;
@@ -72,7 +76,7 @@ public class CallbackWrapper implements CallbackAction {
 	 * Things to do before executing the wrapped action.
 	 * @param target 
 	 */
-	public void before(AjaxRequestTarget target) { /* empty */
+	public void before(@SuppressWarnings("unused") AjaxRequestTarget target) { /* empty */
 	}
 	
 	/**
@@ -84,7 +88,7 @@ public class CallbackWrapper implements CallbackAction {
 	 * Things to do after executing the wrapped action.
 	 * @param target 
 	 */	
-	public void after(AjaxRequestTarget target) { /* empty */
+	public void after(@SuppressWarnings("unused") AjaxRequestTarget target) { /* empty */
 	}
 
 	/**

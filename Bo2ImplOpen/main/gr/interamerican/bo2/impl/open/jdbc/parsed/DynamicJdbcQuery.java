@@ -20,10 +20,7 @@ import gr.interamerican.bo2.arch.ext.TranslatableEntryOwner;
 import gr.interamerican.bo2.arch.ext.TypedSelectable;
 import gr.interamerican.bo2.impl.open.jdbc.JdbcQuery;
 import gr.interamerican.bo2.impl.open.parse.ParserProvider;
-import gr.interamerican.bo2.impl.open.utils.Bo2;
 import gr.interamerican.bo2.utils.ReflectionUtils;
-import gr.interamerican.bo2.utils.StringConstants;
-import gr.interamerican.bo2.utils.StringUtils;
 import gr.interamerican.bo2.utils.sql.SqlUtils;
 import gr.interamerican.bo2.utils.sql.exceptions.SqlParseException;
 import gr.interamerican.bo2.utils.sql.parsers.ParserUtils;
@@ -84,7 +81,6 @@ implements CriteriaDependent<C> {
 		this.criteria = criteria;
 	} 
 	
-	@SuppressWarnings("nls")
 	@Override
 	protected final String sql() {	
 		String stmt;
@@ -128,8 +124,7 @@ implements CriteriaDependent<C> {
 			parms = null;
 		}
 		String jdbcStmt = SqlUtils.replaceParametersWithMarkers(stmt);
-		String parameters = StringUtils.squareBrackets(StringUtils.array2String(parms, StringConstants.COMMA));
-		Bo2.getLogger().debug("Generated dynamic SQL query: [" + jdbcStmt + "] with parameters: " + parameters);
+		logStatement(jdbcStmt, parms);
 		return jdbcStmt;
 	}
 	

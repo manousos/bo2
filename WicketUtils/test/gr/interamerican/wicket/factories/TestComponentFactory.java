@@ -335,7 +335,7 @@ public class TestComponentFactory extends WicketTest{
 		wicketTester.startPage(new ComponentFactoryPage(form, MarkupConstants.INPUT,MarkupConstants.TEXT));
 		wicketTester.assertComponent(WicketUtils.wicketPath(TestPage.FORM_ID,TestPage.TEST_ID), TextField.class);
 	}
-
+	
 	/**
 	 * Test method for {@link gr.interamerican.wicket.factories.ComponentFactory#addAjaxCheckBox(org.apache.wicket.MarkupContainer, java.lang.String[])}.
 	 */

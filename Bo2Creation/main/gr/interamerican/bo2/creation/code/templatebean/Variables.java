@@ -203,7 +203,6 @@ public class Variables {
 	 * 
 	 * @param variables
 	 * @param type
-	 * @param fragment
 	 */
 	public static void setType(Map<String, String> variables, Class<?> type) {
 		variables.put(TYPE, type.getCanonicalName());	

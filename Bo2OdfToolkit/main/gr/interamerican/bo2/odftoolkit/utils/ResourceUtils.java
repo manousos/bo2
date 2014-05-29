@@ -35,7 +35,7 @@ public class ResourceUtils {
 		try {
 			String pathToProperties = "/gr/interamerican/bo2/deployparms/deployment.properties";
 			Properties properties = CollectionUtils.readProperties(pathToProperties);
-			sourcePath = properties.getProperty("workspace");
+			sourcePath = properties.getProperty("odfWorkDirectory");
 			sourcePath=sourcePath.trim();
 			if (!sourcePath.endsWith("/")) {
 				sourcePath = sourcePath+"/";
@@ -79,7 +79,7 @@ public class ResourceUtils {
 	 * @return Returns the File.
 	 */
 	public static String inputPath(String fileName) {					
-		return sourcePath+"Bo2OdfToolkit/resources/in/"+fileName;		
+		return sourcePath+"in/"+fileName;		
 	}
 	
 	/**
@@ -91,7 +91,7 @@ public class ResourceUtils {
 	 * @return Returns the File.
 	 */
 	public static String outputPath(String fileName) {
-		return sourcePath+"Bo2OdfToolkit/resources/out/"+fileName;		
+		return sourcePath+"out/"+fileName;		
 	}
 	
 	/**

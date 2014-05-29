@@ -165,4 +165,14 @@ public class TestTypedSelectableImpl {
 		selectable.compareTo(typed);
 	}
 	
+	/**
+	 * Test toString()
+	 */
+	@Test
+	public void testToString(){
+		selectable.setSubTypeId(null);
+		String expected="[typeId, subTypeId, code, name]=[1,null,1,name]"; //$NON-NLS-1$
+		assertEquals(expected, selectable.toString());
+	}
+	
 }

@@ -1,7 +1,6 @@
 package gr.interamerican.bo2.test.impl.posamples;
 
 import gr.interamerican.bo2.impl.open.po.AbstractKey;
-import gr.interamerican.bo2.test.def.posamples.CompanyUserKey;
 import gr.interamerican.bo2.test.def.posamples.CustomerKey;
 
 /**
@@ -9,6 +8,10 @@ import gr.interamerican.bo2.test.def.posamples.CustomerKey;
  */
 public class CustomerKeyImpl extends AbstractKey implements CustomerKey {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	String customerNo;
 	
 	@Override

@@ -14,7 +14,6 @@ package gr.interamerican.wicket.bo2.utils;
 
 import gr.interamerican.bo2.arch.ext.TranslatableEntry;
 import gr.interamerican.bo2.arch.ext.TranslatableEntryOwner;
-import gr.interamerican.bo2.utils.StringConstants;
 import gr.interamerican.bo2.utils.StringUtils;
 import gr.interamerican.bo2.utils.beans.Pair;
 import gr.interamerican.bo2.utils.beans.PairWithComparableLeft;
@@ -25,6 +24,7 @@ import gr.interamerican.wicket.bo2.markup.html.form.ChoiceRendererForEntryOwner;
 import gr.interamerican.wicket.bo2.markup.html.form.DropDownChoiceForEntry;
 import gr.interamerican.wicket.bo2.markup.html.form.DropDownChoiceForEntryOwner;
 import gr.interamerican.wicket.bo2.markup.html.form.SelfDrawnForm;
+import gr.interamerican.wicket.bo2.markup.html.formcomponent.SelfDrawnMoneyField;
 import gr.interamerican.wicket.bo2.markup.html.panel.SelfDrawnPanel;
 import gr.interamerican.wicket.bo2.validation.BoPropertyDescriptorValidatorWrapper;
 import gr.interamerican.wicket.callback.CallbackAction;
@@ -38,7 +38,6 @@ import java.util.Set;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -46,6 +45,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 
 /**
  * Utilities for self-drawn wicket {@link Component}s.
+ * 
+ * TODO: Create SelfDrawnPanelUtils to package gr.interamerican.wicket.bo2.markup.html.panel
  */
 public class SelfDrawnUtils {
 		
@@ -70,9 +71,7 @@ public class SelfDrawnUtils {
 		if(selfDrawnPanel == null){
 			return null;
 		}
-		WebMarkupContainer repeater = (WebMarkupContainer) selfDrawnPanel.get(SelfDrawnPanel.getRepeaterId());
-		WebMarkupContainer repeaterChild = (WebMarkupContainer) repeater.get(wicketId); 
-		return repeaterChild.get(SelfDrawnPanel.getComponentId());
+		return selfDrawnPanel.get(wicketId);
 	}
 	
 	/**
@@ -127,7 +126,7 @@ public class SelfDrawnUtils {
     		component.setDefaultModelObject(descriptor.getDefaultValue());
         }
     	if(descriptor.isReadOnly()) {
-    		WicketUtils.disableComponent(component);
+    		disableComponent(component);
     	}
     	/*
     	 * This check cannot be off-loaded to the NotNullValidator, since
@@ -140,6 +139,20 @@ public class SelfDrawnUtils {
     	 * the Component is created.
     	 */
     	component.setRequired(!descriptor.isNullAllowed());
+	}
+	
+	/**
+	 * Disables a component.
+	 * 
+	 * @param component
+	 */
+	static <T> void disableComponent(FormComponent<T> component) {
+		if(component instanceof SelfDrawnMoneyField) {
+			SelfDrawnMoneyField sdmf = (SelfDrawnMoneyField) component;
+			sdmf.get(SelfDrawnMoneyField.AMOUNT_FIELD_ID).setEnabled(false);
+		} else {
+			WicketUtils.disableComponent(component);
+		}
 	}
 	
 	/**
@@ -251,8 +264,8 @@ public class SelfDrawnUtils {
 		if(selfDrawnPanel == null){
 			return null;
 		}
-		String path = StringUtils.concatSeparated(StringConstants.COLON, SelfDrawnPanel.getRepeaterId(), fieldId, SelfDrawnPanel.getLabelId());
-		return selfDrawnPanel.get(path);
+		String labelWicketId = SelfDrawnPanel.labelWicketIdWithPropertyName(fieldId);
+		return selfDrawnPanel.get(labelWicketId);
 	}
-
+	
 }

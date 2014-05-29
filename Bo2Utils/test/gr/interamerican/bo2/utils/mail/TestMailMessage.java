@@ -33,7 +33,7 @@ public class TestMailMessage {
 	 */
 	@BeforeClass
 	public static void setup() {
-		MailServer.INSTANCE.setHost("localhost");
+		MailServer.INSTANCE.setHost("10.2.3.60");
 		MailServer.INSTANCE.setPort(null);
 	}
 	

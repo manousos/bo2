@@ -49,8 +49,8 @@ public class TestFolderInitializedBean {
 	public void testInitialized_fromFolderPath() {
 		String deploymentPropertiesPath = "/gr/interamerican/bo2/deployparms/deployment.properties";
 		Properties p = CollectionUtils.readProperties(deploymentPropertiesPath);
-		String workDir = p.getProperty("workspace");
-		String path = workDir + "Bo2Utils/test/gr/interamerican/bo2/utils/beans/fib1/";
+		String workDir = p.getProperty("streamsWorkDirectory");
+		String path = workDir + "fib1/";
 		Fib fib = new Fib(path, false);
 		assertEquals("field1", fib.getField1());
 		assertEquals("field2", fib.getField2());

@@ -47,7 +47,6 @@ public class RebuildQueryWithOutUselessJoins extends EmptyVisitor {
 
 	/**
 	 * @param joins
-	 * @param sets
 	 *            the useless joins
 	 */
 	public void setUselessJoins(Set<Join> joins) {
@@ -115,7 +114,7 @@ public class RebuildQueryWithOutUselessJoins extends EmptyVisitor {
 		for (PlainSelect ps : plainSelects) {
 			int idx = plainSelects.indexOf(ps);
 			ps.accept(this);
-			if (idx < plainSelects.size() - 1) {
+			if (idx < (plainSelects.size() - 1)) {
 				sb.append(SPACE + UNION);
 				if (union.isAll()) {
 					sb.append(SPACE + ALL);

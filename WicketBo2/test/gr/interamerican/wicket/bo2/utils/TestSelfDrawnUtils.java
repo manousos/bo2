@@ -19,11 +19,11 @@ import gr.interamerican.wicket.bo2.factories.meta.BaseClassForTestingComponentFa
 import gr.interamerican.wicket.bo2.markup.html.form.SelfDrawnDropDownChoiceForEntry;
 import gr.interamerican.wicket.markup.html.TestPage;
 import gr.interamerican.wicket.markup.html.panel.service.ModeAwareBeanPanelDef;
-import junit.framework.Assert;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -43,7 +43,7 @@ public class TestSelfDrawnUtils extends BaseClassForTestingComponentFactory{
 		
 		ModeAwareBeanPanelDef<TestBean> definition = ServicePanelDefinitionFactory.createBeanPanelDef(TestPage.TEST_ID, model);
 		Panel selfDrawnPanel = creator.createPanel(definition);
-		tester.startPage(testPageSource(selfDrawnPanel));
+		tester.startPage(getTestPage(selfDrawnPanel));
 		tester.assertComponent(path(StringConstants.EMPTY), Panel.class); 
 		tester.assertRenderedPage(TestPage.class);
 

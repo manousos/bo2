@@ -13,13 +13,13 @@
 package gr.interamerican.bo2.samples.abstractimpl;
 
 import gr.interamerican.bo2.creation.annotations.Property;
-import gr.interamerican.bo2.samples.interfaces.CriteriaDependent;
+import gr.interamerican.bo2.samples.interfaces.ICriteriaDependent;
 
 /**
  * 
  */
 public abstract class MyCriteriaKeeper 
-implements CriteriaDependent<Integer> {
+implements ICriteriaDependent<Integer> {
 	/**
 	 * Criteria.
 	 */

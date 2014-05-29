@@ -70,6 +70,15 @@ public class ExpressionEvaluator {
 	private String nullIndicator = StringConstants.NULL;
 	
 	/**
+	 * Gets the instance.
+	 *
+	 * @return Returns the instance
+	 */
+	public static ExpressionEvaluator getInstance() {
+		return INSTANCE;
+	}
+	
+	/**
 	 * Assigns a new value to the formatter.
 	 *
 	 * @param formatter the formatter to set
@@ -90,12 +99,28 @@ public class ExpressionEvaluator {
 	/**
 	 * Evaluates an OGNL expression on a specified model object.
 	 * 
+	 * If an exception occurs during the evaluation of the OGNL expression, 
+	 * then the result of this method is specified by the 
+	 * <code>tolerateErrors</code> flag set on this {@link ExpressionEvaluator}.
+	 * If this flag is set to <code>true</code>, then the method will return
+	 * the value specified in the <code>errorIndicator</code> property.
+	 * Otherwise a RuntimeException will be thrown. <br/>
+	 * If the OGNL expression evaluates to <code>null</code>, then the
+	 * method returns the value specified by the <code>nullIndicator</code>
+	 * property of this {@link ExpressionEvaluator}.
+	 * 
 	 * @param ognlExpression
 	 *        Expression to evaluate. 
 	 * @param model
 	 *        Context object to evaluate the expression.
 	 *         
-	 * @return Returns the value.
+	 * @return Returns the value evaluated by the OGNL expression.
+	 * 
+	 * @throws RuntimeException 
+	 *         If an exception occurs during the evaluation of the OGNL
+	 *         expression and the <code>tolerateErrors</code> property 
+	 *         of this {@link ExpressionEvaluator} is set to false.
+	 *   
 	 */
 	public String getValue(String ognlExpression, Object model) {		
 		Object val = parseExpression(ognlExpression, model);
@@ -143,34 +168,33 @@ public class ExpressionEvaluator {
 	 * not be thrown and the OGNL expression will be evaluated to an 
 	 * empty string.
 	 *
-	 * @return Returns the tolerateOgnlErrors
+	 * @return Returns the tolerateErrors
 	 */
 	public boolean isTolerateErrors() {
 		return tolerateErrors;
 	}
 
 	/**
-	 * Assigns a new value to the tolerateOgnlErrors.
+	 * Assigns a new value to the tolerateErrors.
 	 *
-	 * @param tolerateOgnlErrors the tolerateOgnlErrors to set
+	 * @param tolerateErrors the tolerateErrors to set
 	 */
-	public void setTolerateErrors(boolean tolerateOgnlErrors) {
-		this.tolerateErrors = tolerateOgnlErrors;
-	}
-
-	/**
-	 * Gets the instance.
-	 *
-	 * @return Returns the instance
-	 */
-	public static ExpressionEvaluator getInstance() {
-		return INSTANCE;
+	public void setTolerateErrors(boolean tolerateErrors) {
+		this.tolerateErrors = tolerateErrors;
 	}
 
 	/**
 	 * Gets the errorIndicator.
+	 * 
+	 * If the <code>tolerateErrors</code> is set to <code>true</code>,
+	 * then the errorIndicator is a string that is returned by the 
+	 * <code>getValue(String,Object)</code> method, when an exception
+	 * occurs during the evaluation of the OGNL expression.
 	 *
 	 * @return Returns the errorIndicator
+	 * 
+	 * @see #setTolerateErrors(boolean)
+	 * @see  #getValue(String, Object)
 	 */
 	public String getErrorIndicator() {
 		return errorIndicator;

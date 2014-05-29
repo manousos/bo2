@@ -12,11 +12,15 @@
  ******************************************************************************/
 package gr.interamerican.bo2.utils;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import java.lang.reflect.InvocationTargetException;
+
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -25,7 +29,7 @@ import org.junit.Test;
 public class TestExceptionUtils {
 	
 	/**
-	 * Tests initialCause 
+	 * Tests initialCause. 
 	 */
 	@Test
 	public void testInitialCause() {
@@ -40,7 +44,7 @@ public class TestExceptionUtils {
 	} 
 	
 	/**
-	 * Tests isCausedBy 
+	 * Tests isCausedBy. 
 	 */
 	@Test
 	public void testIsCausedBy() {
@@ -55,7 +59,7 @@ public class TestExceptionUtils {
 	}
 	
 	/**
-	 * Tests isCausedBy 
+	 * Tests isCausedBy.
 	 */
 	@Test
 	public void testCauseInTheChain() {
@@ -91,6 +95,87 @@ public class TestExceptionUtils {
 		assertNotNull(str);
 	}
 		
+	
+	/**
+	 * tests runtimeException(t).
+	 */	
+	@Test
+	public void testRuntimeException_withRte(){
+		RuntimeException expected = new RuntimeException();
+		RuntimeException actual = ExceptionUtils.runtimeException(expected);
+		assertEquals(expected,actual);
+	}
+	
+	/**
+	 * tests runtimeException(t).
+	 */	
+	@Test
+	public void testRuntimeException_withOtherEx(){
+		Throwable t = new Throwable();		
+		RuntimeException actual = ExceptionUtils.runtimeException(t);
+		Assert.assertNotEquals(t, actual);
+		Assert.assertEquals(t, actual.getCause());
+	}
+	
+	
+	/**
+	 * tests unwrap(t).
+	 */	
+	@Test
+	public void testUnwrap_withRte(){
+		Exception cause = new Exception();
+		RuntimeException rtex = new RuntimeException(cause);		
+		Throwable actual = ExceptionUtils.unwrap(rtex);
+		Assert.assertEquals(cause, actual);
+	}
+	
+	/**
+	 * tests unwrap(ex).
+	 */	
+	@Test
+	public void testUnwrap_withOther(){
+		Throwable t = new Throwable();
+		RuntimeException wrapper = new RuntimeException(t);
+		Throwable actual = ExceptionUtils.unwrap(wrapper);
+		Assert.assertEquals(t, actual);		
+	}
+	
+	/**
+	 * tests unwrap(ex).
+	 */	
+	@Test
+	public void testUnwrap_withRteThatHasnoCause(){
+		RuntimeException npex = new NullPointerException();
+		Throwable actual = ExceptionUtils.unwrap(npex);
+		Assert.assertEquals(npex, actual);		
+	}
+	
+	/**
+	 * tests unwrap(ex).
+	 */	
+	@Test
+	public void testUnwrap_withRteThatHasInvocationtargetEx(){
+		Exception initial = new Exception();		
+		InvocationTargetException itex = new InvocationTargetException(initial);		
+		RuntimeException npex = new RuntimeException(itex);
+		Throwable actual = ExceptionUtils.unwrap(npex);
+		Assert.assertEquals(initial, actual);		
+	}
+	
+	/**
+	 * tests unwrap(ex).
+	 */	
+	@Test
+	public void testUnwrap_withRteThatHasInvocationtargetExAnotherRte(){
+		Exception initial = new Exception();	
+		RuntimeException targetEx = new RuntimeException(initial);		
+		InvocationTargetException itex = new InvocationTargetException(targetEx);		
+		RuntimeException npex = new RuntimeException(itex);
+		Throwable actual = ExceptionUtils.unwrap(npex);
+		Assert.assertEquals(initial, actual);		
+	}
+	
+
 	
 
 }

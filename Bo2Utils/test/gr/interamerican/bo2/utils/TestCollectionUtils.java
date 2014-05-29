@@ -19,6 +19,7 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import gr.interamerican.bo2.samples.bean.BeanWith3Fields;
 import gr.interamerican.bo2.samples.bean.BeanWithOrderedFields;
+import gr.interamerican.bo2.samples.bean.BeanWithShort;
 import gr.interamerican.bo2.samples.bean.NumberBean;
 import gr.interamerican.bo2.utils.beans.AssociationTable;
 
@@ -157,7 +158,7 @@ public class TestCollectionUtils {
 	}
 
 	/**
-	 * Unit test for max
+	 * Unit test for addNextI
 	 */
 	@Test
 	public void testAddNextI() {
@@ -181,7 +182,7 @@ public class TestCollectionUtils {
 	}
 
 	/**
-	 * Unit test for max
+	 * Unit test for addNextL
 	 */
 	@Test
 	public void testAddNextL() {
@@ -202,6 +203,30 @@ public class TestCollectionUtils {
 		assertEquals(set.size(), 5);
 		assertTrue(set.contains(b));
 		assertEquals(new Long(15), b.getFourth());
+	}
+
+	/**
+	 * Unit test for addNextS
+	 */
+	@Test
+	public void testAddNextS() {
+		String property = "first"; //$NON-NLS-1$
+		Set<BeanWithShort> set = new HashSet<BeanWithShort>();
+
+		for (int i = 1; i < 5; i++) {
+			BeanWithShort b = new BeanWithShort();
+			b.setFirst(null);
+			CollectionUtils.addNextS(set, b, property);
+			assertEquals(set.size(), i);
+			assertTrue(set.contains(b));
+			assertEquals(new Short((short) i), b.getFirst());
+		}
+		BeanWithShort b = new BeanWithShort();
+		b.setFirst((short) 15);
+		CollectionUtils.addNextS(set, b, property);
+		assertEquals(set.size(), 5);
+		assertTrue(set.contains(b));
+		assertEquals(new Short((short) 15), b.getFirst());
 	}
 	
 	/**
@@ -629,7 +654,46 @@ public class TestCollectionUtils {
 		Assert.assertEquals("4", map.get(4));
 	}
 	
-	
+	/**
+	 * Unit test for partition.
+	 */
+	@SuppressWarnings("nls")
+	@Test
+	public void testPartition() {
+		List<String> list = new ArrayList<String>();
+		list.add("a");
+		List<List<String>> result = CollectionUtils.partition(list, 2);
+		
+		Assert.assertEquals(1, result.size());
+		Assert.assertEquals(1, result.get(0).size());
+		Assert.assertEquals("a", result.get(0).get(0));
+		
+		list.add("b");
+		list.add("c");
+		list.add("d");
+		result = CollectionUtils.partition(list, 2);
+		
+		Assert.assertEquals(2, result.size());
+		Assert.assertEquals(2, result.get(0).size());
+		Assert.assertEquals(2, result.get(1).size());
+		Assert.assertEquals("a", result.get(0).get(0));
+		Assert.assertEquals("b", result.get(0).get(1));
+		Assert.assertEquals("c", result.get(1).get(0));
+		Assert.assertEquals("d", result.get(1).get(1));
+		
+		list.add("e");
+		result = CollectionUtils.partition(list, 2);
+		
+		Assert.assertEquals(3, result.size());
+		Assert.assertEquals(2, result.get(0).size());
+		Assert.assertEquals(2, result.get(1).size());
+		Assert.assertEquals(1, result.get(2).size());
+		Assert.assertEquals("a", result.get(0).get(0));
+		Assert.assertEquals("b", result.get(0).get(1));
+		Assert.assertEquals("c", result.get(1).get(0));
+		Assert.assertEquals("d", result.get(1).get(1));
+		Assert.assertEquals("e", result.get(2).get(0));
+	}
 	
 
 	/**

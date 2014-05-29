@@ -21,15 +21,14 @@ import gr.interamerican.wicket.bo2.markup.html.form.DropDownChoiceForEntryOwner;
 
 import java.util.List;
 
-import org.apache.wicket.Request;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.protocol.http.WebSession;
+import org.apache.wicket.request.Request;
 
 /**
  * Common base class for Bo2 wicket application sessions.
  * 
- * @param <I> Type of user identifier.
  * @param <A> Type of authorization identifier.
  * @param <L> Type of language id.
  */

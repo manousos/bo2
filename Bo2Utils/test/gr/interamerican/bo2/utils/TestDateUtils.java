@@ -24,8 +24,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Set;
 
-import junit.framework.Assert;
-
 import org.junit.Test;
 
 /**
@@ -474,14 +472,47 @@ public class TestDateUtils {
 		String expected = "20100720"; //$NON-NLS-1$
 		assertEquals(expected, actual);
 	}
-	
+
 	/**
-	 * tests getYear(dt)
+	 * Tests {@link DateUtils#year(Date)}.
 	 */
 	@Test
-	public void testGetYear() {
+	public void testYear() {
 		Date dt = DateUtils.getDate(2011, Calendar.NOVEMBER, 15);
-		assertEquals(2011, DateUtils.year(dt));	
+		assertEquals(2011, DateUtils.year(dt));
+	}
+
+	/**
+	 * Tests {@link DateUtils#days(Date)}.
+	 */
+	@Test
+	public void testDays() {
+		Date dt = DateUtils.getDate(2011, Calendar.NOVEMBER, 15);
+		assertEquals(15, DateUtils.days(dt));
+	}
+
+	/**
+	 * Tests {@link DateUtils#month(Date)}.
+	 */
+	@Test
+	public void testMonth() {
+		Date dt = DateUtils.getDate(2011, Calendar.NOVEMBER, 15);
+		assertEquals(11, DateUtils.month(dt));
+	}
+
+	/**
+	 * tests {@link DateUtils#daysDifFromEpoch(Date)}.
+	 */
+	@Test
+	public void testDaysDifFromEpoch() {
+		Date dt = DateUtils.getDate(2011, Calendar.NOVEMBER, 15);
+		assertTrue(DateUtils.daysDifFromEpoch(dt) > 0);
+		Date dt2 = DateUtils.getDate(1970, Calendar.JANUARY, 2);
+		assertEquals(1, DateUtils.daysDifFromEpoch(dt2));
+		Date dt3 = DateUtils.getDate(1970, Calendar.JANUARY, 1);
+		assertEquals(0, DateUtils.daysDifFromEpoch(dt3));
+		Date dt4 = DateUtils.getDate(1969, Calendar.DECEMBER, 30);
+		assertEquals(-2, DateUtils.daysDifFromEpoch(dt4));
 	}
 	
 	/**
@@ -503,12 +534,12 @@ public class TestDateUtils {
 	public void testGetNullTimeDate() {
 		Date d = new Date();
 		Date nullDate = DateUtils.getDateAtMidnight(d);
-		Assert.assertEquals(d.getDay(), nullDate.getDay());
-		Assert.assertEquals(d.getMonth(), nullDate.getMonth());
-		Assert.assertEquals(d.getYear(), nullDate.getYear());
-		Assert.assertEquals(0, nullDate.getHours());
-		Assert.assertEquals(0, nullDate.getMinutes());
-		Assert.assertEquals(0, nullDate.getSeconds());
+		assertEquals(d.getDay(), nullDate.getDay());
+		assertEquals(d.getMonth(), nullDate.getMonth());
+		assertEquals(d.getYear(), nullDate.getYear());
+		assertEquals(0, nullDate.getHours());
+		assertEquals(0, nullDate.getMinutes());
+		assertEquals(0, nullDate.getSeconds());
 	}
 
 	/**
@@ -518,7 +549,7 @@ public class TestDateUtils {
 	public void testGetOrthodoxEaster() {
 		Date d = DateUtils.getDate(2013, Calendar.MAY, 5);
 		d = DateUtils.getDateAtMidnight(d);
-		Assert.assertEquals(d, DateUtils.getOrthodoxEaster(2013));
+		assertEquals(d, DateUtils.getOrthodoxEaster(2013));
 	}
 
 	/**
@@ -532,12 +563,12 @@ public class TestDateUtils {
 		Date d4 = DateUtils.getDate(2013, Calendar.JUNE, 24);
 		Date d5 = DateUtils.getDate(2013, Calendar.MARCH, 18);
 		Set<Date> dates = DateUtils.getOrthodoxEasterHolidays(2013);
-		Assert.assertEquals(5, dates.size());
-		Assert.assertTrue(dates.contains(d1));
-		Assert.assertTrue(dates.contains(d2));
-		Assert.assertTrue(dates.contains(d3));
-		Assert.assertTrue(dates.contains(d4));
-		Assert.assertTrue(dates.contains(d5));
+		assertEquals(5, dates.size());
+		assertTrue(dates.contains(d1));
+		assertTrue(dates.contains(d2));
+		assertTrue(dates.contains(d3));
+		assertTrue(dates.contains(d4));
+		assertTrue(dates.contains(d5));
 	}
 
 	/**
@@ -548,9 +579,9 @@ public class TestDateUtils {
 		Date d1 = DateUtils.getDate(2013, Calendar.MAY, 5);
 		Date d2 = DateUtils.getDate(2013, Calendar.MAY, 4);
 		Date d3 = DateUtils.getDate(2013, Calendar.MAY, 3);
-		Assert.assertTrue(DateUtils.isWeekend(d1));
-		Assert.assertTrue(DateUtils.isWeekend(d2));
-		Assert.assertFalse(DateUtils.isWeekend(d3));
+		assertTrue(DateUtils.isWeekend(d1));
+		assertTrue(DateUtils.isWeekend(d2));
+		assertFalse(DateUtils.isWeekend(d3));
 	}
 
 	/**
@@ -559,7 +590,7 @@ public class TestDateUtils {
 	@Test
 	@SuppressWarnings("deprecation")
 	public void testGetyear() {
-		Assert.assertEquals((new Date()).getYear() + 1900, DateUtils.getYear(new Date()));
+		assertEquals((new Date()).getYear() + 1900, DateUtils.getYear(new Date()));
 	}
 
 	/**
@@ -569,7 +600,7 @@ public class TestDateUtils {
 	public void testEqualDatesIgnoringTime() {
 		Date d1=DateUtils.today();
 		Date d2=new Date();
-		Assert.assertTrue(DateUtils.equalDatesIgnoringTime(d1, d2));
+		assertTrue(DateUtils.equalDatesIgnoringTime(d1, d2));
 	}
 
 	/**
@@ -579,7 +610,7 @@ public class TestDateUtils {
 	public void testGetKnownGreekHolidays() {
 		Set<Date> dates = DateUtils.getKnownGreekHolidays(2013);
 		Set<Date> easterDates = DateUtils.getOrthodoxEasterHolidays(2013);
-		Assert.assertTrue(dates.containsAll(easterDates));
+		assertTrue(dates.containsAll(easterDates));
 	}
 
 	/**
@@ -589,8 +620,8 @@ public class TestDateUtils {
 	public void TestIsStandardGreekHoliday() {
 		Date d3 = DateUtils.getDate(2013, Calendar.MAY, 10);
 		for (Date d : DateUtils.getKnownGreekHolidays(2013)) {
-			Assert.assertTrue(DateUtils.isStandardGreekHoliday(d));
+			assertTrue(DateUtils.isStandardGreekHoliday(d));
 		}
-		Assert.assertFalse(DateUtils.isStandardGreekHoliday(d3));
+		assertFalse(DateUtils.isStandardGreekHoliday(d3));
 	}
 }

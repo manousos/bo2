@@ -23,8 +23,7 @@ import gr.interamerican.bo2.utils.Defaults;
 
 import java.math.BigDecimal;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 /**

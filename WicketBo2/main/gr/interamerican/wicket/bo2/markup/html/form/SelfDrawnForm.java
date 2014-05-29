@@ -17,6 +17,7 @@ import gr.interamerican.wicket.bo2.markup.html.panel.SelfDrawnPanel;
 import gr.interamerican.wicket.bo2.validation.BusinessObjectFormValidator;
 
 import java.io.Serializable;
+import java.util.Map;
 
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -30,16 +31,6 @@ import org.apache.wicket.model.CompoundPropertyModel;
 public class SelfDrawnForm<T extends Serializable> extends Form<T> {
 	
 	/**
-	 * Form validator.
-	 */
-	BusinessObjectFormValidator boFormValidator;
-	
-	/**
-	 * Self drawn panel.
-	 */
-	SelfDrawnPanel<T> selfDrawnPanel;
-	
-	/**
 	 * serialVersionUID.
 	 */
 	private static final long serialVersionUID = 1L;
@@ -48,7 +39,26 @@ public class SelfDrawnForm<T extends Serializable> extends Form<T> {
 	 * Wicket id.
 	 */
 	public static final String PANEL_WICKET_ID = "selfDrawnPanel"; //$NON-NLS-1$
-
+	
+	/**
+	 * Creates a new SelfDrawnForm object. 
+	 *
+	 * @param id
+	 * @param model
+	 * @param beanDescriptor
+	 * @param columns
+	 * @param dropDownFix
+	 * 
+	 * @see SelfDrawnPanel
+	 */
+	public SelfDrawnForm(String id, CompoundPropertyModel<T> model, BusinessObjectDescriptor<T> beanDescriptor, int columns, Map<String, Long> dropDownFix) {
+		super(id, model);
+		SelfDrawnPanel<T> selfDrawnPanel = new SelfDrawnPanel<T>(PANEL_WICKET_ID, model, beanDescriptor, columns, dropDownFix); 
+		add(selfDrawnPanel);
+		BusinessObjectFormValidator boFormValidator = new BusinessObjectFormValidator(this, beanDescriptor);
+		add(boFormValidator);
+	}
+	
 	/**
 	 * Creates a new SelfDrawnForm object. 
 	 *
@@ -57,11 +67,7 @@ public class SelfDrawnForm<T extends Serializable> extends Form<T> {
 	 * @param beanDescriptor 
 	 */
 	public SelfDrawnForm(String id, CompoundPropertyModel<T> model, BusinessObjectDescriptor<T> beanDescriptor) {		
-		super(id, model);				
-		this.selfDrawnPanel = new SelfDrawnPanel<T>(PANEL_WICKET_ID, model, beanDescriptor); 
-		add(selfDrawnPanel);
-		this.boFormValidator = new BusinessObjectFormValidator(this, beanDescriptor);
-		add(boFormValidator);
+		this(id, model, beanDescriptor, 1, null);
 	}
 	
 }

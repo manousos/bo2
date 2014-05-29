@@ -15,7 +15,6 @@ package gr.interamerican.bo2.impl.open.creation.test;
 
 import gr.interamerican.bo2.utils.ArrayUtils;
 import gr.interamerican.bo2.utils.StreamUtils;
-import gr.interamerican.bo2.utils.StringUtils;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -59,18 +58,17 @@ public abstract class AbstractTestClass {
 	 * @param type 
 	 */	
 	public abstract void testClass(Class<?> type);
-			
+
 	/**
 	 * Test parameters.
-	 * @param path 
+	 * 
+	 * @param path
 	 * 
 	 * @return Returns the test parameters.
-	 * @throws IOException 
-	 */	
+	 * @throws IOException
+	 */
 	public static Collection<?> parameters(String path) throws IOException {
-		String[] classes = StreamUtils.readResourceFile(path);
-		classes = StringUtils.removeEmpty(classes);
+		String[] classes = StreamUtils.readResourceFile(path, true, true);
 		return ArrayUtils.arrayAsListOfArrays(classes);
-	 }
-
+	}
 }

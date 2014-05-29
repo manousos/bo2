@@ -15,14 +15,21 @@ package gr.interamerican.bo2.utils.beans;
 import gr.interamerican.bo2.utils.StringUtils;
 import gr.interamerican.bo2.utils.Utils;
 
+import java.io.Serializable;
+
 /**
  * A pair of two objects, the left and right objects.
  * 
  * @param <L> Type of the left object. 
  * @param <R> Type of the right object.
  */
-public class Pair<L, R>  {
+public class Pair<L, R> implements Serializable {
 	
+	/**
+	 * serialVersionUID
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/**
 	 * creates a new pair from the first two elements of an array.
 	 * 

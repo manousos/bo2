@@ -16,8 +16,7 @@ import gr.interamerican.bo2.utils.handlers.ExceptionHandler;
 
 import java.awt.event.ActionEvent;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 

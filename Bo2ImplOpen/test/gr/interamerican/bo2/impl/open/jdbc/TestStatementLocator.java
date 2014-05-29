@@ -14,8 +14,7 @@ package gr.interamerican.bo2.impl.open.jdbc;
 
 import java.lang.reflect.Field;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 /**

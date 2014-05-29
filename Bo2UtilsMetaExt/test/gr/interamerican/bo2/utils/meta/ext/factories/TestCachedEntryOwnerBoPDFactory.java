@@ -22,7 +22,6 @@ import gr.interamerican.bo2.utils.meta.exceptions.ParseException;
 import gr.interamerican.bo2.utils.meta.ext.descriptors.CachedEntryOwnerBoPropertyDescriptor;
 import gr.interamerican.samples.utils.meta.SamplePropertyDefinition;
 
-import org.junit.Before;
 import org.junit.Test;
 
 /**

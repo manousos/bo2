@@ -18,9 +18,10 @@ import gr.interamerican.wicket.test.WicketTest;
 
 import java.math.BigDecimal;
 
-import junit.framework.Assert;
-
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.util.tester.FormTester;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -36,9 +37,11 @@ public class TestSelfDrawnBigDecimalTextField extends WicketTest {
 		BigDecimalBoPropertyDescriptor descriptor = new BigDecimalBoPropertyDescriptor();
 		SelfDrawnBigDecimalTextField field = 
 			new SelfDrawnBigDecimalTextField(TestPage.TEST_ID, descriptor);
-		tester.startPage(testPageSource(field));
+		tester.startPage(getTestPage(field));
 		Assert.assertSame(field,tester.getComponentFromLastRenderedPage(subjectPath()));
 		Assert.assertNull(field.getDefaultModelObject());
+		
+		testFormSubmission(field);
 	}
 	
 	/**
@@ -49,13 +52,12 @@ public class TestSelfDrawnBigDecimalTextField extends WicketTest {
 		BigDecimalBoPropertyDescriptor descriptor = new BigDecimalBoPropertyDescriptor();
 		SelfDrawnBigDecimalTextField field = 
 			new SelfDrawnBigDecimalTextField(TestPage.TEST_ID, new Model<BigDecimal>(), descriptor);
-		tester.startPage(testPageSource(field));
+		tester.startPage(getTestPage(field));
 		Assert.assertSame(field,tester.getComponentFromLastRenderedPage(subjectPath()));
 		Assert.assertNull(field.getDefaultModelObject());
+		
+		testFormSubmission(field);
 	}
-	
-	
-	
 	
 	/**
 	 * Test creation with default value.
@@ -68,12 +70,14 @@ public class TestSelfDrawnBigDecimalTextField extends WicketTest {
 		descriptor.setDefaultValue(defaultValue);
 		SelfDrawnBigDecimalTextField field = 
 			new SelfDrawnBigDecimalTextField(TestPage.TEST_ID, descriptor);
-		tester.startPage(testPageSource(field));
+		tester.startPage(getTestPage(field));
 		Assert.assertSame(field,tester.getComponentFromLastRenderedPage(subjectPath()));
 		
 		//field = new SelfDrawnBigDecimalTextField(TestPage.TEST_ID, new Model<BigDecimal>(), descriptor);
 		
 		Assert.assertEquals(defaultValue, field.getDefaultModelObject());
+		
+		testFormSubmission(field);
 	}
 	
 	/**
@@ -87,9 +91,39 @@ public class TestSelfDrawnBigDecimalTextField extends WicketTest {
 		descriptor.setDefaultValue(defaultValue);
 		SelfDrawnBigDecimalTextField field = 
 			new SelfDrawnBigDecimalTextField(TestPage.TEST_ID, new Model<BigDecimal>(), descriptor);
-		tester.startPage(testPageSource(field));
+		tester.startPage(getTestPage(field));
 		Assert.assertSame(field,tester.getComponentFromLastRenderedPage(subjectPath()));
 		Assert.assertEquals(defaultValue, field.getDefaultModelObject());
+		
+		testFormSubmission(field);
+	}
+	
+	/**
+	 * Test creation disabled
+	 */
+	@Test
+	public void testConstructor_withModel_disabled() {
+		BigDecimalBoPropertyDescriptor descriptor = new BigDecimalBoPropertyDescriptor();
+		descriptor.setReadOnly(true);
+		SelfDrawnBigDecimalTextField field = 
+			new SelfDrawnBigDecimalTextField(TestPage.TEST_ID, new Model<BigDecimal>(BigDecimal.TEN), descriptor);
+		tester.startPage(getTestPage(field));
+		Assert.assertSame(field,tester.getComponentFromLastRenderedPage(subjectPath()));
+		
+		FormTester formTester = tester.newFormTester(formPath());
+		formTester.submit();
+		
+		Assert.assertEquals(BigDecimal.TEN, field.getModelObject());
+	}
+	
+	/**
+	 * @param textField
+	 */
+	private void testFormSubmission(TextField<BigDecimal> textField) {
+		FormTester formTester = tester.newFormTester(formPath());
+		formTester.setValue(TestPage.TEST_ID, "10"); //$NON-NLS-1$
+		formTester.submit();
+		Assert.assertEquals(new BigDecimal(10), textField.getModelObject());
 	}
 
 }

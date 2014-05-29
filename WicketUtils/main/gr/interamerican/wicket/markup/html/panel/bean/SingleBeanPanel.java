@@ -160,11 +160,11 @@ extends ServicePanelWithBack {
 			@Override 
 			public void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				if(!ServicePanelUtils.authorizedByFlag(getDefinition().getBeanActionFlag())) {
-					target.addComponent(feedBackPanel);
+					target.add(feedBackPanel);
 					SingleBeanPanel.this.error(getDefinition().getBeanActionFlag().getDownMessage());
 					return;
 				}
-				target.addComponent(SingleBeanPanel.this);
+				target.add(SingleBeanPanel.this);
 				B bean = getDefinition().getBeanModel().getObject();
 				if(getDefinition().getFormValidator().check(bean, target)) {
 					super.onSubmit(target, form);
@@ -275,6 +275,11 @@ extends ServicePanelWithBack {
 	 * This validator always returns true (success).
 	 */
 	private class EmptyValidator implements AjaxEnabledCondition<B> {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public boolean check(B b, AjaxRequestTarget t) { return true; }
 	}
 	
@@ -283,6 +288,11 @@ extends ServicePanelWithBack {
 	 */
 	private class ClearFormAction extends AbstractCallbackAction {
 		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public void callBack(AjaxRequestTarget target) { 
 			clearForm(target); 
 		}
@@ -296,7 +306,7 @@ extends ServicePanelWithBack {
 		 * @param target
 		 */
 		private void clearForm(AjaxRequestTarget target) {
-			target.addComponent(SingleBeanPanel.this);
+			target.add(SingleBeanPanel.this);
 			B newBean = newBean();
 			getDefinition().getBeanModel().setObject(newBean);
 			beanForm.setDefaultModelObject(newBean);

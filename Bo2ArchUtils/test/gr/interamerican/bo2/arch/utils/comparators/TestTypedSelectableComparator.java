@@ -14,8 +14,8 @@ package gr.interamerican.bo2.arch.utils.comparators;
 
 import gr.interamerican.bo2.arch.ext.TypedSelectable;
 import gr.interamerican.bo2.arch.utils.beans.TypedSelectableImpl;
-import junit.framework.Assert;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 /**

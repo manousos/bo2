@@ -12,46 +12,62 @@
  ******************************************************************************/
 package gr.interamerican.wicket.markup.html.panel;
 
-import static org.junit.Assert.assertSame;
 import gr.interamerican.wicket.markup.html.TestPage;
-import gr.interamerican.wicket.markup.html.panel.picker.PickerPanel;
 import gr.interamerican.wicket.test.WicketTest;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.util.file.File;
+import org.apache.wicket.util.tester.FormTester;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Unit tests for {@link PickerPanel}
+ * Unit tests for {@link FilePanel}
  */
 public class TestFilePanel extends WicketTest {
 	
 	/**
-	 * Panel to test.
-	 */
-	FilePanel panel;	
+	 * Tests creation of {@link FilePanel}.
+	 */	
+	@SuppressWarnings("nls")
+	@Test
+	public void testCreationAndSubmit() {		 
+		tester.startPage(getTestPage());
+		tester.assertComponent(subjectPath(), FilePanel.class);
+		commonAssertions_noError();
+		
+		FilePanel subject = (FilePanel) tester.getComponentFromLastRenderedPage(subjectPath());
+		
+		//FORM submit not coming from uploadButton is void
+		FormTester formTester = getFormTester();
+		File file = new File(getClass().getResource("/gr/interamerican/wicket/samples/img/delete.jpeg").getFile());
+		String fcPath = TestPage.TEST_ID + ":" + FilePanel.FORM_ID + ":" + FilePanel.FILE_CHOOSER_ID;
+		Assert.assertNull(subject.getDefaultModelObject());
+		formTester.setFile(fcPath, file, "image/jpeg");
+		formTester.submit(TestPage.SUBMIT_BUTTON_ID);
+		Assert.assertNull(subject.getDefaultModelObject());
+		Assert.assertNull(subject.getFileName());
+		
+		//Button submit uploads file to model
+		formTester = getFormTester();
+		formTester.setFile(fcPath, file, "image/jpeg");
+		AjaxButton button = (AjaxButton)
+				tester.getComponentFromLastRenderedPage(path("form:uploadButton"));
+		tester.executeAjaxEvent(button, "onclick");
+		
+		Assert.assertTrue(subject.getDefaultModelObject() instanceof byte[]);
+		Assert.assertTrue(((byte[]) subject.getDefaultModelObject()).length > 0);
+		Assert.assertNotNull(subject.getFileName());
+	}
 	
 	@Override
 	protected Component initializeComponent() {
 		IModel<byte[]> model = new Model<byte[]>();
 		model.setObject(null);
-		panel = new FilePanel(TestPage.TEST_ID, model);
-		return panel;
-	}
-	
-	
-	/**
-	 * Tests creation of {@link PickerPanel}.
-	 * 
-	 * Also tests that pressing the select button, selects the item. 
-	 */	
-	@Test
-	public void testCreation() {		 
-		tester.startPage(testPageSource());
-		tester.assertComponent(subjectPath(), FilePanel.class);
-		Component actual = tester.getComponentFromLastRenderedPage(subjectPath());
-		assertSame(panel, actual);
+		return new FilePanel(TestPage.TEST_ID, model);
 	}
 
 }

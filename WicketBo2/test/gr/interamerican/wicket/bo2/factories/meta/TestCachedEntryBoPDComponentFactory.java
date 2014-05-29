@@ -12,9 +12,7 @@
  ******************************************************************************/
 package gr.interamerican.wicket.bo2.factories.meta;
 
-import gr.interamerican.bo2.arch.ext.Cache;
 import gr.interamerican.bo2.arch.ext.TranslatableEntry;
-import gr.interamerican.bo2.arch.utils.beans.CacheImpl;
 import gr.interamerican.bo2.arch.utils.beans.TypedSelectableImpl;
 import gr.interamerican.bo2.samples.utils.meta.Bean1;
 import gr.interamerican.bo2.utils.StringConstants;
@@ -43,10 +41,6 @@ public class TestCachedEntryBoPDComponentFactory extends BaseClassForTestingComp
 	 */
 	private static final Long SUBTYPE = 1L;
 	/**
-	 * CACHE
-	 */
-	private static final Cache<Long> CACHE = new CacheImpl<Long>();
-	/**
 	 * PARSER
 	 */
 	private static final Parser<Long> PARSER = new LongParser();
@@ -74,7 +68,7 @@ public class TestCachedEntryBoPDComponentFactory extends BaseClassForTestingComp
 	@Test
 	public void testDrawMain_First(){
 		Component component = cachedEntryBoPDComponentFactory.drawMain(cashedDesc, TestPage.TEST_ID);
-		tester.startPage(testPageSource(component));
+		tester.startPage(getTestPage(component));
 		tester.assertComponent(path(StringConstants.EMPTY), SelfDrawnDropDownChoiceForEntry.class); 
 	}
 	/**
@@ -84,7 +78,7 @@ public class TestCachedEntryBoPDComponentFactory extends BaseClassForTestingComp
 	public void testDrawMain_Second(){
 		PropertyModel<Bean1> model = new PropertyModel<Bean1>(bean1,cashedDesc.getName());
 		Component component = cachedEntryBoPDComponentFactory.drawMain(TestPage.TEST_ID, model, cashedDesc);
-		tester.startPage(testPageSource(component));
+		tester.startPage(getTestPage(component));
 		tester.assertComponent(path(StringConstants.EMPTY), SelfDrawnDropDownChoiceForEntry.class); 
 
 	}
@@ -100,9 +94,9 @@ public class TestCachedEntryBoPDComponentFactory extends BaseClassForTestingComp
 		 value.setCode(CODE);
 		 value.setTypeId(TYPE);
 		 value.setSubTypeId(SUBTYPE);
-		 CACHE.put(value);		 		    
+		 cache().put(value);		 		    
 		 CachedEntryBoPropertyDescriptor<?,?> cd = 
-			 new CachedEntryBoPropertyDescriptor<Entry, Long>(1000L, 1L,CACHE, PARSER, FORMATTER);
+			 new CachedEntryBoPropertyDescriptor<Entry, Long>(1000L, 1L,TEST_CACHE_NAME, PARSER, FORMATTER);
 		 cd.setName("id"); //$NON-NLS-1$
 		 
 		 return cd;

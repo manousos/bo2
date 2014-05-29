@@ -14,12 +14,14 @@ package gr.interamerican.bo2.utils.meta.parsers;
 
 import gr.interamerican.bo2.utils.meta.exceptions.ParseException;
 
+import java.io.Serializable;
+
 /**
  * A {@link Parser} parses string values.
  * @param <T> 
  * 
  */
-public interface Parser<T> {
+public interface Parser<T> extends Serializable {
 	
 	/**
 	 * Parses a string.

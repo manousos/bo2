@@ -24,7 +24,7 @@ import gr.interamerican.bo2.arch.ext.CriteriaDependent;
 import gr.interamerican.bo2.impl.open.jdbc.AbstractJdbcWorker;
 import gr.interamerican.bo2.utils.StreamUtils;
 import gr.interamerican.bo2.utils.StringUtils;
-import gr.interamerican.bo2.utils.adapters.AnyOperationSpec;
+import gr.interamerican.bo2.utils.adapters.TransformationSpec;
 import gr.interamerican.bo2.utils.sql.SqlProcessor;
 import gr.interamerican.bo2.utils.sql.elements.PredefinedReport;
 
@@ -59,22 +59,16 @@ import java.util.HashMap;
 public class GenericStoredDynamicEntitiesQuery<C> 
 extends AbstractJdbcWorker 
 implements  EntitiesQuery<Object>, CriteriaDependent<C>, OrderedFieldsContainer, 
-NamedFieldsContainer, OrderedNamedFieldsContainer, AnyOperationSpec {
+NamedFieldsContainer, OrderedNamedFieldsContainer, TransformationSpec {
 	/**
 	 * Static map with all reports.
 	 */
-	private static HashMap<String, PredefinedReport> reports = 
-		new HashMap<String, PredefinedReport>();	
+	static HashMap<String, PredefinedReport> reports = new HashMap<String, PredefinedReport>();	
 	
 	/**
 	 * Wrapped query.
 	 */
 	PredefinedReportQuery query;
-	
-	/**
-	 * Predefined report for the query. 
-	 */
-	PredefinedReport report;
 	
 	/**
 	 * Path to the statement.
@@ -112,7 +106,32 @@ NamedFieldsContainer, OrderedNamedFieldsContainer, AnyOperationSpec {
 	public GenericStoredDynamicEntitiesQuery(String path, C criteria) {
 		super();				
 		this.path = path;
-		this.report = reports.get(path);
+		PredefinedReport report = reports.get(path);
+		if (report!=null) {
+			query = new PredefinedReportQuery(report);
+		}
+		initializeCriteria(criteria);
+	}
+	
+	/**
+	 * Creates a new GenericStoredDynamicEntitiesQuery object. 
+	 *
+	 * @param sql
+	 *        SQL query statement.
+	 * @param id
+	 *        ID for the query.
+	 * @param criteria 
+	 *        Criteria bean. If Class<C> is not Object.class, then this must not be null. 
+	 */
+	public GenericStoredDynamicEntitiesQuery(String sql, String id, C criteria) {
+		super();				
+		this.sql = SqlProcessor.normalizeSql(sql);
+		this.id = id;
+		if(StringUtils.isNullOrBlank(id)) {
+			String msg = "Cannot store a report with null/empty id"; //$NON-NLS-1$
+			throw new RuntimeException(msg);
+		}
+		PredefinedReport report = reports.get(id);
 		if (report!=null) {
 			query = new PredefinedReportQuery(report);
 		}
@@ -134,31 +153,6 @@ NamedFieldsContainer, OrderedNamedFieldsContainer, AnyOperationSpec {
 		}
 	}
 	
-	/**
-	 * Creates a new GenericStoredDynamicEntitiesQuery object. 
-	 *
-	 * @param sql
-	 *        SQL query statement.
-	 * @param id
-	 *        ID for the query.
-	 * @param criteria 
-	 *        Criteria bean. If Class<C> is not Object.class, then this must not be null. 
-	 */
-	public GenericStoredDynamicEntitiesQuery(String sql, String id, C criteria) {
-		super();				
-		this.sql = SqlProcessor.normalizeSql(sql);
-		this.id = id;
-		if(StringUtils.isNullOrBlank(id)) {
-			String msg = "Cannot store a report with null/empty id"; //$NON-NLS-1$
-			throw new RuntimeException(msg);
-		}
-		this.report = reports.get(id);
-		if (report!=null) {
-			query = new PredefinedReportQuery(report);
-		}
-		initializeCriteria(criteria);
-	}
-	
 	@Override
 	public void setManagerName(String managerName) {	
 		super.setManagerName(managerName);
@@ -168,10 +162,12 @@ NamedFieldsContainer, OrderedNamedFieldsContainer, AnyOperationSpec {
 	}
 	
 	@Override
-	public void init(Provider parent) throws InitializationException {		
+	public void init(Provider parent) throws InitializationException {
 		super.init(parent);
 		if (query==null) {
 			initPredefinedReportQuery();
+		} else if (query.getManagerName() == null) {
+			query.setManagerName(managerName);
 		}
 		query.init(parent);
 	}
@@ -198,10 +194,13 @@ NamedFieldsContainer, OrderedNamedFieldsContainer, AnyOperationSpec {
 			cmd.setManagerName(this.getManagerName());
 			cmd.init(this.getProvider());
 			cmd.open();
-			cmd.setManagerName(this.getManagerName());
 			cmd.setSql(sql);
-			cmd.execute();
-			report = cmd.getReport();
+			try {
+				cmd.execute();
+			} finally {
+				cmd.close();
+			}
+			PredefinedReport report = cmd.getReport();
 			if(path != null) {
 				id = StringUtils.removeCharacter(path, '/');
 			}
@@ -220,12 +219,14 @@ NamedFieldsContainer, OrderedNamedFieldsContainer, AnyOperationSpec {
 				 */
 			}
 			
-			if(path == null) {
-				reports.put(id, report);
-			} else if (id == null) {
+			/*
+			 * Cache with path if it exists, else cache with id
+			 */
+			if(path != null) {
 				reports.put(path, report);
+			} else {
+				reports.put(id, report);
 			}
-			cmd.close();
 		} catch (DataException e) {
 			throw new InitializationException(e);
 		}

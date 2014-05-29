@@ -17,6 +17,7 @@ import gr.interamerican.bo2.creation.NameResolver;
 import gr.interamerican.bo2.creation.ObjectFactory;
 import gr.interamerican.bo2.creation.exception.ClassCreationException;
 import gr.interamerican.bo2.utils.CollectionUtils;
+import gr.interamerican.bo2.utils.ExceptionUtils;
 import gr.interamerican.bo2.utils.ReflectionUtils;
 import gr.interamerican.bo2.utils.StreamUtils;
 import gr.interamerican.bo2.utils.StringConstants;
@@ -91,8 +92,7 @@ public class ObjectFactoryImpl implements ObjectFactory {
 	/**
 	 * Logger.
 	 */
-	private static Logger logger = 
-		LoggerFactory.getLogger(ObjectFactoryImpl.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(ObjectFactoryImpl.class);
 	
 	/**
 	 * Assistant.
@@ -148,9 +148,6 @@ public class ObjectFactoryImpl implements ObjectFactory {
 		setMappings(assistant.getMappingsFilePath());
 	}
 	
-
-
-	
 	/**
 	 * Creates a new Factory object using the information defined
 	 * in a properties file.
@@ -179,8 +176,11 @@ public class ObjectFactoryImpl implements ObjectFactory {
 		}
 	}
 	
-	
 	public <M> M create(Class<M> type) {
+		M fixture = assistant.getFixtureResolver().resolveFixture(type);
+		if(fixture != null) {
+			return fixture;
+		}
 		@SuppressWarnings("unchecked")
 		Class<M> implementation = (Class<M>)getImplementationType(type);
 		return createInstance(implementation);
@@ -325,6 +325,21 @@ public class ObjectFactoryImpl implements ObjectFactory {
 		associate(declaration, declaration);
 	}
 	
+	@Override
+	public <M> void registerFixture(Class<M> declarationType, M fixture) {
+		assistant.getFixtureResolver().registerFixture(declarationType, fixture);
+	}
+	
+	@Override
+	public <M> void registerFixture(Class<M> declarationType, ObjectFactory fixtureFactory) {
+		assistant.getFixtureResolver().registerFixture(declarationType, fixtureFactory);
+	}
+
+	@Override
+	public void resetFixtures() {
+		assistant.getFixtureResolver().clearFixturesCache();
+	}
+	
 	/**
 	 * Creates an instance of the specified class.
 	 * 
@@ -442,7 +457,7 @@ public class ObjectFactoryImpl implements ObjectFactory {
 	 * @throws IOException 
 	 * 
 	 */
-	private void readMappings(String mappingsFilePath) 
+	protected void readMappings(String mappingsFilePath) 
 	throws IOException {
 		String[] paths = StreamUtils.readResourceFile(mappingsFilePath, true, true);
 		if (paths==null) {
@@ -489,7 +504,7 @@ public class ObjectFactoryImpl implements ObjectFactory {
 	 */
 	private void loadMappings(String path) {
 		if (path.length()>0) {
-			Properties p = CollectionUtils.readProperties(path);
+			Properties p = loadPropertiesIfAvailable(path);
 			CollectionUtils.putPropertiesToAssociationTable	(p, decl2ImplNames);
 		}
 	}
@@ -501,13 +516,42 @@ public class ObjectFactoryImpl implements ObjectFactory {
 	 */
 	private void loadReplacements(String path) {
 		if (path.length()>0) {
-			Properties p = CollectionUtils.readProperties(path);
+			Properties p = loadPropertiesIfAvailable(path);
 			for (Map.Entry<Object, Object> entry : p.entrySet()) {
 				String key = (String) entry.getKey();
 				String value = (String) entry.getValue();
 				replacements.put(key.trim(), value.trim());
 			}
 		}
+	}
+	
+	/**
+	 * Loads a properties file resource, if it is available. If unavailable,
+	 * a warning is printed. This is not normally acceptable and should be 
+	 * considered a fatal error when in production. 
+	 * 
+	 * @param path
+	 *        Resource path.
+	 * 
+	 * @return loaded properties.
+	 */
+	@SuppressWarnings("nls")
+	private Properties loadPropertiesIfAvailable(String path) {
+		try {
+			Properties p = CollectionUtils.readProperties(path);
+			return p;
+		} catch(RuntimeException rtex) {
+			if(ExceptionUtils.isCausedBy(rtex, IOException.class)) {
+				String msg = StringUtils.concat(
+						"Non existant mappings file: ",
+						path,
+						". This is acceptable for unit tests, but FATAL in every other case and should be investigated.");
+				LOGGER.error(msg);
+			} else {
+				throw rtex;
+			}
+		}
+		return new Properties();
 	}
 	
 	/**
@@ -534,13 +578,13 @@ public class ObjectFactoryImpl implements ObjectFactory {
 		}
 		
 		if(redundant) {
-			if (logger.isInfoEnabled()) {
+			if (LOGGER.isInfoEnabled()) {
 				String msg = "Associating declaration type " //$NON-NLS-1$
 					       + declaration.getName()
 					       + " with implementation type "  //$NON-NLS-1$
 					       + implementation.getName()
 					       + " is redundant, as the association exists."; //$NON-NLS-1$
-				logger.info(msg);
+				LOGGER.info(msg);
 			}
 		} else {
 			checkForIllegalMappingOverrideAttempt(decl2ImplTypes.getLeft(implementation), declaration);
@@ -548,12 +592,12 @@ public class ObjectFactoryImpl implements ObjectFactory {
 			decl2ImplTypes.associate(declaration, implementation);
 			decl2ImplNames.associate(declaration.getName(), implementation.getName());
 
-			if (logger.isInfoEnabled()) {
+			if (LOGGER.isInfoEnabled()) {
 				String msg = "Associating declaration type " //$NON-NLS-1$
 					       + declaration.getName()
 					       + " with implementation type "  //$NON-NLS-1$
 					       + implementation.getName();
-				logger.info(msg);
+				LOGGER.info(msg);
 			}
 		}
 	}
@@ -572,7 +616,7 @@ public class ObjectFactoryImpl implements ObjectFactory {
 		if(existing!=null && existing!=overriding) {
 			String msg = overriding.getName() + " type attempted to override "  //$NON-NLS-1$
 			+ existing.getName() + ". You may need to declare a type replacement."; //$NON-NLS-1$
-			logger.warn(msg);
+			LOGGER.warn(msg);
 		}
 	}
 	
@@ -674,17 +718,17 @@ public class ObjectFactoryImpl implements ObjectFactory {
 	 */
 	@SuppressWarnings("nls")
 	public void log(String title) {
-		if (logger.isDebugEnabled()) {
+		if (LOGGER.isDebugEnabled()) {
 			String names = "decl2ImplNames:" + decl2ImplNames.toString();
 			String types = "decl2ImplTypes:" + decl2ImplTypes.toString();
 			String assistantStr = assistant.toString();
-			logger.debug("---------");
-			logger.debug(title);
-			logger.debug(this.getClass().getName());
-			logger.debug(assistantStr);
-			logger.debug(names);
-			logger.debug(types);
-			logger.debug("---------");	
+			LOGGER.debug("---------");
+			LOGGER.debug(title);
+			LOGGER.debug(this.getClass().getName());
+			LOGGER.debug(assistantStr);
+			LOGGER.debug(names);
+			LOGGER.debug(types);
+			LOGGER.debug("---------");	
 		}
 	}
 

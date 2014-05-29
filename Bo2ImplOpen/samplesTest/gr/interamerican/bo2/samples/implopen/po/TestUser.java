@@ -13,7 +13,7 @@
 package gr.interamerican.bo2.samples.implopen.po;
 
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 import gr.interamerican.bo2.samples.archutil.po.User;
 
 import org.junit.Test;

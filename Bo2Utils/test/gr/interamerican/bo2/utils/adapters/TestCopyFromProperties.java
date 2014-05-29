@@ -14,14 +14,14 @@ package gr.interamerican.bo2.utils.adapters;
 
 import gr.interamerican.bo2.samples.bean.BeanWith2Fields;
 import gr.interamerican.bo2.samples.bean.BeanWith3Fields;
+import gr.interamerican.bo2.samples.bean.BeanWithBoolean;
 import gr.interamerican.bo2.samples.bean.BeanWithDate;
 import gr.interamerican.bo2.utils.DateUtils;
 
 import java.util.Date;
 import java.util.Properties;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -94,6 +94,33 @@ public class TestCopyFromProperties {
 		Assert.assertEquals(field3, bean.getField3());
 	}
 	
-	
+	/**
+	 * Test for execute()
+	 */
+	@SuppressWarnings("nls")
+	@Test
+	public void testExecute_withBool() {
+		Properties p = new Properties();
+		p.setProperty("bool", "true");
+		p.setProperty("wrappedBool", "1");
+		p.setProperty("hacky", "TRUE");
+		p.setProperty("isLala", "1");
+		
+		BeanWithBoolean bean = new BeanWithBoolean();
+		
+		Assert.assertFalse(bean.isBool());
+		Assert.assertFalse(bean.getHacky());
+		Assert.assertNull(bean.getWrappedBool());
+		Assert.assertFalse(bean.getIsLala());
+		
+		CopyFromProperties<BeanWithBoolean> copy = new CopyFromProperties<BeanWithBoolean>(p);
+		copy.execute(bean);
+		
+		Assert.assertTrue(bean.isBool());
+		Assert.assertTrue(bean.getWrappedBool());
+		Assert.assertTrue(bean.getHacky());
+		Assert.assertTrue(bean.getIsLala());
+				
+	}
 
 }

@@ -30,7 +30,6 @@ implements Attachment {
 	 * Creates a new MailAttachment object. 
 	 * 
 	 * @param filename
-	 * @param type
 	 */
 	public FileAttachment(String filename) {
 		super(filename);	

@@ -13,6 +13,8 @@
 package gr.interamerican.wicket.callback;
 
 /**
+ * Chain of responsibility enhancement of {@link CallbackAction}.
+ * <br/>
  * A {@link ChainedCallbackAction} is a {@link CallbackAction} that provides
  * facilities for inversion of control by allowing components to chain, before 
  * or after, other {@link CallbackAction}s.

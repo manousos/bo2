@@ -15,6 +15,7 @@ package gr.interamerican.wicket.utils;
 import gr.interamerican.bo2.utils.CollectionUtils;
 import gr.interamerican.bo2.utils.StringConstants;
 import gr.interamerican.bo2.utils.StringUtils;
+import gr.interamerican.bo2.utils.Utils;
 
 import java.util.Map;
 import java.util.Properties;
@@ -33,11 +34,18 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
  */
 public  class WicketUtils {
+	
+	/**
+	 * Logger
+	 */
+	static final Logger LOGGER = LoggerFactory.getLogger(WicketUtils.class.getName());
 	
 	/**
 	 * hidden constructor. 
@@ -46,30 +54,29 @@ public  class WicketUtils {
 	private WicketUtils() {
 		/* empty */
 	}
+	
 	/**
 	 * Renders the specific fields.
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ Array οΏ½οΏ½οΏ½ field ids οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ Container οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ 
-	 * οΏ½οΏ½οΏ½ οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ Render.
-	 * 
+	 * Δίνουμε ως όρισμα ένα Array απο field ids και τον Container που τα περιέχει 
+	 * και η μέθοδος τα κάνει Render.
 	 * 
 	 * @param target 
 	 * @param container 
 	 * @param fieldsToRender 
 	 * 
 	 */
-	public static void renderFields(AjaxRequestTarget target,WebMarkupContainer container, String[] fieldsToRender){
+	public static void renderFields(AjaxRequestTarget target,WebMarkupContainer container, String[] fieldsToRender) {
 		for (String s :fieldsToRender){
 			container.get(s).setOutputMarkupPlaceholderTag(true);
-			target.addComponent(container.get(s));
+			target.add(container.get(s));
 		}
 	}
+	
 	/**
 	 * Controls the Visibility of  the specific fields.
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ Array οΏ½οΏ½οΏ½ field ids , οΏ½οΏ½οΏ½ Container οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ 
-	 * οΏ½οΏ½οΏ½ οΏ½οΏ½ visibility (True for visible and False for invisible)
-	 * οΏ½οΏ½οΏ½ οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ Visibility οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½.
-	 * 
-	 * 
+	 * Δίνουμε ως όρισμα ένα Array απο field ids , τον Container που τα περιέχει 
+	 * και το visibility (True for visible and False for invisible)
+	 * και η μεθοδος καθορίζει το Visibility για το καθένα.
 	 * 
 	 * @param container 
 	 * @param fields 
@@ -190,6 +197,7 @@ public  class WicketUtils {
 			}
 		}
 	}
+	
 	/**
 	 * Sets the required  property on a number of form components.
 	 * 
@@ -204,11 +212,10 @@ public  class WicketUtils {
 		}
 	}
 	
-	
 	/**
-	 * οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ 
-	 * οΏ½οΏ½οΏ½ CompoundPropertyModel οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½.
-	 * οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½ οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ οΏ½οΏ½οΏ½οΏ½οΏ½ null οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½οΏ½ null.
+	 * Δινουμε ως όρισμα ένα αντικείμενο και μας Επιστρέφει 
+	 * ένα CompoundPropertyModel για το Αντικείμενο Αυτο.
+	 * Σε περίπτωση που το Αντικείμενο είναι null επιστρέφει null.
 	 * @param <T> 
 	 * 
 	 * 
@@ -222,7 +229,6 @@ public  class WicketUtils {
 		}
 		return cpm;
 	}
-	
 	
 	/**
 	 * Method that enables Required Validators.
@@ -259,6 +265,7 @@ public  class WicketUtils {
 			disableComponents(container, set);
 		}
 	}
+	
 	/**
 	 * Method that disables Components.
 	 * @param container - the component that contains the required fields
@@ -283,7 +290,7 @@ public  class WicketUtils {
 	 */
 	public static <T> void disableComponent(FormComponent<T> component) {
 		if(component instanceof TextArea) {
-			AttributeModifier mod = new AttributeModifier(MarkupConstants.READONLY, true, new Model<String>(MarkupConstants.READONLY));
+			AttributeModifier mod = new AttributeModifier(MarkupConstants.READONLY, new Model<String>(MarkupConstants.READONLY));
 			component.add(mod);
 		} else {
 			component.setEnabled(false);
@@ -292,26 +299,35 @@ public  class WicketUtils {
 	
 	/**
 	 * Mounts a number of bookmarkable wicket pages, from a resource properties file.
+	 * <br/>
+	 * If a Page class is not found, an ERROR is logged to facilitate continuous integration
+	 * test execution.
 	 * 
 	 * @param fPath
 	 *        Resource path of properties file.
 	 * @param webApplication
 	 *        {@link WebApplication} instance.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "nls" })
 	public static void mountBookmarkablePagesFromFile(String fPath, WebApplication webApplication) {
 		Properties p = CollectionUtils.readProperties(fPath);
-		for(Map.Entry<Object, Object> entry : p.entrySet()) {
-			Class<?> clazz;
+		Map<String, String> properties = Utils.cast(p);
+		for(Map.Entry<String, String> entry : properties.entrySet()) {
+			Class<?> clazz = null;
 			try {
-				clazz = Class.forName((String) entry.getValue());
+				clazz = Class.forName(entry.getValue());
 			} catch (ClassNotFoundException e) {
-				throw new RuntimeException(e);
+				String msg = StringUtils.concat(
+						"Non existant bookmarkable page class: ",
+						entry.getValue().toString(),
+						". This is acceptable for unit tests, but FATAL in every other case and should be investigated.");
+				LOGGER.error(msg);
+				continue;
 			}
 			if(!Page.class.isAssignableFrom(clazz)) {
 				throw new RuntimeException(entry.getValue() + " should extend " + Page.class.getName()); //$NON-NLS-1$
 			}
-			webApplication.mountBookmarkablePage((String) entry.getKey(), (Class<Page>) clazz);
+			webApplication.mountPage(entry.getKey(), (Class<Page>) clazz);
 		}
 	}
 	

@@ -17,19 +17,34 @@ import gr.interamerican.bo2.arch.ext.TypedSelectable;
 import gr.interamerican.bo2.utils.Utils;
 import gr.interamerican.bo2.utils.beans.Pair;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Cache that can store multiple {@link TypedSelectable} types.
  * @param <C> 
  */
 public class CacheImpl<C extends Comparable<? super C>> 
-implements Cache<C> {
+implements Cache<C>, Serializable {
+	
+	/**
+	 * serialVersionUID.
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Logger.
+	 */
+	static final Logger LOGGER = LoggerFactory.getLogger(CacheImpl.class.getName()); 
 	
 	/**
 	 * Creates a new CacheImpl object.
@@ -46,15 +61,14 @@ implements Cache<C> {
 	/**
 	 * Cache.	
 	 */
-	private HashMap<Pair<Long, C>, TypedSelectable<C>> cache = 
+	private Map<Pair<Long, C>, TypedSelectable<C>> cache = 
 		new HashMap<Pair<Long, C>, TypedSelectable<C>>();
 	
 	/**
 	 * Sub-caches.	
 	 */
-	private HashMap<Pair<Long, Long>, Set<TypedSelectable<C>>> subCaches = 
+	private Map<Pair<Long, Long>, Set<TypedSelectable<C>>> subCaches = 
 		new HashMap<Pair<Long, Long>, Set<TypedSelectable<C>>>();
-	
 	
 	/**
 	 * Creates a unique key for a pair of typeId and subTypeId.
@@ -104,49 +118,87 @@ implements Cache<C> {
 		return new Pair<Long, C>(typeId, code);
 	}
 
-	@SuppressWarnings("unchecked")
-	public <T extends TypedSelectable<C>> Set<T> getSubCache(Long typeId,
-			Long subTypeId) {
-		
-		Set<T> set = new HashSet<T>();		
-		Set<TypedSelectable<C>> subCache = subCaches.get(subKey(typeId, subTypeId));
-		if (subCache!=null) {
-			for (TypedSelectable<C> ts : subCache) {				
-				set.add((T) ts);				
-			}
-		}
-		return set;
+	@Override	
+	public <T extends TypedSelectable<C>> 
+	Set<T> getSubCache(Long typeId,	Long subTypeId) {
+		Pair<Long, Long> key = subKey(typeId,subTypeId);
+		return getSubset(key, subCaches);
 	}
 	
+	@Override
+	@SuppressWarnings("nls")
 	public void put(TypedSelectable<C> value) {
-		cache.put(key(value), value);
-		Pair<Long, Long> subCacheKey = subKey(value); 
-		Set<TypedSelectable<C>> subCache = subCaches.get(subCacheKey);
-		if (subCache==null) {
-			subCache = new HashSet<TypedSelectable<C>>();
+		TypedSelectable<C> existing = cache.put(key(value), value);
+		if(existing != null) {
+			LOGGER.warn("Replaced [" + existing.getTypeId() + "," + existing.getCode() + "].");
 		}
-		if(subCache.contains(value)) {
-			subCache.remove(value);
-		}
-		subCache.add(value);
-		subCaches.put(subCacheKey, subCache);
+		putToSubCache(value);
+		putToTypeEntries(value);
+		
 	}
 	
-	public void remove(TypedSelectable<C> value) {		
-		if (cache.remove(key(value))!=null) {
-			subCaches.get(subKey(value)).remove(value);
+	/**
+	 * Puts the specified value to the appropriate set in the
+	 * <code>subCaches</code> map.
+	 * @param value
+	 */
+	void putToSubCache(TypedSelectable<C> value) {
+		Pair<Long, Long> key = subKey(value); 
+		putToSubset(subCaches, value, key);		
+	}
+	
+	/**
+	 * Puts the specified value to the appropriate set in the
+	 * <code>typeEntries</code> map.
+	 * @param value
+	 */
+	void putToTypeEntries(TypedSelectable<C> value) {
+		Pair<Long, Long> key = subKey(value.getTypeId(), SUBTYPEID_FOR_ALL_TYPE_ENTRIES);
+		putToSubset(subCaches, value, key);
+	}
+	
+	/**
+	 * Puts the specified entry to a sub-set.
+	 * 
+	 * @param map
+	 * @param value
+	 * @param key
+	 */
+	<K> void putToSubset(Map<K, Set<TypedSelectable<C>>> map, TypedSelectable<C> value, K key) {
+		Set<TypedSelectable<C>> set = map.get(key);
+		if (set==null) {
+			set = new HashSet<TypedSelectable<C>>();
+			map.put(key, set);
+		} else {
+			set.remove(value);
+		}
+		set.add(value);
+	}
+	
+	@Override
+	public void remove(TypedSelectable<C> value) {
+		Pair<Long, C> k = key(value);
+		if (cache.remove(k)!=null) {
+			Pair<Long,Long> subCacheKey = subKey(value); 
+			subCaches.get(subCacheKey).remove(value);
+			Pair<Long,Long> allEntriesKey = 
+				subKey(value.getTypeId(), SUBTYPEID_FOR_ALL_TYPE_ENTRIES);
+			subCaches.get(allEntriesKey).remove(value);			
 		}
 	}
 
+	@Override
 	@Deprecated
 	public TypedSelectable<C> get(Long typeId, Long subTypeId, C code) {		
 		return get(typeId, code);
 	}
 	
+	@Override
 	public TypedSelectable<C> get(Long typeId, C code) {		
 		return cache.get(key(typeId, code));
 	}	
 
+	@Override
 	public void clear() {
 		cache.clear();
 		subCaches.clear();
@@ -172,9 +224,7 @@ implements Cache<C> {
 		}		
 	}
 	
-	/* (non-Javadoc)
-	 * @see gr.interamerican.bo2.arch.ext.Cache#refill(java.lang.Long, java.util.Collection)
-	 */
+	@Override
 	public void refill(Long typeId,
 			Collection<? extends TypedSelectable<C>> values) {
 		clearTypeId(typeId);
@@ -185,15 +235,36 @@ implements Cache<C> {
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see gr.interamerican.bo2.arch.ext.Cache#getSubCacheAsList(java.lang.Long, java.lang.Long)
-	 */
+	@Override
 	public <T extends TypedSelectable<C>> List<T> getSubCacheAsList(
 			Long typeId, Long subTypeId) {
 		Set<T> set = getSubCache(typeId, subTypeId);
 		List<T> list = new ArrayList<T>();
 		list.addAll(set);	
 		return list;
+	}
+	
+	
+	/**
+	 * Gets a subset from a map.
+	 * 
+	 * @param key
+	 * @param map
+	 * @return Returns the subset.
+	 */
+	<T extends TypedSelectable<C>, K> 
+	Set<T> getSubset(K key, Map<K, Set<TypedSelectable<C>>> map) {
+		Set<TypedSelectable<C>> subset = map.get(key);
+		if (subset==null) {
+			return new HashSet<T>();
+		}
+		Set<T> set = Utils.cast(subset);
+		return new HashSet<T>(set);
+	}
+
+	@Override
+	public <T extends TypedSelectable<C>> Set<T> getTypeEntries(Long typeId) {
+		return getSubCache(typeId, SUBTYPEID_FOR_ALL_TYPE_ENTRIES);
 	}
 	
 }

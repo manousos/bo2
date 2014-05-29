@@ -26,7 +26,7 @@ public class TimeUtils {
 	 *         in milliseconds.
 	 */
 	public static long hours2millis(int hours) {
-		return hours * 360000L;		
+		return hours * 3600000L;		
 	}
 	
 	/**

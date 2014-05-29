@@ -12,11 +12,14 @@
  ******************************************************************************/
 package gr.interamerican.wicket.bo2.descriptors;
 
-import gr.interamerican.bo2.arch.ext.Translator;
+import gr.interamerican.bo2.arch.utils.TranslatorRegistry;
 import gr.interamerican.bo2.utils.Utils;
 import gr.interamerican.bo2.utils.meta.descriptors.BoPropertyDescriptor;
+import gr.interamerican.bo2.utils.meta.descriptors.BoPropertyDescriptorWrapper;
 import gr.interamerican.bo2.utils.meta.exceptions.ParseException;
 import gr.interamerican.bo2.utils.meta.exceptions.ValidationException;
+import gr.interamerican.bo2.utils.meta.parsers.Parser;
+import gr.interamerican.bo2.utils.meta.validators.Validator;
 import gr.interamerican.wicket.bo2.protocol.http.Bo2WicketSession;
 
 /**
@@ -31,16 +34,20 @@ import gr.interamerican.wicket.bo2.protocol.http.Bo2WicketSession;
  *            Type of language id.
  * 
  */
-public class TranslatableBoPropertyDescriptorWrapper<T, R, L> 
-implements BoPropertyDescriptor<T> {
+public class TranslatableBoPropertyDescriptorWrapper<T, R, L>
+implements BoPropertyDescriptor<T>, BoPropertyDescriptorWrapper<T> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	/**
 	 * Descriptor.
 	 */
 	BoPropertyDescriptor<T> descriptor;
 	/**
-	 * translator.
+	 * translator name.
 	 */
-	Translator<R, L> translator;
+	String translatorName;
 	/**
 	 * translation resource id.
 	 */
@@ -53,16 +60,16 @@ implements BoPropertyDescriptor<T> {
 	 *            BoPropertyDescriptor that describes the property.
 	 * @param resourceId
 	 *            Translation resource id.
-	 * @param translator
-	 *            Translator used to translate the label.
+	 * @param translatorName
+	 *            Name of the translator used to translate the label.
 	 */
 	public TranslatableBoPropertyDescriptorWrapper(
 			BoPropertyDescriptor<T> descriptor,
 			R resourceId,
-			Translator<R, L> translator) {
+			String translatorName) {
 		super();
 		this.descriptor = descriptor;
-		this.translator = translator;
+		this.translatorName = translatorName;
 		this.resourceId = resourceId;
 	}
 
@@ -73,7 +80,7 @@ implements BoPropertyDescriptor<T> {
 		 */
 		@SuppressWarnings("unchecked")
 		L languageId = (L) Bo2WicketSession.get().getLanguageId();
-		String label = translator.translate(resourceId, languageId);
+		String label = TranslatorRegistry.getRegisteredTranslator(translatorName).translate(resourceId, languageId);
 		label = Utils.notNull(label, descriptor.getLabel());
 		return label;
 	}
@@ -185,9 +192,28 @@ implements BoPropertyDescriptor<T> {
 	}
 
 	public void setMaxLength(int maxLength) {
-		descriptor.setMaxLength(maxLength);
+		throw new RuntimeException("Not allowed"); //$NON-NLS-1$
 	}
 	
+	@Override
+	public T valueOf(Number value) {	
+		return descriptor.valueOf(value);
+	}
+
+	public void setAffected(String affected) {
+		throw new RuntimeException("Not allowed"); //$NON-NLS-1$
+	}
+
+	public String getAffected() {
+		return descriptor.getAffected();
+	}
 	
+	public Parser<T> getParser() {
+		return descriptor.getParser();
+	}
+	
+	public Validator<T> getValidator() {
+		return descriptor.getValidator();
+	}
 
 }

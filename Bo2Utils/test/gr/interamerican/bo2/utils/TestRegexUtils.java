@@ -38,5 +38,6 @@ public class TestRegexUtils {
 		matches = RegexUtils.getMatches(value, pattern);
 		Assert.assertTrue(matches.isEmpty());
 	}
-
+	
+	
 }

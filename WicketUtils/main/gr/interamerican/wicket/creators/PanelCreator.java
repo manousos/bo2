@@ -17,15 +17,16 @@ import gr.interamerican.wicket.markup.html.panel.service.ServicePanel;
 
 import java.io.Serializable;
 
+import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
 import org.apache.wicket.markup.html.panel.Panel;
 
 /**
- * Class that creates a {@link Panel}.
+ * Class that creates a {@link DataTable}.
  * 
  * @param <B> 
  *        Type of bean presented in the panel.
  */
-public interface PanelCreator<B extends Serializable> {
+public interface PanelCreator<B extends Serializable> extends Serializable {
 	
 	/**
 	 * Creates the {@link Panel}. This may be used for the creation

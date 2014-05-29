@@ -14,8 +14,11 @@ package gr.interamerican.bo2.utils.meta.descriptors;
 
 import gr.interamerican.bo2.utils.attributes.Labeled;
 import gr.interamerican.bo2.utils.attributes.Named;
+import gr.interamerican.bo2.utils.meta.BusinessObjectDescriptor;
 import gr.interamerican.bo2.utils.meta.exceptions.ParseException;
 import gr.interamerican.bo2.utils.meta.exceptions.ValidationException;
+import gr.interamerican.bo2.utils.meta.parsers.Parser;
+import gr.interamerican.bo2.utils.meta.validators.Validator;
 
 import java.io.Serializable;
 
@@ -33,12 +36,10 @@ import java.io.Serializable;
  * The name BoPropertyDescriptor stands for Business Object Property
  * Descriptor.
  * 
- * TODO: Extend {@link Serializable}.
- * 
  * @param <T> Type of property.
  */
 public interface BoPropertyDescriptor<T> 
-extends Named, Labeled {
+extends Named, Labeled, Serializable {
 	
 	/**
 	 * Gets the index of the property.
@@ -153,6 +154,19 @@ extends Named, Labeled {
 	T parse(String value) throws ParseException;
 	
 	/**
+	 * Converts the specified number to the appropriate value that matches to this
+	 * {@link BoPropertyDescriptor}.
+	 * 
+	 * If a numeric translation can't be performed for the specific data type, then
+	 * returns null.
+	 * 
+	 * @param value
+	 * 
+	 * @return Returns the value.
+	 */
+	T valueOf(Number value);
+	
+	/**
 	 * Gets the string representation of the value.
 	 * 
 	 * @param value Value to print.
@@ -211,5 +225,27 @@ extends Named, Labeled {
 	 */
 	void setMaxLength(int maxLength);
 	
+	/**
+	 * Set the name of a {@link BoPropertyDescriptor} that this one affects.
+	 * This is evaluated within the context of a specific {@link BusinessObjectDescriptor}.
+	 *
+	 * @param affected the affected to set
+	 */
+	void setAffected(String affected);
+	
+	/**
+	 * @return Returns the name of the affected {@link BoPropertyDescriptor}.
+	 */
+	String getAffected();
+	
+	/**
+	 * @return Returns the parser of this BoPropertyDescriptor
+	 */
+	Parser<T> getParser();
+	
+	/**
+	 * @return Returns the validator of this BoPropertyDescriptor
+	 */
+	Validator<T> getValidator();
 
 }

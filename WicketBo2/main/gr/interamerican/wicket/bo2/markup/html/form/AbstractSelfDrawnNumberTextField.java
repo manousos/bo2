@@ -19,7 +19,7 @@ import java.text.NumberFormat;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.convert.IConverter;
-import org.apache.wicket.util.convert.converters.AbstractDecimalConverter;
+import org.apache.wicket.util.convert.converter.AbstractDecimalConverter;
 
 /**
  * Base class for self-drawn number TextField components.
@@ -34,15 +34,22 @@ extends AbstractSelfDrawnTextField<T> {
 	 * serialVersionUID.
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * lengthOfDecimalPart
+	 */
+	int lengthOfDecimalPart;
 
 	/**
 	 * Creates a new AbstractSelfDrawnNumberTextField object. 
 	 *
 	 * @param id
 	 * @param descriptor
+	 * @param type 
 	 */
-	public AbstractSelfDrawnNumberTextField(String id, NumberBoPropertyDescriptor<T> descriptor) {
-		super(id, descriptor);
+	public AbstractSelfDrawnNumberTextField(String id, NumberBoPropertyDescriptor<T> descriptor, Class<T> type) {
+		super(id, descriptor, type);
+		this.lengthOfDecimalPart = descriptor.getLengthOfDecimalPart();
 	}
 	
 	/**
@@ -51,25 +58,25 @@ extends AbstractSelfDrawnTextField<T> {
      * @param id
      * @param descriptor
      * @param model
+	 * @param type 
      */
-    public AbstractSelfDrawnNumberTextField(String id, IModel<T> model, NumberBoPropertyDescriptor<T> descriptor) {
-        super(id, model, descriptor);
+    public AbstractSelfDrawnNumberTextField(String id, IModel<T> model, NumberBoPropertyDescriptor<T> descriptor, Class<T> type) {
+        super(id, model, descriptor, type);
+        this.lengthOfDecimalPart = descriptor.getLengthOfDecimalPart();
     }
     
 	@Override
-	public IConverter getConverter(final Class<?> type) {
-		if(type!=getModelObjectClass()) {
-			return super.getConverter(type);
-		}
-		AbstractDecimalConverter result = getNumberCoverter();
+	@SuppressWarnings("unchecked")
+	public <C> IConverter<C> getConverter(Class<C> type) {
+		AbstractDecimalConverter<T> result = getNumberCoverter();
 		if(result == null) {
 			return super.getConverter(type);
 		}
 		NumberFormat nf = new DecimalFormat();
-		int maxFractionDigits = ((NumberBoPropertyDescriptor<T>)descriptor).getLengthOfDecimalPart();
+		int maxFractionDigits = lengthOfDecimalPart;
 		nf.setMaximumFractionDigits(maxFractionDigits+1);
 		result.setNumberFormat(getLocale(), nf);
-		return result;
+		return (IConverter<C>) result;
 	}
 	
 	/**
@@ -77,11 +84,6 @@ extends AbstractSelfDrawnTextField<T> {
 	 *         for which decimal digits make sense. For the rest, this MUST return
 	 *         null.
 	 */
-	protected abstract AbstractDecimalConverter getNumberCoverter();
+	protected abstract AbstractDecimalConverter<T> getNumberCoverter();
 	
-	/**
-	 * @return Returns the model object class. This should conform to Class<T>
-	 */
-	protected abstract Class<T> getModelObjectClass(); 
-
 }

@@ -35,6 +35,10 @@ public final class StringConstants {
 	 */
 	public static final String MINUS = "-"; //$NON-NLS-1$
 	/**
+	 * minus string (-).
+	 */
+	public static final String PLUS = "+"; //$NON-NLS-1$
+	/**
 	 * zero string (0).
 	 */
 	public static final String ZERO = "0"; //$NON-NLS-1$
@@ -159,9 +163,9 @@ public final class StringConstants {
 	 */
 	public static final String SHARP = "#"; //$NON-NLS-1$
 	/**
-	 * Euro (�)
+	 * Euro (unicode codepoint 20AC)
 	 */
-	public static final String EURO_SIGN = "�"; //$NON-NLS-1$
+	public static final String EURO_SIGN = String.valueOf('\u20ac');
 	/**
 	 * left bracket ([)
 	 */

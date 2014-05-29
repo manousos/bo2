@@ -727,6 +727,7 @@ public class PoUtils {
 		}
 		if (strategy==null) {
 			strategy = Factory.getDefaultDetachStrategy(object.getClass());
+			setDetachStrategy(object, strategy);
 		}
 		return strategy;
 	}
@@ -806,6 +807,22 @@ public class PoUtils {
 		DetachStrategy strategy = getDetachStrategy(object);
 		if (strategy!=null) {
 			strategy.reattach(object, provider);
+		}
+	}
+	
+	/**
+	 * In the unit of work that this is called, it is mandatory to perform
+	 * a database update.
+	 * 
+	 * @param object
+	 *        The object to re-attach
+	 * @param provider 
+	 *        Provider to re-attach the object.
+	 */
+	public static final void reattachForUpdate(Object object, Provider provider) {		
+		DetachStrategy strategy = getDetachStrategy(object);
+		if (strategy!=null) {
+			strategy.reattachForUpdate(object, provider);
 		}
 	}	
 	
@@ -989,4 +1006,23 @@ public class PoUtils {
 		}		
 	}
 	
+	/**
+	 * Gets the first declared interface of the specified class
+	 * that is a PersistentObject. 
+	 * 
+	 * @param clazz
+	 * 
+	 * @return Returns the first interface
+	 */
+	public static Class<?> getPoDeclarationType(Class<?> clazz) {
+		Class<?>[] interfaces = clazz.getInterfaces();
+		for (Class<?> iface : interfaces) {
+			if (PersistentObject.class.isAssignableFrom(iface)) {
+				return iface;
+			}
+		}
+		return null;
+	}
+	
+
 }

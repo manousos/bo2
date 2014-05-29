@@ -12,6 +12,8 @@
  ******************************************************************************/
 package gr.interamerican.bo2.arch.utils.adapters;
 
+import gr.interamerican.bo2.arch.utils.adapters.number.TestSuiteBo2ArchUtilsAdaptersNumber;
+
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
@@ -25,6 +27,7 @@ import org.junit.runners.Suite.SuiteClasses;
 		TestCalculatePercentageOfMoney.class,
 		TestSetModificationRecord.class,
 		TestResetModificationRecord.class,
+		TestSuiteBo2ArchUtilsAdaptersNumber.class,
 	}
 )
 public class TestSuiteArchUtilsAdapters {

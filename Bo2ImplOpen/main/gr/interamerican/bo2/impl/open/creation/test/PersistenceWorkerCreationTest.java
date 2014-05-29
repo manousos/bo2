@@ -16,11 +16,13 @@ import static org.junit.Assert.fail;
 import gr.interamerican.bo2.arch.PersistenceWorker;
 import gr.interamerican.bo2.arch.PersistentObject;
 import gr.interamerican.bo2.arch.Provider;
+import gr.interamerican.bo2.arch.exceptions.CouldNotBeginException;
 import gr.interamerican.bo2.arch.exceptions.CouldNotCommitException;
 import gr.interamerican.bo2.arch.exceptions.CouldNotRollbackException;
 import gr.interamerican.bo2.arch.exceptions.DataException;
 import gr.interamerican.bo2.arch.exceptions.InitializationException;
 import gr.interamerican.bo2.arch.exceptions.PoNotFoundException;
+import gr.interamerican.bo2.arch.utils.ext.Bo2Session;
 import gr.interamerican.bo2.impl.open.creation.Factory;
 import gr.interamerican.bo2.impl.open.utils.Bo2;
 
@@ -70,12 +72,14 @@ extends AbstractTestClass {
 	
 	/**
 	 * @throws InitializationException 
+	 * @throws CouldNotBeginException 
 	 * 
 	 */
 	@Before
-	public void before() throws InitializationException {
+	public void before() throws InitializationException, CouldNotBeginException {
 		failed = false;
 		manager = Bo2.getDefaultDeployment().getProvider();
+		manager.getTransactionManager().begin();
 	}
 	
 	/**
@@ -97,6 +101,7 @@ extends AbstractTestClass {
 	private <P extends PersistentObject<?>> 
 	void testCreation(Class<P> type) {
 		try {
+			Bo2Session.setProvider(manager);
 			P po = Factory.create(type);
 			PersistenceWorker<P> pw = Factory.createPw(type);
 			pw.init(manager);
@@ -111,6 +116,8 @@ extends AbstractTestClass {
 			doFail(ie, type.getName());
 		} catch (RuntimeException rte) {
 			doFail(rte, type.getName());
+		} finally {
+			Bo2Session.setProvider(null);
 		}
 	}
 	
@@ -119,7 +126,6 @@ extends AbstractTestClass {
 	 * 
 	 * @param t
 	 * @param type
-	 * @throws CouldNotRollbackException 
 	 */
 	void doFail(Throwable t, String type) {
 		@SuppressWarnings("nls")

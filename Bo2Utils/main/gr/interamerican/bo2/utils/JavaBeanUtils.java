@@ -225,7 +225,7 @@ public class JavaBeanUtils {
 	 * @param obj
 	 *            Object on which the field value is changed.
 	 */
-	public static void setProperty(PropertyDescriptor pd, Object val, Object obj) {
+	public static void setProperty(PropertyDescriptor pd, Object val, Object obj) {		
 		if (isValidValue(pd, val)) {
 			setPropertyTyped(pd, val, obj);
 		} else {
@@ -741,7 +741,5 @@ public class JavaBeanUtils {
 			setPropertyTo(target, propertyName, propertyValue);
 		}
 	}
-	
-	
 
 }

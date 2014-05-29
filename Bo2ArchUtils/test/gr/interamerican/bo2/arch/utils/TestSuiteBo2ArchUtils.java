@@ -33,7 +33,6 @@ import org.junit.runners.Suite.SuiteClasses;
 		TestSuiteBo2ArchUtilsBeans.class,
 		TestSuiteBo2ArchUtilsCollections.class,
 		TestBo2ArchStringUtils.class,
-		TestBo2ArchUtils.class,
 		TestCacheUtils.class,
 		TestProviderUtils.class,
 		TestMockUtils.class,
@@ -42,7 +41,8 @@ import org.junit.runners.Suite.SuiteClasses;
 		TestSuiteBo2ArchUtilsCopiers.class,
 		TestSuiteBo2ArchUtilsComparators.class,
 		TestSuiteBo2ArchUtilsExt.class,
-		TestBo2ArchReflectionUtils.class
+		TestBo2ArchReflectionUtils.class,
+		TestBo2ExceptionUtils.class,
 	}
 )
 public class TestSuiteBo2ArchUtils {

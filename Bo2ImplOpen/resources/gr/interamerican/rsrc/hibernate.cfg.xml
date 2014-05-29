@@ -15,7 +15,7 @@
 		<property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
 
 		<!-- Echo all executed SQL to stdout -->
-		<property name="show_sql">true</property>
+		<property name="show_sql">false</property>
 		
 		<!--  lazy fetch depth size -->
 		<property name="hibernate.max_fetch_depth">0</property>

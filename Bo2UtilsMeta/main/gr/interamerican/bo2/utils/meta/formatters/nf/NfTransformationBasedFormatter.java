@@ -12,7 +12,7 @@
  ******************************************************************************/
 package gr.interamerican.bo2.utils.meta.formatters.nf;
 
-import gr.interamerican.bo2.utils.adapters.AnyOperation;
+import gr.interamerican.bo2.utils.adapters.Transformation;
 import gr.interamerican.bo2.utils.meta.formatters.Formatter;
 import gr.interamerican.bo2.utils.meta.formatters.TransformationBasedFormatter;
 
@@ -28,6 +28,10 @@ import gr.interamerican.bo2.utils.meta.formatters.TransformationBasedFormatter;
 public class NfTransformationBasedFormatter<T> 
 extends AbstractNullFilteringFormatter<T> {
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
 	 * Formatter.
 	 */
 	Formatter<T> formatter;
@@ -37,7 +41,7 @@ extends AbstractNullFilteringFormatter<T> {
 	 *
 	 * @param transformation
 	 */
-	public NfTransformationBasedFormatter(AnyOperation<T, String> transformation) {
+	public NfTransformationBasedFormatter(Transformation<T, String> transformation) {
 		super();
 		this.formatter = new TransformationBasedFormatter<T>(transformation);
 	}

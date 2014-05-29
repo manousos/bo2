@@ -22,7 +22,8 @@ import gr.interamerican.bo2.arch.exceptions.UnexpectedException;
 import gr.interamerican.bo2.samples.implopen.operations.DeleteUserFromBothDb;
 import gr.interamerican.bo2.samples.implopen.operations.ReadUserFromBothDb;
 import gr.interamerican.bo2.samples.implopen.operations.StoreUserToBothDb;
-import junit.framework.Assert;
+
+import org.junit.Assert;
 
 /**
  * Unit test for the {@link TransactionManager} of a {@link Provider}.

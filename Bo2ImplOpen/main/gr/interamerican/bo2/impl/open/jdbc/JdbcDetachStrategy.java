@@ -22,6 +22,11 @@ import gr.interamerican.bo2.arch.Provider;
 public class JdbcDetachStrategy implements DetachStrategy {
 	
 	/**
+	 * serialVersionUID
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	/**
 	 * Singleton instance.
 	 */
 	public static final JdbcDetachStrategy INSTANCE = new JdbcDetachStrategy();
@@ -35,6 +40,8 @@ public class JdbcDetachStrategy implements DetachStrategy {
 	}
 
 	public void reattach(Object object, Provider provider) {/* do nothing */}
+	
+	public void reattachForUpdate(Object object, Provider provider) {/* do nothing */}
 
 	public void detach(Object object, Provider provider) {/* do nothing */}	
 	

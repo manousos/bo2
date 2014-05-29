@@ -17,16 +17,14 @@ import gr.interamerican.bo2.utils.meta.formatters.DecimalFormatter;
 import gr.interamerican.bo2.utils.meta.formatters.Formatter;
 import gr.interamerican.bo2.utils.meta.parsers.DoubleParser;
 
-import java.io.Serializable;
-
 /**
  * {@link BoPropertyDescriptor} for Double.
  */
 public class DoubleBoPropertyDescriptor 
-extends AbstractNumberBoPropertyDescriptor<Double> implements Serializable {
+extends AbstractNumberBoPropertyDescriptor<Double> {
 	
 	/**
-	 * Serial.
+	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -46,5 +44,10 @@ extends AbstractNumberBoPropertyDescriptor<Double> implements Serializable {
 	protected Formatter<Double> getFormatter() {
 		return new DecimalFormatter<Double>(getLengthOfDecimalPart());
 	}	
+	
+	@Override
+	public Double valueOf(Number value) {	
+		return value.doubleValue();
+	}
 
 }
