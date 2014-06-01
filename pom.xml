@@ -45,9 +45,6 @@
 
 		<project.build.sourceEncoding>CP1253</project.build.sourceEncoding>
 
-		<central.repository.proxy>http://10.2.3.76:8081/nexus/content/repositories/central/</central.repository.proxy>
-		<interamerican.repository>http://10.2.3.76:8081/nexus/content/repositories/interamerican/</interamerican.repository>
-		
 		<bo2.failureIgnore>false</bo2.failureIgnore>
 	</properties>
 
@@ -468,37 +465,6 @@
 		<module>Bo2BoAdapters</module>
 		<module>Bo2ImplInter</module>
 	</modules>
-
-	<scm>
-		<developerConnection>scm:svn:http://svn-srv.interamerican.gr/svn/bo2/trunk/Bo2</developerConnection>
-	</scm>
- 
-	<repositories>
-		<repository>
-			<id>central</id>
-			<name>Maven Central proxy</name>
-			<url>${central.repository.proxy}</url>
-		</repository>
-
-		<repository>
-			<id>interamerican</id>
-			<name>interamerican libraries</name>
-			<url>${interamerican.repository}</url>
-		</repository>
-	</repositories>
-
-	<distributionManagement>
-		<snapshotRepository>
-			<id>interamerican</id>
-			<name>interamerican libraries</name>
-			<url>${interamerican.repository}</url>
-		</snapshotRepository>
-		<repository>
-			<id>interamerican</id>
-			<name>interamerican libraries</name>
-			<url>${interamerican.repository}</url>
-		</repository>
-	</distributionManagement>
 
 	<reporting>
 		<plugins>
