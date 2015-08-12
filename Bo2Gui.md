@@ -1,0 +1,2 @@
+## Description ##
+The Bo2Gui is a small library that builds on top of Swing. It provides user interface for some Bo2 utilities.

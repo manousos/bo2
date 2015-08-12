@@ -1,0 +1,2 @@
+## Description ##
+Implementation of the Bo2 architecture for Java SE. All implementations are based on open technologies.

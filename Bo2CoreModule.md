@@ -1,0 +1,23 @@
+## Description ##
+The core Bo2 development framework.
+
+## Libraries ##
+  * Bo2Architecture
+  * Bo2ImplOpen
+  * Bo2ImplHibernate
+  * Bo2ImplJee
+  * Bo2ImplJotm
+  * Bo2ImplMsOffice
+  * Bo2Jasper
+  * Bo2UtilsMetadataExt
+  * WicketBo2
+  * Bo2Gui
+
+
+## Dependencies ##
+#### Bo2 libraries ####
+The framework uses all other Bo2 utility modules.
+
+
+
+

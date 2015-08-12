@@ -1,0 +1,2 @@
+## Description ##
+This project contains the definition of the bo2 architecture. The architecture is defined as a set of interfaces that model known stereotypes. The architecture is complemented by exceptions thrown by the interface methods.

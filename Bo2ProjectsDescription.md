@@ -1,0 +1,21 @@
+| **Project** | **Description** |
+|:------------|:----------------|
+| **Bo2Architecture** |This project contains the the declaration of the Bo2 architecture. It consists of interfaces and exception classes defining the architecture abstractions|
+| **Bo2ArchUtils** | Utility classes based on the Bo2Architecture interfaces.|
+| **Bo2Utils** | This package contains various utility classes.|
+| **Bo2Creation** | This project provides the means to eliminate boilerplate as getters and setters. It provides object factories that can create functional implementations of abstract classes and in some cases implement an interface automatically|
+| **Bo2ImplOpen** |This project contains implementations of the architecture concepts defined in the Bo2Architecture project.|
+| **Bo2Gui**  | Swing utilities. |
+| **Bo2ImplHibernate** |This package contains Hibernate support for Bo2.|
+| **Bo2ImplJee** | Integration with J2EE technologies. |
+| **Bo2ImplJotm** | Integration with the Java Open Transaction Manager (JOTM). |
+| **Bo2ImplMsOffice** | Utilities for MS Office Documents. |
+| **Bo2Jasper** | Integration with Jasper reports. |
+| **Bo2JsqlParser** | Integration with JsqlParser sql parser. |
+| **Bo2UtilsDoc** | Defines the architecture of a template engine that creates business documents. The architecture is defined as a set of interfaces and exception classes.|
+| **Bo2OdfToolkit** |The Bo2Odftoolkit project provides an implementation of the template engine architecture defined by the Bo2UtilsDoc project. The implementation is based on open document format. The project is based on the OdfToolkit libraries http://incubator.apache.org/odftoolkit/|
+| **Bo2UtilsMeta** | Metadata facilities for Business Object data. |
+| **Bo2UtilsMetaExt** | This package extends the Bo2UtilsMeta project with support for types defined by the Bo2 architecture.|
+| **Bo2UtilsSql** |  This package contains utilities relevant with relational databases and SQL.|
+| **WicketBo2** | This package contains supporting classes for development of wicket applications that use the Bo2 framework.|
+| **WicketUtils** | Classes for advanced wicket experience.|

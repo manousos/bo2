@@ -1,0 +1,10 @@
+## The promise ##
+[WORA](http://en.wikipedia.org/wiki/Write_once,_run_anywhere) is one of the most important features of java. Years ago, the [mother company](http://www.interamerican.gr) of Bo2 made an assessment in order to select between Java and .NET. Despite having years of experience with Microsoft development tools and numerous Visual Basic applications the selection was Java. The main reason was the WORA promise.
+
+Visual Basic clients running on Windows desktops were supplemented by a [CICS](http://en.wikipedia.org/wiki/CICS) server layer written in Cobol. Countless Cobol batch programs running on the [zOS](http://en.wikipedia.org/wiki/Z/OS) mainframe filled the picture. Java can run on every platform including zOS, CICS. A web application running on an application server under Windows or Linux, a java CICS transaction and a java batch program would be able to use the same java classes.
+
+## The reality ##
+Reality proved different. Java runs on all platforms, but important resources as transaction managers, JDBC connections, files are created differently in the different platforms. Pretty soon it turned out that code written for _this_ platform could not be reused on _that_ platform.
+
+## The Bo2 solution ##
+The known solution to the problem is [dependency injection](http://en.wikipedia.org/wiki/Dependency_injection). Bo2 uses the [Provider](http://bo2.googlecode.com/svn/trunk/docs/javadocs/Bo2Architecture/gr/interamerican/bo2/arch/Provider.html) abstraction for this. Provider is an abstraction of the [execution platform](RuntimeLayer.md). It will create and manage any resource required by the business layer. All resources are provided in the form of a common interface. The [ResourceWrapper](http://bo2.googlecode.com/svn/trunk/docs/javadocs/Bo2Architecture/gr/interamerican/bo2/arch/ResourceWrapper.html) abstracts the resource management code. Different implementations exist for different platforms (and mode can be built) making it possible to write a platform agnostic (and hence reusable) business layer.
